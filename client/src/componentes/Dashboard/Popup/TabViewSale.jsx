@@ -8,6 +8,7 @@ const TabViewSale = ({ isOpen, onClose, sale, infoVentas }) => {
     return null;
   }
 
+  
   const toggleExpand = (index) => {
     setExpandedItems((prevState) => ({
       ...prevState,
