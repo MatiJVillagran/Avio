@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 export function TabViewImages() {
   const [isFormularioOpen, setIsFormularioOpen] = useState(false);
   const carrouselData = useSelector((state) => state.sheets.sectionData);
+  console.log("seccion",carrouselData);
+  
 
   const handleOpenFormulario = () => {
     setIsFormularioOpen(true); // Abre el formulario
@@ -25,9 +27,9 @@ export function TabViewImages() {
             <div key={index} className="w-1/3 text-center">
               {/* Contenedor para imagen y texto */}
               <div className="border border-black p-3">
-                {seccion && seccion.imagen ? (
+                {seccion && seccion.imageUrl ? (
                   <img
-                    src={seccion.imagen}
+                    src={seccion.imageUrl}
                     alt={`Imagen ${seccion.numero}`}
                     className="w-full h-60 object-cover"
                   />

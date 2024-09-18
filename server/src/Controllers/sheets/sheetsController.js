@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { google } = require("googleapis");
+const { handleImageUpload } = require("./handleImageUpload");
 // const path = require("path");
 
 async function authorize() {
@@ -781,51 +782,72 @@ async function addCashFlowEntry(auth, data) {
   }
 }
 
+
 async function createSectionEntry(req, res) {
   try {
     // Autorizar Google Sheets
     const auth = await authorize();
-
-    // Obtener el último ID de la base de datos
-    const { lastId } = await getSheetData(auth);
-    const newId = lastId + 1;
-
-    const { seccion, texto } = req.body;
-
-    // Validar que el texto tenga menos de 200 caracteres
-    if (texto.length > 200) {
-      return res.status(400).json({ message: "El texto no debe exceder los 200 caracteres." });
-    }
-
-    // Subir la imagen a Cloudinary
-    const imageUrl = await handleImageUpload(req, res);
-
-    // Formatear los datos para agregarlos a la hoja de cálculo
-    const newRow = [
-      newId,
-      seccion,
-      texto,
-      imageUrl,
-    ];
-
-    // Guardar la fila en Google Sheets
     const sheets = google.sheets({ version: "v4", auth });
-    const result = await sheets.spreadsheets.values.append({
+
+    // Obtener el último ID para determinar el ID más reciente
+    const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Imagenes!A2:D", // Ajustar el rango según tu estructura de datos
-      valueInputOption: "RAW",
-      resource: {
-        values: [newRow],
-      },
+      range: "Imagenes!A:A", // Ajusta esto si tu ID no está en la columna A
     });
 
+    const rows = response.data.values;
+    let lastId = 0;
+
+    // Si hay más de una fila (considerando que la primera podría ser el encabezado)
+    if (rows && rows.length > 1) {
+      lastId = rows.length - 1; // La última fila con datos
+    }
+    
+    const secciones = req.body; // Recibe el array de secciones
+    console.log("secciones",req.body);
+    
+
+    // Iterar sobre las secciones y agregar cada una a la hoja de cálculo
+    for (const seccion of secciones) {
+      const { texto, imagen } = seccion;
+
+      // Validar que el texto tenga menos de 200 caracteres
+      if (texto.length > 200) {
+        return res.status(400).json({ message: "El texto no debe exceder los 200 caracteres." });
+      }
+
+      // // Subir la imagen a Cloudinary si existe
+      // const imageUrl = imagen ? await handleImageUpload(imagen) : null;
+
+      // Formatear los datos para agregarlos a la hoja de cálculo
+      const newRow = [
+        ++lastId, // Incrementar el ID
+        seccion.seccion, // Número o nombre de la sección
+        texto, // Texto asociado
+        imagen // URL de la imagen en Cloudinary
+      ];
+
+      // Guardar la nueva fila en la hoja de cálculo de Google Sheets
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+        range: "Imagenes!A2:D", // Ajustar el rango según tu estructura de datos
+        valueInputOption: "RAW",
+        resource: {
+          values: [newRow],
+        },
+      });
+    }
+
     // Responder con el resultado
-    res.status(201).json({ message: "Entrada creada exitosamente", data: result.data });
+    res.status(200).json({ message: "Secciones creadas exitosamente" });
+
   } catch (error) {
     console.error("Error creando la entrada:", error);
-    res.status(500).json({ message: "Error creando la entrada", error: error.message });
+    res.status(500).json({ message: "Error creando las secciones", error: error.message });
   }
 }
+
+
 
 async function getSectionEntries(req, res) {
   try {

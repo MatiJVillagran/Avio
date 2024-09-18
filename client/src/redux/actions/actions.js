@@ -568,7 +568,9 @@ export const sendEmailChangeStateOrder = async (userMail, paymentDetail) => {
 // Acción para guardar los datos
 export const createSection = (data) => async (dispatch) => {
   try {
-    const response = await intance.post("/api/seccion", data);
+    console.log("seccion",data);
+    
+    const response = await intance.post("/api/sheets/seccion", data);
     if (response.status === 200) {
       dispatch({
         type: CREATE_SECTION,
@@ -582,10 +584,12 @@ export const createSection = (data) => async (dispatch) => {
   }
 };
 
+
+
 // Acción para obtener los datos
 export const getSection = () => async (dispatch) => {
   try {
-    const response = await intance.get("/api/seccion");
+    const response = await intance.get("/api/sheets/seccion");
     if (response.status === 200) {
       dispatch({
         type: GET_SECTION,
