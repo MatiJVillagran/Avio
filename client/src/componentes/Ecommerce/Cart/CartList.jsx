@@ -24,7 +24,7 @@ export default function CartList({ cartItems, calculateTotal }) {
           ? cartItems.map((product, index) => (
               <CartItem key={index} product={product} />
             ))
-          : "Carrito vacio"}
+          : "Canasta vacio"}
       </div>
       {/* Total del carrito */}
       <div className="mt-4">

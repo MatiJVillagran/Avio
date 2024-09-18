@@ -1,6 +1,9 @@
 import CryptoJS from "crypto-js";
 import intance from "../../api/axiosConfig";
 import toast from "react-hot-toast";
+import renderEmail from "../../componentes/Mails/renderEmail";
+import renderEmailOrder from "../../componentes/Mails/renderEmailOrder";
+import renderEmailOrderStateChange from "../../componentes/Mails/renderEmailOrderStateChange";
 
 export const LOGIN_WITH_GOOGLE = "LOGIN_WITH_GOOGLE";
 export const AUTHENTICATE_USER_FROM_SESSION = "AUTHENTICATE_USER_FROM_SESSION";
@@ -42,6 +45,7 @@ export const GET_SALES = "GET_SALES";
 export const GET_SALE_BY_ID = "GET_SALE_BY_ID";
 export const CREATED_SALE = "CREATED_SALE";
 export const DELETE_SALE_ROW = "DELETE_SALE_ROW";
+export const GET_SALE_BY_USER_ID = "GET_SALE_BY_USER_ID";
 
 export const GET_CASH_FLOW = "GET_CASH_FLOW";
 export const ADD_CASH_FLOW_ENTRY = "ADD_CASH_FLOW_ENTRY";
@@ -51,6 +55,10 @@ export const AUTH_SELLER = "AUTH_SELLER";
 export const FETCH_USERS = "FETCH_USERS";
 
 export const CREATED_USER = "CREATED_USER";
+
+export const CREATE_SECTION = "CREATE_SECTION";
+export const GET_SECTION = "GET_SECTION";
+
 
 //USER
 export const authenticationUser = (email) => async (dispatch) => {
@@ -183,14 +191,33 @@ export const getSales = () => async (dispatch) => {
 export const createSale = (data) => async (dispatch) => {
   try {
     const res = await intance.post(`/api/sheets/sale`, data);
-    console.log(res);
-    dispatch({
-      type: CREATED_SALE,
-      payload: res,
-    });
-    dispatch(cleanCart());
+    if (res.status === 200) {
+      dispatch(getSales());
+      await sendEmail(data.cliente.correo, data);
+      await sendEmailOrder("matiassjv@gmail.com", data);
+      dispatch({
+        type: CREATED_SALE,
+        payload: res,
+      });
+      dispatch(cleanCart());
+    }
   } catch (error) {
     console.log({ error: error.message });
+  }
+};
+
+export const getSaleByUserID = (uid) => async (dispatch) => {
+  try {
+
+    const res = await intance.get(`/api/sheets/sales/${uid}`);
+    if (res.status === 200) {
+      dispatch({
+        type: GET_SALE_BY_USER_ID,
+        payload: res.data,
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -299,7 +326,7 @@ export const fetchSheets = () => async (dispatch) => {
       },
     });
     console.log(res.data.products);
-    
+
     dispatch({
       type: FETCH_SHEETS,
       payload: res.data.products,
@@ -307,7 +334,7 @@ export const fetchSheets = () => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
-  
+
 };
 
 export const getProductById = (id) => async (dispatch) => {
@@ -398,7 +425,7 @@ export const filterByCategory = (category) => async (dispatch) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    
+
 
     dispatch({
       type: FILTER_CATEGORY,
@@ -417,7 +444,7 @@ export const getCategories = () => async (dispatch) => {
   try {
     const response = await intance.get("/api/sheets/categories");
     const categories = response.data;
-    
+
     dispatch({ type: GET_CATEGORIES, payload: categories });
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -484,5 +511,89 @@ export const deleteSaleRow = (rowIndex) => async (dispatch) => {
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+//MAILS
+
+export const sendEmail = async (userMail, paymentDetail) => {
+  const emailContent = {
+    to: userMail,
+    subject: "Gracias por tu compra",
+    message: renderEmail(paymentDetail), // Renderiza el HTML en el frontend
+  };
+
+  try {
+    const response = await intance.post(`/api/mails/`, emailContent);
+    return response;
+  } catch (error) {
+    console.error("Error al enviar el correo:", error.message);
+    throw error; // Lanza el error para que pueda ser capturado en createSale
+  }
+};
+
+export const sendEmailOrder = async (userMail, paymentDetail) => {
+  const emailContent = {
+    to: userMail,
+    subject: "Tenes una nueva Venta!",
+    message: renderEmailOrder(paymentDetail), // Renderiza el HTML en el frontend
+  };
+
+  try {
+    const response = await intance.post(`/api/mails/`, emailContent);
+    return response;
+  } catch (error) {
+    console.error("Error al enviar el correo:", error.message);
+    throw error; // Lanza el error para que pueda ser capturado en createSale
+  }
+};
+
+export const sendEmailChangeStateOrder = async (userMail, paymentDetail) => {
+  const emailContent = {
+    to: userMail,
+    subject: "Actualizamos el estado de tu compra!",
+    message: renderEmailOrderStateChange(paymentDetail), // Renderiza el HTML en el frontend
+  };
+
+  try {
+    const response = await intance.post(`/api/mails/`, emailContent);
+    return response;
+  } catch (error) {
+    console.error("Error al enviar el correo:", error.message);
+    throw error; // Lanza el error para que pueda ser capturado en createSale
+  }
+};
+
+// SECCIONES IMAGENES
+// Acción para guardar los datos
+export const createSection = (data) => async (dispatch) => {
+  try {
+    const response = await intance.post("/api/seccion", data);
+    if (response.status === 200) {
+      dispatch({
+        type: CREATE_SECTION,
+        payload: response.data, // los datos que has guardado
+      });
+      toast.success("Datos guardados exitosamente");
+    }
+  } catch (error) {
+    console.error("Error al guardar los datos:", error);
+    toast.error("Error al guardar los datos");
+  }
+};
+
+// Acción para obtener los datos
+export const getSection = () => async (dispatch) => {
+  try {
+    const response = await intance.get("/api/seccion");
+    if (response.status === 200) {
+      dispatch({
+        type: GET_SECTION,
+        payload: response.data, // los datos obtenidos del servidor
+      });
+    }
+  } catch (error) {
+    console.error("Error al obtener los datos:", error);
+    toast.error("Error al obtener los datos");
   }
 };

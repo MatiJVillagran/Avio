@@ -18,15 +18,19 @@ export default function ProductList({ allProducts }) {
     (product) => product.publicado === "si"
   );
 
-  console.log(allProducts);
+
   
 
   // Productos a mostrar basado en el número de productos visibles
   const currentProducts = publishedProducts.slice(0, visibleProducts);
 
   const handleAddToCart = (product) => {
-    console.log(product);
+
+    if (product.stock === 0)
+      {toast.error(`${product.nombre} no tiene stock por el momento`);
+        return;}
     dispatch(addToCart(product));
+    toast.success(`${product.nombre} añadido a la canasta`);
   };
 
   useEffect(() => {
@@ -72,7 +76,7 @@ export default function ProductList({ allProducts }) {
                   price={product.precio}
                   quantity={product.stock}
                   marca={(product.marca)}
-                  onAddToCart={handleAddToCart} // Pasar directamente handleAddToCart
+                  onAddToCart={() => handleAddToCart (product)} // Pasar directamente handleAddToCart
                   isNew={false}
                 />
               );

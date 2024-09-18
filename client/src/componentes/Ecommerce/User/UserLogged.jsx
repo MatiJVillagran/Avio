@@ -1,5 +1,6 @@
 import React from "react";
 import { doSignOut } from "../../../firebase/auth";
+import { Link } from "react-router-dom";
 
 const UserLogged = ({ user, onClose }) => {
   return (
@@ -25,7 +26,10 @@ const UserLogged = ({ user, onClose }) => {
           <div className="flex flex-wrap justify-center">
             <div className="w-full text-center mt-20">
               <div className="flex justify-center lg:pt-4 pt-8 pb-0 items-center gap-4">
-                <div className="p-2 text-center flex flex-col gap-2 justify-center items-center hover:animate-pulse">
+              <Link
+                  to={`/userpurchase/${user.uid}`}
+                 className="p-2 text-center flex flex-col gap-2 justify-center items-center hover:animate-pulse"
+                  >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -41,7 +45,8 @@ const UserLogged = ({ user, onClose }) => {
                     />
                   </svg>
                   <span className="text-sm text-slate-400">Compras</span>
-                </div>
+                  </Link>
+                
                 <div className="p-2 text-center flex flex-col gap-2 justify-center items-center hover:animate-pulse">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

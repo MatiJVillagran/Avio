@@ -3,7 +3,7 @@ const { google } = require("googleapis");
 
 async function createUser(authClient, data) {
   try {
-    const { uid, email, name, address, state, postalCode, role } = data;
+    const { uid, email, name, address = "", state = "", postalCode = "", role } = data;
     const sheets = google.sheets({ version: "v4", auth: authClient });
     const currentDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 

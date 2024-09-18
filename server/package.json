@@ -24,7 +24,8 @@
     "googleapis": "^105.0.0",
     "mercadopago": "^2.0.13",
     "mime-types": "^2.1.35",
-    "multiparty": "^4.2.3"
+    "multiparty": "^4.2.3",
+    "nodemailer": "^6.9.15"
   },
   "devDependencies": {
     "morgan": "^1.10.0",

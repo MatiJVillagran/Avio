@@ -7,9 +7,12 @@ import toast from "react-hot-toast";
 
 const ProdustHome = ({ allProducts }) => {
   const dispatch = useDispatch();
-
+  
+  const publishedProducts = allProducts?.filter(
+    (product) => product.publicado === "si"
+  );
   // Obtener los últimos 8 productos
-  const latestProducts = allProducts?.slice(-8);
+  const latestProducts = publishedProducts?.slice(-8);
 
   return (
     <div className="max-w-screen grid grid-cols-1 mt-8 mb-8 sm:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -40,8 +43,10 @@ const FloatingProductCard = ({ product, dispatch }) => {
         url={product.url}
         sku={product.sku}
         price={product.precio}
+        quantity={product.stock}
         onAddToCart={() => handleAddToCart(product, dispatch)}
         isNew={true}
+        marca={product.marca}
       />
     </div>
   );
@@ -49,8 +54,11 @@ const FloatingProductCard = ({ product, dispatch }) => {
 
 const handleAddToCart = (product, dispatch) => {
   // Lógica para añadir al carrito
+  if (product.stock === 0)
+  {toast.error(`${product.nombre} no tiene stock por el momento`);
+    return;}
   dispatch(addToCart(product));
-  toast.success(`Producto ${product.nombre} añadido al carrito`);
+  toast.success(`${product.nombre} añadido al carrito`);
 };
 
 export default ProdustHome;

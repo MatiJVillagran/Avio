@@ -78,7 +78,7 @@ async function getSheetDataById(id, auth) {
       publicado: row[9],
     }));
 
-    const product = products.find(product => product.id === id);
+    const product = products.find((product) => product.id === id.toString());
 
     if (!product) {
       throw new Error('Producto no encontrado');
@@ -104,8 +104,8 @@ async function appendRow(auth, rowData) {
   const sheets = google.sheets({ version: "v4", auth });
   const { rows, lastId } = await getSheetData(auth);
   const newId = lastId + 1;
-  const { categoria, nombre, color, tamaño, cantidad, precio, url } = rowData;
-  const sku = generateSKU(categoria, nombre, color, newId);
+  const { categoria, nombre, marca, medida, cantidad, precio, url } = rowData;
+  const sku = generateSKU(categoria, nombre, marca, newId);
   const urlString = Array.isArray(url) ? url.join(", ") : url;
   const publicadoValue = "no"; // Nueva variable para el valor de publicado
   const newRow = [
@@ -179,7 +179,8 @@ async function updateRow(auth, rowData) {
 
 async function registerSale(auth, data) {
   try {
-    const { productos, nombreCliente, formaPago } = data;
+    
+    const { productos, cliente, formaPago } = data;
 
     const sheets = google.sheets({ version: "v4", auth });
 
@@ -203,7 +204,7 @@ async function registerSale(auth, data) {
     const ventaData = productos.map((prod) => [
       newId,
       prod.id,
-      nombreCliente,
+      cliente.id,
       prod.sku,
       prod.cantidad,
       prod.medida,
@@ -334,6 +335,51 @@ async function getSalesByDate(auth, date) {
   } catch (error) {
     console.error("Error obteniendo ventas por fecha:", error);
     throw new Error("Error obteniendo ventas por fecha");
+  }
+}
+
+async function getSaleByUserId(auth, uid) {
+  try {
+  
+    
+    const sheets = google.sheets({ version: "v4", auth });
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      range: "Ventas!A2:K", // Ajusta el rango según tu hoja de ventas
+    });
+
+    const rows = res.data.values || [];
+
+    // Filtrar las ventas que coinciden con el uid en la columna "cliente"
+    const salesForUser = rows.filter((row) => row[2] === uid);
+    
+    
+
+    // Obtener la información del producto para cada venta
+    const salesData = await Promise.all(
+      salesForUser.map(async (row) => {
+        const product = await getSheetDataById(Number(row[1]), auth); // Convertir productId a número
+        return {
+          id: row[0],
+          productId: row[1],
+          clientId: row[2],
+          sku: row[3],
+          quantity: row[4],
+          measure: row[5],
+          marca: row[6],
+          price: row[7],
+          paymentMethod: row[8],
+          totalPrice: row[9],
+          date: row[10],
+          product, // Añadir la información del producto
+        };
+      })
+    );
+
+    return salesData;
+  } catch (error) {
+    console.error("Error obteniendo ventas por UID:", error);
+    throw new Error("Error obteniendo ventas por UID");
   }
 }
 
@@ -567,6 +613,55 @@ async function deleteSalesById(auth, id) {
   return res.data;
 }
 
+async function activeProductById(auth, id) {
+  const sheets = google.sheets({ version: "v4", auth });
+
+  // Obtener todos los datos de la hoja
+  const getRows = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+    range: "Productos!A:J", // Ajusta el rango para incluir hasta la columna J
+  });
+
+  const rows = getRows.data.values;
+  let rowIndexToUpdate = null;
+
+  // Encontrar la fila con el ID proporcionado
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i][0] == id) {
+      // Asumiendo que la columna ID es la primera (A)
+      rowIndexToUpdate = i;
+      break;
+    }
+  }
+
+  if (rowIndexToUpdate === null) {
+    throw new Error("ID not found");
+  }
+
+  // Obtener el valor actual de la columna "Publicado" (columna J, índice 9)
+  const currentPublishedValue = rows[rowIndexToUpdate][9];
+  const newPublishedValue = currentPublishedValue === "si" ? "no" : "si"; // Alternar entre "si" y "no"
+
+  // Actualizar la celda con el nuevo valor
+  const updateResponse = await sheets.spreadsheets.values.update({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+    range: `Productos!J${rowIndexToUpdate + 1}`, // J es la columna 10, sumamos 1 al índice para la referencia en Sheets
+    valueInputOption: "USER_ENTERED",
+    resource: {
+      values: [[newPublishedValue]],
+    },
+  });
+
+  // Determinar el estado de "Publicado" y enviar el mensaje correspondiente
+  const statusMessage =
+    newPublishedValue === "si" ? "publicado" : "no publicado";
+
+  return {
+    message: `El producto cambio a ${statusMessage}.`,
+    updateResponse: updateResponse.data,
+  };
+}
+
 async function getCashFlow(auth) {
   try {
     const sheets = google.sheets({ version: "v4", auth });
@@ -686,7 +781,86 @@ async function addCashFlowEntry(auth, data) {
   }
 }
 
+async function createSectionEntry(req, res) {
+  try {
+    // Autorizar Google Sheets
+    const auth = await authorize();
 
+    // Obtener el último ID de la base de datos
+    const { lastId } = await getSheetData(auth);
+    const newId = lastId + 1;
+
+    const { seccion, texto } = req.body;
+
+    // Validar que el texto tenga menos de 200 caracteres
+    if (texto.length > 200) {
+      return res.status(400).json({ message: "El texto no debe exceder los 200 caracteres." });
+    }
+
+    // Subir la imagen a Cloudinary
+    const imageUrl = await handleImageUpload(req, res);
+
+    // Formatear los datos para agregarlos a la hoja de cálculo
+    const newRow = [
+      newId,
+      seccion,
+      texto,
+      imageUrl,
+    ];
+
+    // Guardar la fila en Google Sheets
+    const sheets = google.sheets({ version: "v4", auth });
+    const result = await sheets.spreadsheets.values.append({
+      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      range: "Imagenes!A2:D", // Ajustar el rango según tu estructura de datos
+      valueInputOption: "RAW",
+      resource: {
+        values: [newRow],
+      },
+    });
+
+    // Responder con el resultado
+    res.status(201).json({ message: "Entrada creada exitosamente", data: result.data });
+  } catch (error) {
+    console.error("Error creando la entrada:", error);
+    res.status(500).json({ message: "Error creando la entrada", error: error.message });
+  }
+}
+
+async function getSectionEntries(req, res) {
+  try {
+    // Autorizar Google Sheets
+    const auth = await authorize();
+
+    // Obtener los datos de la hoja "Imagenes"
+    const sheets = google.sheets({ version: "v4", auth });
+    const result = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEETS_ID, // ID de tu hoja de cálculo
+      range: "Imagenes!A2:D", // Rango desde donde quieras obtener los datos (omitir encabezados)
+    });
+
+    const rows = result.data.values;
+
+    // Verificar si hay datos en la hoja
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ message: "No se encontraron entradas en la hoja de 'Imagenes'." });
+    }
+
+    // Formatear los datos en un array de objetos
+    const formattedData = rows.map(row => ({
+      id: row[0],       // ID
+      seccion: row[1],  // Sección
+      texto: row[2],    // Texto
+      imageUrl: row[3], // URL de la imagen
+    }));
+
+    // Devolver los datos formateados
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error("Error obteniendo las entradas:", error.message);
+    res.status(500).json({ message: "Error obteniendo las entradas", error: error.message });
+  }
+}
 
 
 
@@ -707,8 +881,12 @@ module.exports = {
   getProductsByCategory,
   getAllCategories,
   deleteSalesById,
+  getSaleByUserId,
   getCashFlow,
   addCashFlowEntry,
   getAllColors,
-  getProductsByColor
+  getProductsByColor,
+  activeProductById,
+  createSectionEntry,
+  getSectionEntries
 };

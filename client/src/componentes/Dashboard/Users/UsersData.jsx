@@ -35,7 +35,7 @@ const UsersData = () => {
               onClick={() => toggleModal()}
               className="p-2 border border-secondary bg-secondary text-white rounded-md hover:bg-primary hover:text-white active:translate-y-[2px] shadow-sm hover:shadow-md"
             >
-              Crear nuevo vendedor
+              Crear nuevo usuario
             </button>
           </div>
           <div className="flex items-center space-x-2">

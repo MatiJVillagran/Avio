@@ -14,11 +14,15 @@ const {
   getProductsByCategory,
   getAllCategories,
   deleteSalesById,
+  getSaleByUserId,
   getCashFlow,
   addCashFlowEntry,
   getSheetDataById,
   getAllColors,
   getProductsByColor,
+  activeProductById,
+  createSectionEntry,
+  getSectionEntries,
 } = require("../Controllers/sheets/sheetsController.js");
 const {handleImageUpload}= require("../Controllers/sheets/handleImageUpload.js");
 
@@ -52,6 +56,7 @@ sheetsRouter.post("/data", async (req, res) => {
     const updates = await appendRow(auth, data);
     res.json(updates);
   } catch (error) {
+    console.log({ error: error.message });
     res.status(500).send(error.message);
   }
 });
@@ -79,6 +84,19 @@ sheetsRouter.delete("/delete/:rowIndex", async (req, res) => {
   }
 });
 
+//PUBLICAR O NO EL PRODUCTO EN LA PAGINA
+sheetsRouter.put("/product/:id", async (req, res) => {
+  try {
+    const auth = await authorize();
+    const rowIndex = parseInt(req.params.id, 10);
+    const result = await activeProductById(auth, rowIndex);
+    res.status(200).json(result);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 sheetsRouter.post("/images", (req, res) => { 
   handleImageUpload (req,res)});
@@ -97,6 +115,23 @@ sheetsRouter.get("/sale/:id", async (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send(error.message);
+  }
+});
+
+sheetsRouter.get("/sales/:uid", async (req, res) => {
+  try {
+    const { uid } = req.params;
+
+    const authClient = await authorize();
+
+    const sales = await getSaleByUserId(authClient, uid);
+    // console.log(sales)
+    res.status(200).json(sales);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error obteniendo ventas por UID",
+      error: error.message,
+    });
   }
 });
 
@@ -239,5 +274,9 @@ sheetsRouter.post("/cashflow/add", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+sheetsRouter.post("/seccion", createSectionEntry);
+
+sheetsRouter.get("/seccion", getSectionEntries);
 
 module.exports = sheetsRouter;

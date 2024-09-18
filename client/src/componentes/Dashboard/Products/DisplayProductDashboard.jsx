@@ -80,7 +80,10 @@ const DisplayProductDashboard = ({ products }) => {
       dispatch(createSale(venta));
       dispatch(cleanCart())
     }
+    console.log("venta",venta);
   };
+ 
+  
 
   const handleAddToCart = (product) => {
     const available = product.stock;

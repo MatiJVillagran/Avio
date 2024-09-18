@@ -87,6 +87,21 @@ export const Nav = ({ user, showNav }) => {
               <span className="">Ventas</span>
             </Link>
             <Link
+              to={"/dashboard/carrousel"}
+              className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-primary hover:text-white rounded-md transition duration-150 ease-in-out"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6 fill-current inline-block"
+              >
+              <path d="M9 5V19M15 5V19M6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V8.2C21 7.0799 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.07989 19 6.2 19Z" stroke="#000000" stroke-width="0.25" 
+              clipRule="evenodd"/>
+              </svg>
+              <span className="">Carrousel</span>
+            </Link>
+            <Link
               to={"/dashboard/balance"}
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-primary hover:text-white rounded-md transition duration-150 ease-in-out"
             >
@@ -122,7 +137,7 @@ export const Nav = ({ user, showNav }) => {
                 <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
               </svg>
 
-              <span className="">Vendedores</span>
+              <span className="">Usuarios</span>
             </Link>
           </>
         ) : (

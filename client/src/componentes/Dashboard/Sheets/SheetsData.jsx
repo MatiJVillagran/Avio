@@ -18,7 +18,7 @@ const SheetsData = ({
               <th>Nombre</th>
               <th>Marca</th>
               <th>Medida</th>
-              <th>Cantidad</th>
+              <th>Stock</th>
               <th>Precio</th>
               <th>Imagen</th>
               <th>SKU</th>
@@ -33,8 +33,8 @@ const SheetsData = ({
                 const rowClass =
                   row.stock === 0 ? "bg-red-500 text-white" : "";
                 const rowClassWarning =
-                  row.stock > 0 && row.stock < 2
-                    ? "bg-yellow-100 text-gray-800"
+                  row.stock > 0 && row.stock < 5
+                    ? "bg-yellow-200 text-gray-800"
                     : "";
 
                 return (
@@ -47,7 +47,7 @@ const SheetsData = ({
                     <td>{row.nombre}</td>
                     <td>{row.marca}</td>
                     <td>{row.medida}</td>
-                    <td>{row.cantidad}</td>
+                    <td>{row.stock}</td>
                     <td>{row.precio}</td>
                     <td className="flex">
                       {imgUrl?.length > 1 ? (
@@ -56,14 +56,14 @@ const SheetsData = ({
                             key={imgIndex}
                             src={url}
                             alt={`Imagen ${index}-${imgIndex}`}
-                            className="w-16 h-16 rounded-full mr-[-36px] object-cover mb-2"
+                            className="w-16 h-16 rounded-full mr-[-42px] object-cover mb-2"
                           />
                         ))
                       ) : (
                         <LazyLoadImage
                           src={row?.url}
                           alt={`Imagen ${row?.url}-${index}`}
-                          className="w-16 h-16 rounded-full mr-[-36px] object-cover mb-2"
+                          className="w-16 h-16 rounded-full mr-[-42px] object-cover mb-2"
                         />
                       )}
                     </td>
@@ -109,7 +109,7 @@ const SheetsData = ({
                           />
                         </svg>
                       </button>
-                      {row.cantidad !== 0 ? (
+                      {row.stock !== 0 ? (
                         <button
                           title="Publicar en la pagina"
                           className={`${
@@ -167,7 +167,7 @@ const SheetsData = ({
         </table>
       </div>
       <div className="flex flex-row my-2 gap-4">
-        <div className="flex justify-center items-center p-2 border rounded-md bg-yellow-600 text-white gap-2">
+        <div className="flex justify-center items-center p-2 border rounded-md bg-yellow-300 text-white gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

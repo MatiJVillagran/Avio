@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createSale, removeFromCart } from "../../../redux/actions/actions";
 import { useNavigate } from "react-router-dom";
 
@@ -11,11 +11,16 @@ const Cart = ({ product, calcularTotal, usuario }) => {
   const [formCliente, setFormCliente] = useState({
     nombre: usuario.name || "",
     correo: usuario.email || "",
+    id: usuario.uid || "",
     provincia: usuario.provincia || "",
     direccion: usuario.direccion || "",
     cp: usuario.cp || "",
     celular: "",
   });
+
+  console.log(usuario);
+  
+
   const handleFormaPagoChange = (forma) => {
     setFormaPago(forma);
   };
@@ -44,10 +49,13 @@ const Cart = ({ product, calcularTotal, usuario }) => {
       cliente: formCliente,
     };
 
+    console.log("venta",venta);
+    
+
     if (venta.formaPago === "") {
       toast.error("Falta forma de pago");
     } else if (venta.productos.length === 0) {
-      toast.error("El carrito está vacío");
+      toast.error("La canasta está vacía");
     } else if (venta.cliente.nombre.trim() === "") {
       toast.error("Falta nombre del cliente");
     } else {
@@ -61,8 +69,8 @@ const Cart = ({ product, calcularTotal, usuario }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-200">
-      <div className="bg-gray-50 h-screen text-center shadow-md p-6 rounded-xl w-2/3 flex flex-col">
+    <div className="flex items-center justify-center bg-primary">
+      <div className="bg-gray-50 h-screen text-center shadow-md p-6 rounded-xl w-2/3 flex flex-col ml-2">
         <div className="flex justify-start">
           <button
             className="flex gap-2 border border-gray-400 p-2 active:translate-y-[1px] hover:shadow-lg rounded-md"
@@ -84,15 +92,14 @@ const Cart = ({ product, calcularTotal, usuario }) => {
             </svg>
             <span>Volver</span>
           </button>
-          <h1 className="text-xl font-bold flex-1">Carrito</h1>
+          <h1 className="text-xl font-bold flex-1">Canasta de compras</h1>
         </div>
 
         <div
-          className={`border border-gray-500 p-2 mt-4 ${
-            product.length > 0
+          className={`border border-gray-500 p-2 mt-4 rounded-md ${product.length > 0
               ? "overflow-y-scroll"
               : "h-full flex justify-center items-center"
-          }`}
+            }`}
         >
           {product?.length > 0 ? (
             product?.map((prod, i) => {
@@ -100,45 +107,41 @@ const Cart = ({ product, calcularTotal, usuario }) => {
               return (
                 <div
                   key={i}
-                  className="md:flex items-center py-2 md:py-2 lg:py-2 border-t border-gray-500"
+                  className="md:flex items-center py-2 border-t border-gray-500 rounded-md bg-white shadow-sm p-4"
                 >
-                  <div className="md:w-4/12 2xl:w-1/4 w-full gap-2 p-1 flex">
+                  <div className="md:w-1/3 w-32 h-32 flex-shrink-0">
                     <img
                       key={i}
                       src={imagenes}
-                      alt="Black Leather Purse"
-                      className="h-48 w-48 border border-gray-400 object-center p-2 rounded-md object-cover md:block hidden"
+                      alt="Producto"
+                      className="h-full w-full rounded-md object-cover"
                     />
                   </div>
-                  <div className="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center p-4">
-                    <p className="text-base mt-4 leading-3 text-gray-800">
+                  <div className="md:w-2/3 flex flex-col justify-center p-4 text-left">
+                    <p className="text-base font-bold leading-none text-gray-800">
+                      {prod.nombre}
+                    </p>
+                    <p className="text-sm leading-3 text-gray-600 pt-2">
                       <span className="font-bold">SKU:</span> {prod.sku}
                     </p>
-                    <div className="flex items-center justify-between w-full">
-                      <p className="text-base font-bold leading-none text-gray-800">
-                        {prod.nombre}
-                      </p>
-                    </div>
                     {prod.medida && (
-                      <p className="text-base leading-3 text-gray-600 pt-2">
+                      <p className="text-sm leading-3 text-gray-600 pt-2">
                         <span className="font-bold">Medida:</span> {prod.medida}
                       </p>
                     )}
-                    <p className="text-base leading-3 text-gray-800 py-4">
+                    <p className="text-sm leading-3 text-gray-600 py-2">
                       <span className="font-bold">Marca:</span> {prod.marca}
                     </p>
-                    <p className="text-base leading-3 text-gray-800 py-4">
-                      <span className="font-bold">Cantidad:</span>{" "}
-                      {prod.cantidad}
+                    <p className="text-sm leading-3 text-gray-600 py-2">
+                      <span className="font-bold">Cantidad:</span> {prod.cantidad}
                     </p>
-
-                    <div className="flex items-center justify-between pt-5">
-                      <p className="text-xl text-gray-800">
+                    <div className="flex items-center justify-between pt-4">
+                      <p className="text-xl font-semibold text-gray-800">
                         ${prod.precio * prod.cantidad},00
                       </p>
                       <button
                         onClick={() => handleRemove(prod.id)}
-                        className="text-xs leading-3 p-2 hover:shadow-md border hover:border-red-500  active:translate-y-[2px] rounded-full text-red-500 cursor-pointer"
+                        className="flex items-center justify-center p-2 hover:shadow-md border border-red-500 rounded-full text-red-500 cursor-pointer transition ease-in-out duration-200 hover:bg-red-100"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -155,6 +158,7 @@ const Cart = ({ product, calcularTotal, usuario }) => {
                           />
                         </svg>
                       </button>
+
                     </div>
                   </div>
                 </div>
@@ -162,20 +166,18 @@ const Cart = ({ product, calcularTotal, usuario }) => {
             })
           ) : (
             <p className="text-gray-500 text-center">
-              Carrito vacío, llénalo y podrás concretar una venta
+              Canasta vacía, llenala y podrás realizar el pedido
             </p>
           )}
         </div>
       </div>
 
-      <div className="bg-gray-50 opacity-95 text-center shadow-md p-6 rounded-xl w-1/3 m-2 h-screen flex flex-col justify-between">
+      {/* Resumen */}
+      <div className="bg-gray-100  text-center shadow-md p-6 rounded-xl w-1/3 m-2 h-screen flex flex-col justify-between">
         <h1 className="text-xl text-black">Resumen</h1>
         <div className="p-2">
           <div className="mt-2 flex justify-center items-center">
-            <label
-              className="border border-gray-300 p-2 text-center"
-              htmlFor="nombre"
-            >
+            <label className="border border-gray-300 p-2 text-center" htmlFor="nombre">
               Nombre
             </label>
             <input
@@ -183,15 +185,12 @@ const Cart = ({ product, calcularTotal, usuario }) => {
               name="nombre"
               value={formCliente.nombre}
               onChange={handleFormClienteChange}
-              className="border p-2 w-full border-gray-300"
+              className="border p-2 w-full border-gray-300 rounded-md"
               placeholder="Nombre completo"
             />
           </div>
           <div className="mt-2 flex justify-center items-center">
-            <label
-              className="border border-gray-300 p-2 text-center"
-              htmlFor="correo"
-            >
+            <label className="border border-gray-300 p-2 text-center" htmlFor="correo">
               Correo
             </label>
             <input
@@ -199,16 +198,13 @@ const Cart = ({ product, calcularTotal, usuario }) => {
               name="correo"
               value={formCliente.correo}
               onChange={handleFormClienteChange}
-              className="border p-2 w-full"
+              className="border p-2 w-full border-gray-300 rounded-md"
               placeholder="Email"
             />
           </div>
           <div className="mt-2 flex flex-row justify-center items-center">
             <div className="flex">
-              <label
-                className="border border-gray-300 p-2 text-center"
-                htmlFor="provincia"
-              >
+              <label className="border border-gray-300 p-2 text-center" htmlFor="provincia">
                 Provincia
               </label>
               <input
@@ -216,15 +212,12 @@ const Cart = ({ product, calcularTotal, usuario }) => {
                 name="provincia"
                 value={formCliente.provincia}
                 onChange={handleFormClienteChange}
-                className="border p-2 w-full"
+                className="border p-2 w-full border-gray-300 rounded-md"
                 placeholder="Provincia"
               />
             </div>
             <div className="ml-2 flex">
-              <label
-                className="border border-gray-300 p-2 text-center"
-                htmlFor="cp"
-              >
+              <label className="border border-gray-300 p-2 text-center" htmlFor="cp">
                 CP
               </label>
               <input
@@ -232,17 +225,14 @@ const Cart = ({ product, calcularTotal, usuario }) => {
                 name="cp"
                 value={formCliente.cp}
                 onChange={handleFormClienteChange}
-                className="border p-2 w-full"
+                className="border p-2 w-full border-gray-300 rounded-md"
                 placeholder="Código Postal"
               />
             </div>
           </div>
           <div className="mt-2 flex flex-row justify-center items-center">
             <div className="flex">
-              <label
-                className="border border-gray-300 p-2 text-center"
-                htmlFor="direccion"
-              >
+              <label className="border border-gray-300 p-2 text-center" htmlFor="direccion">
                 Dirección
               </label>
               <input
@@ -250,15 +240,12 @@ const Cart = ({ product, calcularTotal, usuario }) => {
                 name="direccion"
                 value={formCliente.direccion}
                 onChange={handleFormClienteChange}
-                className="border p-2 w-full"
+                className="border p-2 w-full border-gray-300 rounded-md"
                 placeholder="Dirección"
               />
             </div>
             <div className="ml-2 flex">
-              <label
-                className="border border-gray-300 p-2 text-center"
-                htmlFor="celular"
-              >
+              <label className="border border-gray-300 p-2 text-center" htmlFor="celular">
                 Celular
               </label>
               <input
@@ -266,53 +253,43 @@ const Cart = ({ product, calcularTotal, usuario }) => {
                 name="celular"
                 value={formCliente.celular}
                 onChange={handleFormClienteChange}
-                className="border p-2 w-full"
+                className="border p-2 w-full border-gray-300 rounded-md"
                 placeholder="Número de celular"
               />
             </div>
           </div>
         </div>
+
         <div className="p-2 mt-2">
-          Forma de pago
+          <p>Forma de pago</p>
           <div className="flex gap-2 mt-2 justify-center items-center">
             <button
               onClick={() => handleFormaPagoChange("Efectivo")}
-              className={`border p-2 text-gray-500 w-40 hover:bg-gray-100 shadow-md active:translate-y-[2px] ${
-                formaPago === "Efectivo" ? "border-teal-300" : "border-gray-400"
-              }`}
+              className={`border p-2 text-gray-500 w-40 hover:bg-gray-100 shadow-md rounded-md active:translate-y-[2px] ${formaPago === "Efectivo" ? "border-teal-300" : "border-gray-400"
+                }`}
             >
               Efectivo
             </button>
-            {/* <button
-              onClick={() => handleFormaPagoChange("Mercado Pago")}
-              className={`border p-2 text-gray-500 w-40 hover:bg-gray-100 shadow-md active:translate-y-[2px] ${
-                formaPago === "Mercado Pago"
-                  ? "border-teal-300"
-                  : "border-gray-400"
-              }`}
-            >
-              Mercado Pago
-            </button> */}
             <button
               onClick={() => handleFormaPagoChange("Transferencia")}
-              className={`border p-2 text-gray-500 w-40 hover:bg-gray-100 shadow-md active:translate-y-[2px] ${
-                formaPago === "Transferencia"
+              className={`border p-2 text-gray-500 w-40 hover:bg-gray-100 shadow-md rounded-md active:translate-y-[2px] ${formaPago === "Transferencia"
                   ? "border-teal-300"
                   : "border-gray-400"
-              }`}
+                }`}
             >
               Transferencia
             </button>
           </div>
         </div>
-        <div className="p-2 mt-4">Total: ${calcularTotal()}</div>
+
         <div className="p-2 mt-4">
-          {/* <button
+          <p>Total: ${calcularTotal()}</p>
+          <button
             onClick={handleCreateVenta}
-            className="border p-2 text-white bg-gray-800 w-full hover:bg-gray-700"
+            className="border p-2 text-white bg-gray-800 w-full hover:bg-gray-700 rounded-md mt-4"
           >
-            Empezar el pago
-          </button> */}
+            Confirmar compra
+          </button>
         </div>
       </div>
     </div>

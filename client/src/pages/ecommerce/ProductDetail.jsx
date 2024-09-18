@@ -31,8 +31,12 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = (product) => {
-    toast.success("Producto agregado al carrito");
-    dispatch(addToCart(product));
+    if (product.cantidad > 0) {
+      toast.success("Producto agregado al carrito");
+      dispatch(addToCart(product));
+    } else {
+      toast.error("Producto sin stock");
+    }
   };
 
   const handleQuantityChange = (event) => {
@@ -115,8 +119,8 @@ const ProductDetail = () => {
           </div>
 
           <div className="info-container">
-            <p className="product-date">SKU: {product ? product.sku : null}</p>
-            <h1 className="product-name">{product?.Nombre}</h1>
+            <p className="product-date">Marca: {product ? product.marca : null}</p>
+            <h1 className="product-name">{product?.nombre}</h1>
             <p className="brand">Categoria: {product?.categoria}</p>
             <p className="product-price">${product?.precio}</p>
             <div className="product-quantity">

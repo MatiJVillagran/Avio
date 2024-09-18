@@ -20,7 +20,7 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
     url: [],
   });
   const [errors, setErrors] = useState({});
-  const img = useSelector((state) => state.sheets.images);
+  const img = useSelector((state) => state.sheets.images); // Selector de imágenes
 
   const memoizedErrors = useMemo(() => {
     return validationProductForm(formData);
@@ -45,13 +45,14 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
     }
   }, [product]);
 
+  // Manejo de la respuesta de la imagen subida
   useEffect(() => {
     if (img && img.length > 0) {
       setFormData((prevData) => ({
         ...prevData,
-        url: [...prevData.url, ...img.map((image) => image[0])],
+        url: [...prevData.url, ...img], // Asegurarse de que el valor de img sea la URL correcta
       }));
-      dispatch(clearImages());
+      dispatch(clearImages()); // Limpiar imágenes del estado global después de agregarlas al formData
     }
   }, [img, dispatch]);
 
@@ -285,8 +286,8 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
               onChange={handleChange}
               placeholder="Medida"
             />
-            {errors.tamaño && (
-              <p className="text-red-500 text-xs">{errors.tamaño}</p>
+            {errors.medida && (
+              <p className="text-red-500 text-xs">{errors.medida}</p>
             )}
           </div>
           <div className="mt-2 w-1/2">

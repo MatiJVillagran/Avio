@@ -86,42 +86,15 @@ const Navigation = () => {
             </div>
             <div className="flex-1 flex justify-center gap-2 px-2 lg:ml-6 lg:justify-end">
               <div className="max-w-lg w-full lg:max-w-xs">
-                <label htmlFor="search" className="sr-only">
-                  Search
-                </label>
-                <form className="relative z-50">
-                  <button
-                    type="submit"
-                    id="searchsubmit"
-                    className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                  >
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
-                  <input
-                    type="text"
-                    name="s"
-                    id="s"
-                    className="flex w-60 pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-primary text-white placeholder-gray-400 focus:outline-none focus:bg-white focus:text-gray-900 sm:text-sm transition duration-150 ease-in-out"
-                    placeholder="Search"
-                  />
-                </form>
+                
               </div>
               <div className="tooltip">
                 <button
                   onClick={toggleCart}
                   className={`border hover:shadow-lg hover:border-secondary hover:text-secondary rounded-lg w-auto p-2 flex items-center`}
                 >
-   <svg viewBox="0 -3 17 17" xmlns="http://www.w3.org/2000/svg" fill="#000000" className="size-6"><g id="SVGRepo_bgCarrier" stroke="currentColor" stroke-width="1.5"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="Path_8" data-name="Path 8" d="M278.973,826.978l-1.594,6.42c-.7,1.993-1.189,2.6-2.656,2.6h-8.5c-1.467,0-2.05-.463-2.656-2.6l-1.594-6.42h3.018A2.214,2.214,0,0,1,267.246,825H273.7a2.215,2.215,0,0,1,2.255,1.978Zm-14.344,6.452a1.677,1.677,0,0,0,1.594,1.561h8.5c.88,0,1.382-.605,1.594-1.561l1.295-5.443H263.335Zm9.072-7.448h-6.454a1.244,1.244,0,0,0-1.327,1h9.108A1.245,1.245,0,0,0,273.7,825.982Zm.256,5h-6.968v-1h6.968Zm-1,2h-4.968v-1h4.968Z" transform="translate(-261.973 -825)" fill="#444"></path> </g></svg>
+                  <svg viewBox="0 -2.69 20.438 20.438" xmlns="http://www.w3.org/2000/svg" fill="#000000" className="size-7"><g id="SVGRepo_bgCarrier" stroke="currentColor" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="Path_9" data-name="Path 9" d="M312.693,827.969h-.7v5.045a3.01,3.01,0,0,1-3.009,3.01h-9.991a3.01,3.01,0,0,1-3.009-3.01v-5.045h-.73a1.5,1.5,0,0,1,0-3h5.078l2.812-3.006-.165-.151.895-.841.106.1.092-.1.9.841-.084.089,3.331,3.068h4.478a1.5,1.5,0,0,1,0,3Zm-15.724,5.2a1.805,1.805,0,0,0,1.806,1.806h10.4a1.805,1.805,0,0,0,1.806-1.806V828H296.969Zm7.077-10.383-2.059,2.182h4.444Zm7.622,3.2h-15.4c-.733,0-1.328.229-1.328.512s.6.511,1.328.511h15.4c.734,0,1.328-.229,1.328-.511S312.4,825.986,311.668,825.986Zm-10.7,4.983h6V832h-6Z" transform="translate(-293.755 -820.971)" fill="#444"></path> </g></svg>
+
                   {cartItems?.length > 0 && (
                     <span className="bg-secondary text-white text-xs rounded-full w-4 h-4 text-center top-0 left-0">
                       {cartItems?.length}
@@ -142,19 +115,10 @@ const Navigation = () => {
                   onClick={handleShowLogin}
                   className={`border hover:shadow-lg hover:border-secondary hover:text-secondary rounded-lg w-auto p-2 flex items-center`}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none" className="size-7">
+                    <circle cx="12" cy="10" r="3" stroke="#222222" strokeLinecap="round" />
+                    <circle cx="12" cy="12" r="9" stroke="#222222" />
+                    <path d="M18 18.7059C17.6461 17.6427 16.8662 16.7033 15.7814 16.0332C14.6966 15.3632 13.3674 15 12 15C10.6326 15 9.30341 15.3632 8.21858 16.0332C7.13375 16.7033 6.35391 17.6427 6 18.7059" stroke="#222222" strokeLinecap="round" />
                   </svg>
                 </button>
               </div>
@@ -200,4 +164,3 @@ const Navigation = () => {
 };
 
 export default Navigation;
-  

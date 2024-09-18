@@ -16,6 +16,8 @@ import {
   FETCH_PRODUCT_SHEET_BY_ID,
   GET_COLORS,
   FILTER_COLOR,
+  CREATE_SECTION,
+  GET_SECTION
 } from "../actions/actions";
 
 const initialState = {
@@ -29,7 +31,8 @@ const initialState = {
   categories: [],
   cashFlow: [],
   colors: [],
-  filterColors: []
+  filterColors: [],
+  sectionData: [],
 };
 
 const sheetsReducer = (state = initialState, action) => {
@@ -125,6 +128,20 @@ const sheetsReducer = (state = initialState, action) => {
         ...state,
         cashFlow: [...state.cashFlow, action.payload],
       };
+
+        // Acción para guardar los datos en sectionData
+        case CREATE_SECTION:
+          return {
+            ...state,
+            sectionData: [...state.sectionData, action.payload],
+          };
+    
+        // Acción para obtener los datos y actualizar SectionData
+        case GET_SECTION:
+          return {
+            ...state,
+            sectionData: action.payload,
+          };  
     default:
       return state;
   }

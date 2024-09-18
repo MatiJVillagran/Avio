@@ -8,6 +8,7 @@ import {
   UPDATE_CART,
   GET_SALES,
   GET_SALE_BY_ID,
+  GET_SALE_BY_USER_ID,
   DECREMENT_QUANTITY,
   INCREMENT_QUANTITY,
 } from "../actions/actions";
@@ -100,6 +101,12 @@ const cartReducer = (state = initialState, action) => {
         ...state,
         saleInfo: payload,
       };
+
+      case GET_SALE_BY_USER_ID:
+        return {
+          ...state,
+          saleInfo: payload,
+        };
 
     case INCREMENT_QUANTITY:
       updatedCartItems = state.cartItems.map((item) =>

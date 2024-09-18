@@ -16,6 +16,8 @@ import CartPage from "./pages/ecommerce/CartPage";
 import Register from "./pages/dashboard/Register";
 import ProductDetail from "./pages/ecommerce/ProductDetail";
 import AllProducts from "./pages/ecommerce/AllProducts";
+import Purchase from "./pages/ecommerce/Purchase";
+import { ImageGallery } from "./pages/dashboard/ImageGallery";
 
 function App() {
   const dispatch = useDispatch();
@@ -32,6 +34,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/userpurchase/:id" element={<Purchase />} />
         <Route path="/product" element={<AllProducts />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         {isAuth ? (
@@ -40,6 +43,7 @@ function App() {
             <Route path="/dashboard/products" element={<Products />} />
             <Route path="/dashboard/sales" element={<Sales />} />
             <Route path="/dashboard/users" element={<Users />} />
+            <Route path="/dashboard/carrousel" element={<ImageGallery />} />
             <Route path="/dashboard/balance" element={<Balance />} />
             <Route path="/dashboard/support" element={<Support />} />
           </>
