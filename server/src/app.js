@@ -17,7 +17,7 @@ server.use(
   cors({
     origin: [
       // "https://ninashowroom.techwebstudio.com.ar",
-      "https://avio-omega.vercel.app/",
+      "https://avio-omega.vercel.app",
       "http://localhost:5173"
     ],
     credentials: true,
