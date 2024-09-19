@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js";
-import intance from "../../api/axiosConfig";
+import instance from "../../api/axiosConfig";
 import toast from "react-hot-toast";
 import renderEmail from "../../componentes/Mails/renderEmail";
 import renderEmailOrder from "../../componentes/Mails/renderEmailOrder";
@@ -63,7 +63,7 @@ export const GET_SECTION = "GET_SECTION";
 //USER
 export const authenticationUser = (email) => async (dispatch) => {
   try {
-    const response = await intance.post(`/api/user/auth/${email}`);
+    const response = await instance.post(`/api/user/auth/${email}`);
     
     if (response.status === 200) {
       dispatch({
@@ -81,7 +81,7 @@ export const authenticationUser = (email) => async (dispatch) => {
 export const createUser = (data) => async (dispatch) => {
   
   try {
-    const response = await intance.post(`/api/user/create`, data);
+    const response = await instance.post(`/api/user/create`, data);
     console.log(response);
     if (response.ok) {
       dispatch({
@@ -98,7 +98,7 @@ export const createUser = (data) => async (dispatch) => {
 export const createSeller = (email, name, uid, role) => async (dispatch) => {
   try {
     const data = { email, name, uid, role };
-    const response = await intance.post(`/api/user/seller`, data);
+    const response = await instance.post(`/api/user/seller`, data);
     if (response.ok) {
       dispatch({
         type: CREATED_SELLER,
@@ -114,7 +114,7 @@ export const createSeller = (email, name, uid, role) => async (dispatch) => {
 
 export const fetchUsers = () => async (dispatch) => {
   try {
-    const response = await intance.get(`/api/user/users`);
+    const response = await instance.get(`/api/user/users`);
     if (response.status === 200) {
       dispatch({
         type: FETCH_USERS,
@@ -165,7 +165,7 @@ export const updateCart = (updatedCart) => ({
 //VENTAS
 export const getSaleInfo = (id) => async (dispatch) => {
   try {
-    const res = await intance.get(`/api/sheets/sale/${id}`);
+    const res = await instance.get(`/api/sheets/sale/${id}`);
     console.log(res);
     dispatch({
       type: GET_SALE_BY_ID,
@@ -178,7 +178,7 @@ export const getSaleInfo = (id) => async (dispatch) => {
 
 export const getSales = () => async (dispatch) => {
   try {
-    const res = await intance.get(`/api/sheets/sale`);
+    const res = await instance.get(`/api/sheets/sale`);
     dispatch({
       type: GET_SALES,
       payload: res.data,
@@ -190,7 +190,7 @@ export const getSales = () => async (dispatch) => {
 
 export const createSale = (data) => async (dispatch) => {
   try {
-    const res = await intance.post(`/api/sheets/sale`, data);
+    const res = await instance.post(`/api/sheets/sale`, data);
     if (res.status === 200) {
       dispatch(getSales());
       await sendEmail(data.cliente.correo, data);
@@ -209,7 +209,7 @@ export const createSale = (data) => async (dispatch) => {
 export const getSaleByUserID = (uid) => async (dispatch) => {
   try {
 
-    const res = await intance.get(`/api/sheets/sales/${uid}`);
+    const res = await instance.get(`/api/sheets/sales/${uid}`);
     if (res.status === 200) {
       dispatch({
         type: GET_SALE_BY_USER_ID,
@@ -225,7 +225,7 @@ export const getSaleByUserID = (uid) => async (dispatch) => {
 // Obtener todos los movimientos de caja
 export const getCashFlow = () => async (dispatch) => {
   try {
-    const res = await intance.get(`/api/sheets/cashflow`);
+    const res = await instance.get(`/api/sheets/cashflow`);
 
     dispatch({
       type: GET_CASH_FLOW,
@@ -239,7 +239,7 @@ export const getCashFlow = () => async (dispatch) => {
 
 export const addCashFlowEntry = (entryData) => async (dispatch) => {
   try {
-    const response = await intance.post("/api/sheets/cashflow/add", entryData);
+    const response = await instance.post("/api/sheets/cashflow/add", entryData);
     toast.success("Entrada añadida exitosamente");
 
     // Actualizar el estado local solo con la nueva entrada
@@ -290,7 +290,7 @@ export const authenticateUserFromSession = () => {
 //UPLOAD IMAGE
 export const uploadImages = (formData) => async (dispatch) => {
   try {
-    const response = await intance.post(`/api/sheets/images`, formData, {
+    const response = await instance.post(`/api/sheets/images`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     if (response.status === 200) {
@@ -320,7 +320,7 @@ export const clearImages = () => ({
 export const fetchSheets = () => async (dispatch) => {
   const token = localStorage.getItem("authToken");
   try {
-    const res = await intance.get(`/api/sheets/data`, {
+    const res = await instance.get(`/api/sheets/data`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -339,7 +339,7 @@ export const fetchSheets = () => async (dispatch) => {
 
 export const getProductById = (id) => async (dispatch) => {
   try {
-    const res = await intance.get(`/api/sheets/data/${id}`);
+    const res = await instance.get(`/api/sheets/data/${id}`);
     dispatch({
       type: FETCH_PRODUCT_SHEET_BY_ID,
       payload: res.data
@@ -352,7 +352,7 @@ export const getProductById = (id) => async (dispatch) => {
 export const addSheetRow = (rowData) => async (dispatch) => {
   const token = localStorage.getItem("authToken");
   try {
-    const res = await intance.post(`/api/sheets/data`, rowData, {
+    const res = await instance.post(`/api/sheets/data`, rowData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -376,7 +376,7 @@ export const addSheetRow = (rowData) => async (dispatch) => {
 
 export const updateRow = (rowData) => async (dispatch) => {
   try {
-    const res = await intance.put(`/api/sheets/update`, rowData);
+    const res = await instance.put(`/api/sheets/update`, rowData);
     if (res.status === 200) {
       toast.success("Editado exitosamente");
       dispatch({
@@ -393,7 +393,7 @@ export const updateRow = (rowData) => async (dispatch) => {
 export const deleteSheetRow = (rowIndex) => async (dispatch) => {
   const token = localStorage.getItem("authToken");
   try {
-    const res = await intance.delete(`/api/sheets/delete/${rowIndex}`, {
+    const res = await instance.delete(`/api/sheets/delete/${rowIndex}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -420,7 +420,7 @@ export const filterByCategory = (category) => async (dispatch) => {
   const token = localStorage.getItem("authToken");
   try {
 
-    const res = await intance.get(`/api/sheets/filter/${category}`, {
+    const res = await instance.get(`/api/sheets/filter/${category}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -442,7 +442,7 @@ export const clearFilteredProducts = () => ({
 
 export const getCategories = () => async (dispatch) => {
   try {
-    const response = await intance.get("/api/sheets/categories");
+    const response = await instance.get("/api/sheets/categories");
     const categories = response.data;
 
     dispatch({ type: GET_CATEGORIES, payload: categories });
@@ -453,7 +453,7 @@ export const getCategories = () => async (dispatch) => {
 
 export const getMarcas = () => async (dispatch) => {
   try {
-    const response = await intance.get("/api/sheets/marcas");
+    const response = await instance.get("/api/sheets/marcas");
     const marcas = response.data;
 
     dispatch({ type: GET_MARCAS, payload: marcas });
@@ -464,7 +464,7 @@ export const getMarcas = () => async (dispatch) => {
 
 export const getProductsByMarca = (marca) => async (dispatch) => {
   try {
-    const response = await intance.get(`/api/sheets/filter/marca/${marca}`);
+    const response = await instance.get(`/api/sheets/filter/marca/${marca}`);
     const products = response.data.products;
 
 
@@ -476,7 +476,7 @@ export const getProductsByMarca = (marca) => async (dispatch) => {
 
 export const publicProductById = (id) => async (dispatch) => {
   try {
-    const res = await intance.put(`/api/sheets/product/${id}`);
+    const res = await instance.put(`/api/sheets/product/${id}`);
     if (res.status === 200) {
       
       toast.success(res.data.message);
@@ -495,7 +495,7 @@ export const publicProductById = (id) => async (dispatch) => {
 export const deleteSaleRow = (rowIndex) => async (dispatch) => {
   const token = localStorage.getItem("authToken");
   try {
-    const res = await intance.delete(`/api/sheets/delete/sale/${rowIndex}`, {
+    const res = await instance.delete(`/api/sheets/delete/sale/${rowIndex}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -524,7 +524,7 @@ export const sendEmail = async (userMail, paymentDetail) => {
   };
 
   try {
-    const response = await intance.post(`/api/mails/`, emailContent);
+    const response = await instance.post(`/api/mails/`, emailContent);
     return response;
   } catch (error) {
     console.error("Error al enviar el correo:", error.message);
@@ -540,7 +540,7 @@ export const sendEmailOrder = async (userMail, paymentDetail) => {
   };
 
   try {
-    const response = await intance.post(`/api/mails/`, emailContent);
+    const response = await instance.post(`/api/mails/`, emailContent);
     return response;
   } catch (error) {
     console.error("Error al enviar el correo:", error.message);
@@ -556,7 +556,7 @@ export const sendEmailChangeStateOrder = async (userMail, paymentDetail) => {
   };
 
   try {
-    const response = await intance.post(`/api/mails/`, emailContent);
+    const response = await instance.post(`/api/mails/`, emailContent);
     return response;
   } catch (error) {
     console.error("Error al enviar el correo:", error.message);
@@ -570,7 +570,7 @@ export const createSection = (data) => async (dispatch) => {
   try {
     // console.log("seccion",data);
     
-    const response = await intance.post("/api/sheets/seccion", data);
+    const response = await instance.post("/api/sheets/seccion", data);
     if (response.status === 200) {
       dispatch({
         type: CREATE_SECTION,
@@ -589,7 +589,7 @@ export const createSection = (data) => async (dispatch) => {
 // Acción para obtener los datos
 export const getSection = () => async (dispatch) => {
   try {
-    const response = await intance.get("/api/sheets/seccion");
+    const response = await instance.get("/api/sheets/seccion");
     if (response.status === 200) {
       dispatch({
         type: GET_SECTION,
