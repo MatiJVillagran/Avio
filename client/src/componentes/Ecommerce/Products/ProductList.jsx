@@ -18,9 +18,6 @@ export default function ProductList({ allProducts }) {
     (product) => product.publicado === "si"
   );
 
-
-  
-
   // Productos a mostrar basado en el número de productos visibles
   const currentProducts = publishedProducts.slice(0, visibleProducts);
 
