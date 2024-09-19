@@ -477,29 +477,29 @@ async function getAllCategories(auth) {
   }
 }
 
-async function getAllColors (auth) {
+async function getAllMarcas (auth) {
   try {
     const { products } = await getSheetData(auth);
 
-    const colors = [...new Set(products.map((product) => product.marca.trim().toLowerCase().
+    const marcas = [...new Set(products.map((product) => product.marca.trim().toLowerCase().
     normalize("NFD").replace(/[\u0300-\u036f]/g, "")))];
 
-    return colors;
+    return marcas;
   } catch (error) {
     console.log({ error: error.message });
     throw new Error(error.message);
   }
 }
 
-async function getProductsByColor (auth, color) {
+async function getProductsByMarca (auth, marca) {
   try {
     const { products } = await getSheetData(auth);
 
-    const trimmedColor = color.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const trimmedMarca = marca.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
     const filteredProducts = products.filter(
       (product) =>
-        product.marca.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === trimmedColor
+        product.marca.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === trimmedMarca
     );
 
     if (filteredProducts.length === 0) {
@@ -906,8 +906,8 @@ module.exports = {
   getSaleByUserId,
   getCashFlow,
   addCashFlowEntry,
-  getAllColors,
-  getProductsByColor,
+  getAllMarcas,
+  getProductsByMarca,
   activeProductById,
   createSectionEntry,
   getSectionEntries

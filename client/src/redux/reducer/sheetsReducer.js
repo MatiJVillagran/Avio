@@ -14,8 +14,8 @@ import {
   GET_CASH_FLOW,
   ADD_CASH_FLOW_ENTRY,
   FETCH_PRODUCT_SHEET_BY_ID,
-  GET_COLORS,
-  FILTER_COLOR,
+  GET_MARCAS,
+  FILTER_MARCAS,
   CREATE_SECTION,
   GET_SECTION
 } from "../actions/actions";
@@ -30,8 +30,8 @@ const initialState = {
   filterProducts: [],
   categories: [],
   cashFlow: [],
-  colors: [],
-  filterColors: [],
+  marcas: [],
+  filterMarcas: [],
   sectionData: [],
 };
 
@@ -105,16 +105,16 @@ const sheetsReducer = (state = initialState, action) => {
         categories: action.payload,
       };
 
-    case GET_COLORS:
+    case GET_MARCAS:
       return {
         ...state,
-        colors: action.payload,
+        marcas: action.payload,
       };
 
-    case FILTER_COLOR:
+    case FILTER_MARCAS:
       return {
         ...state,
-        filterColors: action.payload,
+        filterMarcas: action.payload,
       };
 
     case GET_CASH_FLOW:

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import Navigation from "../../componentes/Ecommerce/Nav/Navigation";
 import Carrousel from "../../componentes/Ecommerce/Carrousel/Carrousel";
-import { fetchSheets } from "../../redux/actions/actions";
+import { fetchSheets, getSection } from "../../redux/actions/actions";
 import ProdustHome from "../../componentes/Ecommerce/Products/ProdustHome";
 import Features from "../../componentes/Ecommerce/Features/Features";
 import FooterPage from "../../componentes/Ecommerce/Footer/FooterPage";
@@ -12,6 +12,8 @@ import WhatsAppBubble from "../../componentes/Ecommerce/Whatsapp/WhatsAppBubble"
 const Home = () => {
   const dispatch = useDispatch();
   const sheetsData = useSelector((state) => state.sheets.sheetsData);
+  const carruselData= useSelector((state)=> state.sheets.sectionData);
+  
   const [refCarrousel, inViewCarrousel] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -23,6 +25,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(fetchSheets());
+    dispatch(getSection())
   }, [dispatch]);
 
   return (
@@ -31,13 +34,13 @@ const Home = () => {
       <WhatsAppBubble />
       <div
         ref={refCarrousel}
-        className={`transition-transform duration-1000 ${
+        className={`transition-transform duration-2000 ${
           inViewCarrousel
             ? "translate-y-0 opacity-100"
             : "translate-y-20 opacity-0"
         }`}
       >
-        <Carrousel />
+        <Carrousel carruselData={carruselData} />
       </div>
       <div
         ref={refProducts}

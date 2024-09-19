@@ -19,9 +19,9 @@ export default function TabFormImages({ isOpen, onClose }) {
   useEffect(() => {
     // Actualizar el estado local `secciones` cuando cambie `images`
     setSecciones((prevSecciones) => 
-      prevSecciones.map((seccion, index) => ({
+      prevSecciones.map((seccion) => ({
         ...seccion,
-        imagen: images[index] || seccion.imagen
+        imagen: images[seccion.seccion - 1] || seccion.imagen
       }))
     );
   }, [images]);
@@ -60,23 +60,32 @@ export default function TabFormImages({ isOpen, onClose }) {
       // Despachar la acción para subir la imagen
       await dispatch(uploadImages(formDataImage));
   
-      // Esperar a que la URL esté disponible en el estado global
-      const updatedImages = await new Promise((resolve) => {
-        const unsubscribe = store.subscribe(() => {
-          const state = store.getState();
-          if (state.sheets.images.length > index) {
-            resolve(state.sheets.images);
-            unsubscribe();
-          }
+      // Verificar si la imagen ya está en el estado global
+      if (images[index]) {
+        // Si la imagen ya está en el estado global, actualizar directamente
+        setSecciones((prevSecciones) => {
+          const nuevasSecciones = [...prevSecciones];
+          nuevasSecciones[index].imagen = images[index];
+          return nuevasSecciones;
         });
-      });
+      } else {
+        // Si la imagen no está en el estado global, esperar a que se genere la URL
+        const updatedImages = await new Promise((resolve) => {
+          const unsubscribe = store.subscribe(() => {
+            const state = store.getState();
+            if (state.sheets.images.length > index && state.sheets.images[index]) {
+              resolve(state.sheets.images);
+              unsubscribe();
+            }
+          });
+        });
   
-      setSecciones((prevSecciones) => {
-        const nuevasSecciones = [...prevSecciones];
-        nuevasSecciones[index].imagen = updatedImages[index]; // Actualizar con la URL obtenida del estado global
-        return nuevasSecciones;
-      });
-  
+        setSecciones((prevSecciones) => {
+          const nuevasSecciones = [...prevSecciones];
+          nuevasSecciones[index].imagen = updatedImages[index];
+          return nuevasSecciones;
+        });
+      }
     } catch (error) {
       console.error("Error al comprimir o subir la imagen:", error);
     //   toast.error("Error al procesar la imagen");
@@ -84,6 +93,7 @@ export default function TabFormImages({ isOpen, onClose }) {
       setIsUploading(false);
     }
   };
+  
 
   const handleChangeTexto = (index, event) => {
     const { value } = event.target;

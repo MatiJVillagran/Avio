@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useDispatch } from 'react-redux';
+import { useEffect, useState } from "react";
 import TabFormImages from "../Popup/TabFormImages";
 import { useSelector } from "react-redux";
+import { getSection } from '../../../redux/actions/actions';
 
 export function TabViewImages() {
   const [isFormularioOpen, setIsFormularioOpen] = useState(false);
   const carrouselData = useSelector((state) => state.sheets.sectionData);
-  console.log("seccion",carrouselData);
+  const dispatch = useDispatch();
+
+
+//   useEffect(() =>{
+//     dispatch(getSection())
+//   }),[dispatch]
   
 
   const handleOpenFormulario = () => {

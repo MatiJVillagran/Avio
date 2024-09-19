@@ -1,18 +1,18 @@
 import { useDispatch } from 'react-redux';
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { getProductsByColor, renderCondition } from '../../../redux/actions/actions';
+import {getProductsByMarca, renderCondition } from '../../../redux/actions/actions';
 
 const FilterColor = () => {
 
-    const allColors = useSelector((state) => state.sheets.colors);
+    const allMarcas = useSelector((state) => state.sheets.marcas);
     const dispatch = useDispatch();
 
-    const handleColorFilter = (event) => {
-        const color = event.target.value;
+    const handleMarcaFilter = (event) => {
+        const marca = event.target.value;
     
-    if (color!=="Todos"){
-      dispatch (getProductsByColor(color));
+    if (marca!=="Todos"){
+      dispatch (getProductsByMarca(marca));
       dispatch(renderCondition("filteredColor"));
     }else{
       dispatch(renderCondition("allProducts"));
@@ -20,33 +20,32 @@ const FilterColor = () => {
     }}
 
 
-  return (
-    <div className="flex items-center mt-5 flex-row px-1 overflow-x-hidden">
-
-      <div
-        className="flex overflow-x-scroll scrollbar-hide space-x-2 p-4 rounded-md mr-2" // Agrega espacio entre los botones y oculta el scrollbar
-        
-      >
-        <button
-            value={"Todos"}
-            onClick={handleColorFilter}
-            className="px-4 py-2 bg-primary rounded-2xl text-white text-xs whitespace-nowrap" >
-                Todos
-        </button>
-        {allColors.map((color, index) => (
-          <button
-            key={index}
-            value={color}
-            onClick={handleColorFilter}
-            className="px-3 py-1 bg-primary rounded-2xl text-white text-xs whitespace-nowrap" // Ajusta padding y font-size
-          >
-            {color}
-          </button>
-        ))}
+    return (
+      <div className="flex items-center mt-5 px-1">
+        <div className="p-4 rounded-md">
+          <div className="grid grid-cols-2 flex-col gap-2">
+            <button
+              value={"Todos"}
+              onClick={handleMarcaFilter}
+              className="px-3 py-2 bg-secondary rounded-md text-white text-xs"
+            >
+              Todos
+            </button>
+            {allMarcas.map((marca, index) => (
+              <button
+                key={index}
+                value={marca}
+                onClick={handleMarcaFilter}
+                className="px-3 flex justify-center items-center py-3 bg-secondary w-max rounded-md text-white text-xs whitespace-nowrap" // Ajusta padding y font-size
+              >
+                {marca}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
-
-    </div>
-  )
-}
-
-export default FilterColor
+    );
+  };
+  
+  export default FilterColor;
+  

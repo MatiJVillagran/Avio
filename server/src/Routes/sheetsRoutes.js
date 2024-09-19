@@ -18,8 +18,8 @@ const {
   getCashFlow,
   addCashFlowEntry,
   getSheetDataById,
-  getAllColors,
-  getProductsByColor,
+  getAllMarcas,
+  getProductsByMarca,
   activeProductById,
   createSectionEntry,
   getSectionEntries,
@@ -213,21 +213,21 @@ sheetsRouter.get("/categories", async (req, res) => {
   }
 });
 
-sheetsRouter.get("/colors", async (req, res) => {
+sheetsRouter.get("/marcas", async (req, res) => {
   try {
     const auth = await authorize();
-    const colors = await getAllColors(auth);
-    res.json(colors);
+    const marcas = await getAllMarcas(auth);
+    res.json(marcas);
   } catch (error) {
     res.status(500).send(error.message);
   }
 })
 
-sheetsRouter.get("/filter/color/:color", async (req, res) => {
+sheetsRouter.get("/filter/marca/:marca", async (req, res) => {
   try {
     const auth = await authorize();
-    const color = req.params.color;
-    const data = await getProductsByColor(auth, color);
+    const marca = req.params.marca;
+    const data = await getProductsByMarca(auth, marca);
     res.json(data);
   } catch (error) {
     res.status(404).send("Producto no encontrado");
