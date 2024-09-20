@@ -16,7 +16,7 @@ server.use(cookieParser());
 server.use(
   cors({
     origin: [
-      "https://avio.com.ar/",
+      "https://avio.com.ar",
       "https://avio-omega.vercel.app",
       "http://localhost:5173"
     ],
