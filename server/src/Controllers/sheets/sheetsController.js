@@ -181,7 +181,7 @@ async function updateRow(auth, rowData) {
 async function registerSale(auth, data) {
   try {
     
-    const { productos, cliente, formaPago } = data;
+    const { productos, cliente, formaPago, envio } = data;
 
     const sheets = google.sheets({ version: "v4", auth });
 
@@ -214,12 +214,13 @@ async function registerSale(auth, data) {
       formaPago,
       prod.cantidad * prod.precio,
       currentDate,
+      envio
     ]);
 
     // Append the data to the spreadsheet
     const res = await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:I",
+      range: "Ventas!A2:L",
       valueInputOption: "RAW",
       resource: {
         values: ventaData,
@@ -245,7 +246,7 @@ async function getSaleDataUnitiInfo(auth, id) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:K",
+      range: "Ventas!A2:L",
     });
     const rows = res.data.values || [];
 
@@ -264,6 +265,7 @@ async function getSaleDataUnitiInfo(auth, id) {
         pago: row[8],
         total: row[9],
         fecha: row[10],
+        envio: row[11],
       }));
 
     return sales;
@@ -278,7 +280,7 @@ async function getSaleData(auth) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:K",
+      range: "Ventas!A2:L",
     });
     const rows = res.data.values || [];
     let lastId = 0;
@@ -303,6 +305,7 @@ async function getSaleData(auth) {
           pago: row[8],
           total: parseFloat(row[9]),
           fecha: row[10],
+          envio:row[11],
         };
       } else {
         salesMap[id].cantidad += parseInt(row[4]);
@@ -324,7 +327,7 @@ async function getSalesByDate(auth, date) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:K", // Ajusta el rango según tu hoja de ventas
+      range: "Ventas!A2:L", // Ajusta el rango según tu hoja de ventas
     });
     
     const rows = res.data.values || [];
@@ -346,7 +349,7 @@ async function getSaleByUserId(auth, uid) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:K", // Ajusta el rango según tu hoja de ventas
+      range: "Ventas!A2:L", // Ajusta el rango según tu hoja de ventas
     });
 
     const rows = res.data.values || [];
@@ -372,6 +375,7 @@ async function getSaleByUserId(auth, uid) {
           paymentMethod: row[8],
           totalPrice: row[9],
           date: row[10],
+          shipping: row[11],
           product, // Añadir la información del producto
         };
       })

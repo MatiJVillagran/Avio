@@ -32,7 +32,7 @@ const Carrousel = ({ carruselData }) => {
     return (
       <div className="w-full h-[500px]">
         <div className="w-full h-full bg-primary flex justify-center items-center">
-          <h1 className="text-7xl text-gray-50 italic text-center">Avío mercado Itinerante</h1>
+          <h1 className="text-7xl text-gray-50 italic text-center">Avío Mercado Itinerante</h1>
         </div>
       </div>
     );
