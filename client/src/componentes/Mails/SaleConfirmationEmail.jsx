@@ -1,7 +1,7 @@
 import React from "react";
 
 const SaleConfirmationEmail = ({ data }) => {
-  const { productos, cliente } = data;
+  const { productos, cliente, envio } = data;
   return (
     <div
       style={{
@@ -90,6 +90,7 @@ const SaleConfirmationEmail = ({ data }) => {
                 >
                   ${product.precio}
                 </td>
+                
               </tr>
             ))}
           </tbody>
@@ -108,6 +109,21 @@ const SaleConfirmationEmail = ({ data }) => {
             PENDIENTE
           </strong>
         </p>
+        <p
+          style={{ textAlign: "center", color: "#718096", marginTop: "1rem" }}
+        >
+          Forma de entrega:{" "}
+          <strong
+            style={{
+              textAlign: "center",
+              color: "#d98f25",
+              padding: "1rem",
+            }}
+          >
+            {envio}
+          </strong>
+        </p>
+        
       </div>
 
       <p style={{ textAlign: "center", color: "#718096", marginTop: "1rem" }}>

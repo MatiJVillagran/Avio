@@ -8,6 +8,7 @@ const Cart = ({ product, calcularTotal, usuario }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formaPago, setFormaPago] = useState("");
+  const [envio, setEnvio] = useState("");
   const [formCliente, setFormCliente] = useState({
     nombre: usuario.name || "",
     correo: usuario.email || "",
@@ -18,11 +19,12 @@ const Cart = ({ product, calcularTotal, usuario }) => {
     celular: "",
   });
 
-  console.log(usuario);
-  
-
   const handleFormaPagoChange = (forma) => {
     setFormaPago(forma);
+  };
+
+  const handleEnvioChange = (envio) => {
+    setEnvio(envio);
   };
 
   const handleFormClienteChange = (e) => {
@@ -46,20 +48,24 @@ const Cart = ({ product, calcularTotal, usuario }) => {
       })),
       total: calcularTotal(),
       formaPago,
+      envio,
       cliente: formCliente,
     };
 
-    console.log("venta",venta);
+    
     
 
     if (venta.formaPago === "") {
       toast.error("Falta forma de pago");
-    } else if (venta.productos.length === 0) {
+    } else if (venta.envio === "") {
+      toast.error("Falta envio");
+    }else if (venta.productos.length === 0) {
       toast.error("La canasta está vacía");
     } else if (venta.cliente.nombre.trim() === "") {
       toast.error("Falta nombre del cliente");
     } else {
-      toast.success("Venta creada exitosamente...");
+      toast.success("Pedido creado exitosamente...");
+     
       dispatch(createSale(venta));
     }
   };
@@ -120,9 +126,6 @@ const Cart = ({ product, calcularTotal, usuario }) => {
                   <div className="md:w-2/3 flex flex-col justify-center p-4 text-left">
                     <p className="text-base font-bold leading-none text-gray-800">
                       {prod.nombre}
-                    </p>
-                    <p className="text-sm leading-3 text-gray-600 pt-2">
-                      <span className="font-bold">SKU:</span> {prod.sku}
                     </p>
                     {prod.medida && (
                       <p className="text-sm leading-3 text-gray-600 pt-2">
@@ -265,15 +268,15 @@ const Cart = ({ product, calcularTotal, usuario }) => {
           <div className="flex gap-2 mt-2 justify-center items-center">
             <button
               onClick={() => handleFormaPagoChange("Efectivo")}
-              className={`border p-2 text-gray-500 w-40 hover:bg-gray-100 shadow-md rounded-md active:translate-y-[2px] ${formaPago === "Efectivo" ? "border-teal-300" : "border-gray-400"
+              className={`border p-2 text-gray-500 w-32 hover:bg-gray-200 shadow-md rounded-md active:translate-y-[2px] ${formaPago === "Efectivo" ? "bg-teal-300" : "border-gray-400"
                 }`}
             >
               Efectivo
             </button>
             <button
               onClick={() => handleFormaPagoChange("Transferencia")}
-              className={`border p-2 text-gray-500 w-40 hover:bg-gray-100 shadow-md rounded-md active:translate-y-[2px] ${formaPago === "Transferencia"
-                  ? "border-teal-300"
+              className={`border p-2 text-gray-500 w-32 hover:bg-gray-200 shadow-md rounded-md active:translate-y-[2px] ${formaPago === "Transferencia"
+                  ? "bg-teal-400"
                   : "border-gray-400"
                 }`}
             >
@@ -281,14 +284,35 @@ const Cart = ({ product, calcularTotal, usuario }) => {
             </button>
           </div>
         </div>
+        <div className="p-2 mt-1">
+          <p>Envio</p>
+          <div className="flex gap-2 mt-2 justify-center items-center">
+            <button
+              onClick={() => handleEnvioChange("Retiro")}
+              className={`border p-2 text-gray-500 w-24 hover:bg-gray-200 shadow-md rounded-md active:translate-y-[2px] ${envio === "Retiro" ? "bg-teal-300" : "border-gray-400"
+                }`}
+            >
+              Retiro
+            </button>
+            <button
+              onClick={() => handleEnvioChange("Envio")}
+              className={`border p-2 text-gray-500 w-24 hover:bg-gray-200 shadow-md rounded-md active:translate-y-[2px] ${envio === "Envio"
+                  ? "bg-teal-400"
+                  : "border-gray-400"
+                }`}
+            >
+              Envio
+            </button>
+          </div>
+          </div>
 
         <div className="p-2 mt-4">
           <p>Total: ${calcularTotal()}</p>
           <button
             onClick={handleCreateVenta}
-            className="border p-2 text-white bg-gray-800 w-full hover:bg-gray-700 rounded-md mt-4"
+            className="border p-2 text-white bg-tertiary w-full hover:bg-gray-700 rounded-md mt-4"
           >
-            Confirmar compra
+            Confirmar pedido
           </button>
         </div>
       </div>

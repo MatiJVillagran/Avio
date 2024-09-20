@@ -13,20 +13,25 @@ const Login = () => {
   };
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
-      <div className="w-1/2 h-full hidden lg:block">
+      <div className="w-1/2 h-full hidden lg:block bg-primary">
         <img
-          src={"https://i.ibb.co/THt2PXT/images-1.jpg"}
+          src={"https://res.cloudinary.com/dfj3xkyd5/image/upload/v1726851454/biwiswuczos8t1fj4vhs.webp"}
           alt="Placeholder Image"
-          className="object-contain w-1/2 h-1/2"
+          className="object-contain w-full h-full"
         />
       </div>
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full h-full lg:w-1/2 flex justify-center gap-2 items-center flex-col">
-        <h1 className="text-2xl font-semibold mb-4 text-center">Login</h1>
-        <div className="mt-6 ml-10 mr-10 w-full">
+        <h1 className="text-2xl font-semibold mb-4 text-center">Inicar Sesion</h1>
+        <img
+                  className="h-12 w-12 object-cover rounded-full"
+                  src="https://i.ibb.co/THt2PXT/images-1.jpg"
+                  alt="Logo"
+                />
+        <div className="mt-1 ml-10 mr-10 w-full">
           <FormLogin />
         </div>
         <div className="border p-0 border-gray-300 w-full mt-6"></div>
-        <div className="mt-6 ml-10 mr-10 w-full">
+        <div className="mt-2 ml-10 mr-10 w-full">
           <button
             onClick={onGoogleSignIn}
             className="group h-12 w-full px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-primary focus:bg-pink-50 active:bg-pink-100"
@@ -53,10 +58,10 @@ const Login = () => {
           </h3>
           <span className="border border-gray-400 w-full"></span>
         </div>
-        <div className="mt-6 ml-10 mr-10 w-full">
+        <div className="mt-2 ml-10 mr-10 w-full">
           <button
             onClick={() => navigate("/register")}
-            className="group h-12 w-full px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-primary focus:bg-pink-50 active:bg-pink-100"
+            className="group h-12 w-full px-4 border-2 border-gray-300 rounded-full transition duration-300 hover:border-primary focus:bg-pink-50 active:bg-pink-100"
           >
             <div className="relative flex items-center space-x-4 justify-center">
               <svg

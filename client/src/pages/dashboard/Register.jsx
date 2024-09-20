@@ -1,10 +1,10 @@
-// import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { FormRegister } from "../../componentes/Dashboard/Users/FormRegister";
 
 export default function Register() {
   return (
     <div className="w-full flex items-center justify-center">
+      {/* Desktop View - Left Side */}
       <div className="w-1/2 hidden lg:inline-flex h-full text-white">
         <div className="w-[550px] shadow-md shadow-gray-400 h-full bg-secondary px-10 flex flex-col gap-6 justify-center">
           <div className="flex flex-row justify-center items-center gap-2 border-b">
@@ -24,6 +24,7 @@ export default function Register() {
               </p>
             </div>
           </div>
+          {/* Benefits */}
           <div className="w-[300px] flex items-start gap-3">
             <span className="mt-1"></span>
             <p className="text-base text-gray-300">
@@ -31,24 +32,14 @@ export default function Register() {
                 Inicio rápido
               </span>
               <br />
-              Regístrate y comienza a comprar en minutos.
+              Regístrate y realiza tu pedido en minutos.
             </p>
           </div>
           <div className="w-[300px] flex items-start gap-3">
             <span className="text-green-500 mt-1"></span>
             <p className="text-base text-gray-300">
               <span className="text-white font-semibold font-titleFont">
-                Acceso a todos los servicios
-              </span>
-              <br />
-              Disfruta de todos los servicios que ofrecemos.
-            </p>
-          </div>
-          <div className="w-[300px] flex items-start gap-3">
-            <span className="text-green-500 mt-1"></span>
-            <p className="text-base text-gray-300">
-              <span className="text-white font-semibold font-titleFont">
-                Confiado por miles
+                De confianza
               </span>
               <br />
               Únete a una comunidad de clientes satisfechos.
@@ -68,12 +59,13 @@ export default function Register() {
             <span className="text-green-500 mt-1"></span>
             <p className="text-base text-gray-300">
               <span className="text-white font-semibold font-titleFont">
-                Ofertas y descuentos exclusivos
+                Ofertas y Promociones
               </span>
               <br />
-              Recibe promociones y descuentos solo para miembros.
+              Recibi promociones y novedades.
             </p>
           </div>
+          {/* Footer */}
           <div className="flex items-center justify-between gap-2 mb-6">
             <Link to="/">
               <p className="text-sm font-semibold text-gray-300 hover:text-secondary cursor-pointer duration-300">
@@ -92,7 +84,18 @@ export default function Register() {
           </div>
         </div>
       </div>
-      <div className="w-full md:w-1/2 h-screen flex items-center justify-center">
+
+      {/* Mobile View - Full screen right side */}
+      <div className="lg:hidden w-full flex flex-col items-center justify-center px-4 py-8">
+
+        <div className="w-full">
+          <FormRegister />
+        </div>
+
+      </div>
+
+      {/* Desktop Right Side */}
+      <div className="hidden lg:flex w-full lg:w-1/2 h-screen items-center justify-center">
         <FormRegister />
       </div>
     </div>

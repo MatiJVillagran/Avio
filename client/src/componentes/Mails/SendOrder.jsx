@@ -1,7 +1,7 @@
 import React from "react";
 
 const SendOrder = ({ data }) => {
-  const { productos, cliente, tipoEnvio, formaPago } = data;
+  const { productos, cliente, formaPago, envio } = data;
   return (
     <div
       style={{
@@ -193,7 +193,7 @@ const SendOrder = ({ data }) => {
                   borderBottom: "1px solid #e2e8f0",
                 }}
               >
-                {tipoEnvio}
+                {envio}
               </td>
               <td
                 style={{
