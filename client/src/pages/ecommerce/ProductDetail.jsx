@@ -94,7 +94,7 @@ const ProductDetail = () => {
                 </button>
               )}
               <img
-                src={imgUrl ? imgUrl[currentImageIndex] : "ninaShowrrom.jpeg"}
+                src={imgUrl ? imgUrl[currentImageIndex] : "avio.jpeg"}
                 alt={`Product Image ${currentImageIndex + 1}`}
               />
               {imgUrl?.length > 1 && (
@@ -143,9 +143,9 @@ const ProductDetail = () => {
             <div className="flex">
               <button
                 onClick={() => handleAddToCart(product)}
-                className="p-4 rounded-md text-white w-full shadow-md bg-secondary"
+                className="p-4 rounded-md text-white w-full shadow-md bg-tertiary"
               >
-                {"Agregar al carrito"}
+                {"Agregar a la canasta"}
               </button>
             </div>
           </div>

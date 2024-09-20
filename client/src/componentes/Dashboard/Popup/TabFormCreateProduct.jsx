@@ -260,13 +260,19 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
             <option value="" disabled>
               Selecciona una categoría
             </option>
-            <option value="yerba">Yerba</option>
-            <option value="legumbres">Legumbres</option>
-            <option value="frutos secos">Frutos Secos</option>
-            <option value="condimentos">Condimentos</option>
-            <option value="harinas">Harinas</option>
-            <option value="fideos">Fideos</option>
-            <option value="dulces">Dulces</option>
+            <option value="Yerba">Yerba</option>
+            <option value="Legumbres">Legumbres</option>
+            <option value="Bebidas">Bebidas</option>
+            <option value="Arroz">Arroz</option>
+            <option value="Harinas y fecula">Harinas y fecula</option>
+            <option value="Azucar">Azucar</option>
+            <option value="Fideos">Fideos</option>
+            <option value="Hierbas y tes">Hierbas y tes</option>
+            <option value="Semillas">Semillas</option>
+            <option value="Condimentos">Condimentos</option>
+            <option value="Aceitunas y Aceites">Aceitunas y Aceites</option>
+            <option value="Otros alimentos">Otros alimentos</option>
+            <option value="Cuidado personal">Cuidado personal</option>
           </select>
           {errors.categoria && (
             <p className="text-red-500 text-xs">{errors.categoria}</p>

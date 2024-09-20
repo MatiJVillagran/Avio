@@ -27,7 +27,7 @@ const FilterCategories = () => {
           <button
             value={"Todos"}
             onClick={handleFilter}
-            className="px-4 py-2 bg-secondary rounded-md text-white text-xs whitespace-nowrap"
+            className="px-4 py-2 bg-primary rounded-md text-white text-xs whitespace-nowrap"
           >
             Todos
           </button>
@@ -38,7 +38,7 @@ const FilterCategories = () => {
                   key={index}
                   value={category}
                   onClick={handleFilter}
-                  className="px-3 flex justify-center items-center py-3 w-auto bg-secondary rounded-md text-white text-xs p-4" // Ajusta padding y font-size
+                  className="px-2 flex justify-center items-center py-3 w-auto bg-primary rounded-md text-white text-xs p-2" // Ajusta padding y font-size
                 >
                   {category}
                 </button>

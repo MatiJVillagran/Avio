@@ -70,13 +70,7 @@ const Navigation = () => {
                     Proveedores amigos
                   </Link>
                   <Link
-                    to="#"
-                    className="ml-4 px-3 py-2 rounded-md text-sm leading-5 text-gray-800 hover:bg-tertiary hover:text-white transition duration-150 ease-in-out cursor-pointer focus:outline-none focus:text-white focus:bg-gray-700 "
-                  >
-                    Promos
-                  </Link>
-                  <Link
-                    to="#"
+                    to="/aboutUs"
                     className="ml-4 px-3 py-2 rounded-md text-sm leading-5 text-gray-800 hover:bg-tertiary hover:text-white transition duration-150 ease-in-out cursor-pointer focus:outline-none focus:text-white focus:bg-gray-700 "
                   >
                     Sobre nosotros
@@ -133,29 +127,24 @@ const Navigation = () => {
         <div className="lg:hidden">
           <div className="px-2 pt-2 pb-3">
             <Link
-              to="#"
+              to="/product"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-secondary hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out cursor-pointer"
             >
-              Location
+              Productos
             </Link>
             <Link
               to="#"
               className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-secondary hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out cursor-pointer"
             >
-              Article
+              Proveedores amigos
             </Link>
             <Link
-              to="#"
+              to="/aboutUs"
               className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-secondary hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out cursor-pointer"
             >
-              Recipe
+              Sobre Nosotros
             </Link>
-            <Link
-              to="#"
-              className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-secondary hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out cursor-pointer"
-            >
-              Promo
-            </Link>
+
           </div>
         </div>
       </div>
