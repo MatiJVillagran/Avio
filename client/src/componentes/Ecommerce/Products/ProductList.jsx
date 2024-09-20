@@ -54,14 +54,14 @@ export default function ProductList({ allProducts }) {
 
   return (
     <Layout items={currentProducts.length}>
-      <div className="h-full mt-4 mb-16 flex justify-center items-center flex-col p-2 rounded-md">
+      <div className="h-full mt-4 mb-16 flex justify-center items-center flex-col p-2 rounded-md ">
       
         {currentProducts.length === 0 ? (
           <div className="text-center text-gray-600 font-bold text-2xl mt-16">
             No se encontraron resultados
           </div>
         ) : (
-          <div className="max-w-screen grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+          <div className="max-w-screen grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 ">
             {currentProducts.map((product) => {
               return (
                 <ProductCard

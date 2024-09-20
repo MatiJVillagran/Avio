@@ -21,9 +21,9 @@ const Layout = ({ children, items }) => {
   };
 
   return (
-    <section className="bg-gray-100">
-      <div className="container px-3 py-6 mx-auto">
-        <div className="lg:flex lg:-mx-2">
+    <section className="bg-gray-200">
+      <div className="container px-3 py-6 mx-auto ">
+        <div className="lg:flex lg:-mx-2 ">
           {/* Sidebar responsive toggle button */}
           <button
             className="lg:hidden bg-gray-800 text-white p-2 rounded flex flex-row gap-2 justify-center items-center"
