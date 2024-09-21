@@ -44,12 +44,14 @@ const Home = () => {
       </div>
       <div
         ref={refProducts}
+        
         className={`flex w-full justify-center items-center transition-transform duration-1000 #eab676 ${
           inViewProducts
             ? "translate-y-0 opacity-100"
             : "translate-y-20 opacity-0"
         }`}
       >
+        <h2 className="flex justify-center text-center text-black font-bold text-3xl my-6">Ultimos Productos  </h2>
         <ProdustHome allProducts={sheetsData} />
       </div>
       <div

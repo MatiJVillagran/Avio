@@ -8,6 +8,7 @@ import {
   UPLOAD_IMAGES_FAILURE,
   CLEAR_IMAGES,
   CLEAR_FILTER,
+  CLEAR_MARCA,
   FILTER_CATEGORY,
   GET_CATEGORIES,
   SET_CONDITION,
@@ -17,7 +18,10 @@ import {
   GET_MARCAS,
   FILTER_MARCAS,
   CREATE_SECTION,
-  GET_SECTION
+  GET_SECTION,
+  SET_VARIABLE,
+  SEARCH_PRODUCT,
+  CLEAN_SEARCH_PRODUCT
 } from "../actions/actions";
 
 const initialState = {
@@ -33,6 +37,8 @@ const initialState = {
   marcas: [],
   filterMarcas: [],
   sectionData: [],
+  searchedProducts: [],
+  filterVar: null,
 };
 
 const sheetsReducer = (state = initialState, action) => {
@@ -84,6 +90,12 @@ const sheetsReducer = (state = initialState, action) => {
         images: [],
       };
 
+    case CLEAR_MARCA:
+      return {
+        ...state,
+        filterMarcas: [],
+      }
+
     case SET_CONDITION:
       return { ...state, rCondition: action.payload };
 
@@ -129,19 +141,39 @@ const sheetsReducer = (state = initialState, action) => {
         cashFlow: [...state.cashFlow, action.payload],
       };
 
-        // Acción para guardar los datos en sectionData
-        case CREATE_SECTION:
-          return {
-            ...state,
-            sectionData: [...state.sectionData, action.payload],
-          };
-    
-        // Acción para obtener los datos y actualizar SectionData
-        case GET_SECTION:
-          return {
-            ...state,
-            sectionData: action.payload,
-          };  
+    case SET_VARIABLE:
+      return { ...state, filterVar: action.payload };
+
+    case SEARCH_PRODUCT:
+      const searchTerm = action.payload.toLowerCase();
+      // Verifica que item.nombre exista y no sea undefined
+      const searchedProducts = state.sheetsData.filter(item =>
+        item.nombre && item.nombre.toLowerCase().includes(searchTerm)
+      );
+      return {
+        ...state,
+        searchedProducts
+      };
+
+    case CLEAN_SEARCH_PRODUCT:
+      return {
+        ...state,
+        searchedProducts: []
+      }
+
+    // Acción para guardar los datos en sectionData
+    case CREATE_SECTION:
+      return {
+        ...state,
+        sectionData: [...state.sectionData, action.payload],
+      };
+
+    // Acción para obtener los datos y actualizar SectionData
+    case GET_SECTION:
+      return {
+        ...state,
+        sectionData: action.payload,
+      };
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { createSale, removeFromCart } from "../../../redux/actions/actions";
+import { cleanCart, createSale, removeFromCart } from "../../../redux/actions/actions";
 import { useNavigate } from "react-router-dom";
 
 const Cart = ({ product, calcularTotal, usuario }) => {
@@ -67,6 +67,10 @@ const Cart = ({ product, calcularTotal, usuario }) => {
       toast.success("Pedido creado exitosamente...");
      
       dispatch(createSale(venta));
+      dispatch(cleanCart());
+      setTimeout(() => {
+        navigate("/")
+      },3000)
     }
   };
 

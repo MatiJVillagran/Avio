@@ -11,9 +11,11 @@ export const Nav = ({ user, showNav }) => {
       <h1 className="font-bold text-4xl text-center md:hidden">
         N<span className="text-primary">.</span>
       </h1>
+      <Link to="/">
       <h1 className="hidden md:block font-bold text-sm md:text-xl text-center">
-        Avio<span className="text-primary">.</span>
+        Avio Inicio<span className="text-primary">.</span>
       </h1>
+      </Link>
       <div id="profile" className="space-y-3">
         {user.picture ? (
           <img
@@ -28,7 +30,7 @@ export const Nav = ({ user, showNav }) => {
           <h2 className="font-medium text-xs md:text-sm text-center text-primary">
             {user.name}
           </h2>
-          <p className="text-xs text-gray-500 text-center">Administrador</p>
+          <p className="text-xs text-black text-center">Administrador</p>
         </div>
       </div>
       <div id="menu" className="flex flex-col w-full space-y-2">
@@ -143,24 +145,7 @@ export const Nav = ({ user, showNav }) => {
         ) : (
           ""
         )}
-        <Link
-          to={"/dashboard/support"}
-          className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-primary hover:text-white rounded-md transition duration-150 ease-in-out"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-6 h-6 fill-current inline-block"
-          >
-            <path
-              fillRule="evenodd"
-              d="M6.25 4.5A2.25 2.25 0 0 0 4 6.75v2.5h1.55a5.47 5.47 0 0 1 3.68-2.977 3.25 3.25 0 1 1 5.54 0 5.47 5.47 0 0 1 3.68 2.977H20v-2.5a2.25 2.25 0 0 0-2.25-2.25H6.25ZM22 11.25a.75.75 0 0 0-.75-.75h-1.235a5.485 5.485 0 0 0-1.275-1.528v-.222a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75v.176a5.499 5.499 0 0 0-10.19 0v-.176a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75v.222a5.486 5.486 0 0 0-1.275 1.528H2.75a.75.75 0 0 0-.75.75v4.5a.75.75 0 0 0 .75.75h2.027a5.48 5.48 0 0 0 1.273 1.532l-.88 1.467a.75.75 0 1 0 1.292.75l.87-1.451a5.497 5.497 0 0 0 7.194 0l.87 1.451a.75.75 0 1 0 1.292-.75l-.88-1.467a5.479 5.479 0 0 0 1.272-1.532H21.25a.75.75 0 0 0 .75-.75v-4.5Zm-5.5 4.5a4 4 0 1 1-8 0v-4a4 4 0 1 1 8 0v4Z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <span className="">Soporte</span>
-        </Link>
+
         <button
           className="w-full text-sm font-medium text-gray-700 py-2 px-2 hover:bg-primary hover:text-white rounded-md transition duration-150 ease-in-out"
           onClick={() => doSignOut()}
@@ -182,7 +167,7 @@ export const Nav = ({ user, showNav }) => {
               clipRule="evenodd"
             />
           </svg>
-          <span className="">Sign Out</span>
+          <span className="">Cerrar sesion</span>
         </button>
       </div>
     </div>

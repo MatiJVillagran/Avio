@@ -6,6 +6,7 @@ import Layout from "../Layout/Layout";
 import { addToCart } from "../../../redux/actions/actions";
 import InfiniteScroll from "../Paginate/InfiniteScroll";
 import ScrollToTopButton from "../Scroll/ScrollToTopButton";
+import Loader from "../Loader/Loader";
 
 
 
@@ -14,7 +15,7 @@ export default function ProductList({ allProducts }) {
   const dispatch = useDispatch();
   const cartError = useSelector((state) => state.cart.cartError);
 
-  const publishedProducts = allProducts.filter(
+  const publishedProducts = allProducts?.filter(
     (product) => product.publicado === "si"
   );
 
@@ -58,7 +59,7 @@ export default function ProductList({ allProducts }) {
       
         {currentProducts.length === 0 ? (
           <div className="text-center text-gray-600 font-bold text-2xl mt-16">
-            No se encontraron resultados
+            <Loader/>
           </div>
         ) : (
           <div className="max-w-screen grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 ">

@@ -47,7 +47,7 @@ const WhatsAppBubble = () => {
             <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
           </span>
           <span className="text-black mr-2">
-            ¡Hola! 👋 Un asesor ya está listo para ayudarte.
+            ¡Hola! 👋 cualquier cosa no dudes en escribirnos.
           </span>
           <button
             onClick={handleClose}

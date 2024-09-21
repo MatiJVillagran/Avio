@@ -19,6 +19,7 @@ import AllProducts from "./pages/ecommerce/AllProducts";
 import Purchase from "./pages/ecommerce/Purchase";
 import { ImageGallery } from "./pages/dashboard/ImageGallery";
 import AboutUs from "./pages/ecommerce/AboutUs";
+import ProtectedRoute from "./firebase/ProtectedRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function App() {
   useEffect(() => {
     dispatch(authenticateUserFromSession());
   }, [dispatch]);
+
   return (
     <div>
       <Toaster />
@@ -41,13 +43,13 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         {isAuth ? (
           <>
-            <Route path="/dashboard/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/products" element={<Products />} />
-            <Route path="/dashboard/sales" element={<Sales />} />
-            <Route path="/dashboard/users" element={<Users />} />
-            <Route path="/dashboard/carrousel" element={<ImageGallery />} />
-            <Route path="/dashboard/balance" element={<Balance />} />
-            <Route path="/dashboard/support" element={<Support />} />
+            <Route path="/dashboard/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/dashboard/products" element={<ProtectedRoute><Products /></ProtectedRoute>} />
+            <Route path="/dashboard/sales" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
+            <Route path="/dashboard/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+            <Route path="/dashboard/carrousel" element={<ProtectedRoute><ImageGallery /></ProtectedRoute>} />
+            <Route path="/dashboard/balance" element={<ProtectedRoute><Balance /></ProtectedRoute>} />
+            <Route path="/dashboard/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
           </>
         ) : (
           <Route path="/error" element={<Error />} />

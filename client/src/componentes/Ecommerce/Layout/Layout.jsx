@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import FilterColor from "../Filters/FilterColor";
 import { useSelector, useDispatch } from "react-redux";
-import { clearFilteredProducts, renderCondition } from "../../../redux/actions/actions";
+import { clearFilteredProducts, clearMarca, renderCondition } from "../../../redux/actions/actions";
 import FilterCategories from "../Filters/FilterCategories";
+import SearchBar from "../Searchbar/SearchBar";
 
 
 
@@ -17,7 +18,7 @@ const Layout = ({ children, items }) => {
     dispatch(renderCondition("allProducts"));
     // dispatch(setVariable(null))
     dispatch(clearFilteredProducts());
-    // dispatch(clearColor());
+    dispatch(clearMarca());
   };
 
   return (
@@ -54,7 +55,7 @@ const Layout = ({ children, items }) => {
           >
             {/* Categorías */}
             <div className="mt-9">
-              
+              <SearchBar/>
               <div
                 onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
                 className="flex flex-row justify-between cursor-pointer items-center gap-2"
