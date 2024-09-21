@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import renderEmail from "../../componentes/Mails/renderEmail";
 import renderEmailOrder from "../../componentes/Mails/renderEmailOrder";
 import renderEmailOrderStateChange from "../../componentes/Mails/renderEmailOrderStateChange";
+import { useHref } from "react-router-dom";
 
 export const LOGIN_WITH_GOOGLE = "LOGIN_WITH_GOOGLE";
 export const AUTHENTICATE_USER_FROM_SESSION = "AUTHENTICATE_USER_FROM_SESSION";
@@ -23,6 +24,7 @@ export const SET_CONDITION = "SET_CONDITION";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 export const FILTER_CATEGORY = "FILTER_CATEGOTY";
 export const CLEAR_FILTER = "CLEAR_FILTER";
+export const CLEAR_MARCA = "CLEAR_MARCA";
 export const GET_MARCAS = "GET_MARCAS";
 export const FILTER_MARCAS = "FILTER_MARCAS";
 
@@ -46,9 +48,14 @@ export const GET_SALE_BY_ID = "GET_SALE_BY_ID";
 export const CREATED_SALE = "CREATED_SALE";
 export const DELETE_SALE_ROW = "DELETE_SALE_ROW";
 export const GET_SALE_BY_USER_ID = "GET_SALE_BY_USER_ID";
+export const GET_SALE_CHANGE_STATE = "GET_SALE_CHANGE_STATE";
 
 export const GET_CASH_FLOW = "GET_CASH_FLOW";
 export const ADD_CASH_FLOW_ENTRY = "ADD_CASH_FLOW_ENTRY";
+
+export const SEARCH_PRODUCT = "SEARCH_PRODUCT";
+export const CLEAN_SEARCH_PRODUCT = "CLEAN_SEARCH_PRODUCT";
+export const SET_VARIABLE = "SET_VARIABLE";
 
 export const CREATED_SELLER = "CREATED_SELLER";
 export const AUTH_SELLER = "AUTH_SELLER";
@@ -199,7 +206,7 @@ export const createSale = (data) => async (dispatch) => {
         type: CREATED_SALE,
         payload: res,
       });
-      dispatch(cleanCart());
+
     }
   } catch (error) {
     console.log({ error: error.message });
@@ -220,6 +227,71 @@ export const getSaleByUserID = (uid) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const getSaleChangeState = (id, state) => async (dispatch) => {
+  try {
+    // Primero obtenemos la información de la venta
+    const saleInfoResponse = await instance.get(`/api/sheets/sale/${id}`);
+    const saleInfo = saleInfoResponse.data;
+
+    // Luego actualizamos el estado de la venta
+    const res = await instance.put(
+      `/api/sheets/sale/${id}/changestate/${state}`
+    );
+    if (res.status === 200) {
+      // Después de actualizar el estado, obtenemos la información del usuario
+      const userMail = saleInfo[0].correo; // Asegúrate de que esto sea correcto según tu API
+      const paymentDetail = {
+        orderNumber: saleInfo[0].id,
+        newStatus: state,
+        cliente: { nombre: saleInfo[0].cliente }, // Datos del cliente
+      };
+
+      // Enviamos el correo electrónico
+      await sendEmailChangeStateOrder(userMail, paymentDetail);
+
+      // Actualizamos la información en el store de Redux
+      dispatch(getSales());
+      dispatch({
+        type: GET_SALE_CHANGE_STATE,
+        payload: res.data,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//BUSQUEDA DE PRODUCTOS
+export const setVariable = (variable) => async (dispatch) => {
+  try {
+    dispatch({ type: SET_VARIABLE, payload: variable });
+  } catch (error) {
+    console.error("Error setting variable:", error);
+  }
+};
+
+export const searchProduct = (name) => async (dispatch) =>{
+  try {
+    
+    dispatch({ type: SEARCH_PRODUCT, payload: name });
+    
+    
+  }
+  catch (error) {
+    console.error("Error searching product:", error);
+    toast.error("Error buscando el producto");
+  }
+}
+
+export const cleanSearchProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: CLEAN_SEARCH_PRODUCT });
+  } catch (error) {
+    console.error("Error cleaning search products:", error);
+  }
+}
+
 
 // FLUJO DE CAJA
 // Obtener todos los movimientos de caja
@@ -438,6 +510,10 @@ export const filterByCategory = (category) => async (dispatch) => {
 
 export const clearFilteredProducts = () => ({
   type: CLEAR_FILTER,
+});
+
+export const clearMarca = () => ({
+  type: CLEAR_MARCA,
 });
 
 export const getCategories = () => async (dispatch) => {

@@ -147,9 +147,9 @@ const DisplayProductDashboard = ({ products }) => {
                   className="w-12 h-12 rounded-full"
                   alt=""
                 />
-                NINA Showroom
+                AVIO
               </div>
-              <span className="text-xs">Location ID#MEND007</span>
+              
             </div>
             <div className="flex items-center">
               <div className="text-sm text-center mr-4">
