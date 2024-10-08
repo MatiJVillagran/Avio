@@ -79,8 +79,8 @@ const Cart = ({ product, calcularTotal, usuario }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-primary">
-      <div className="bg-gray-50 h-screen text-center shadow-md p-6 rounded-xl w-2/3 flex flex-col ml-2">
+    <div className="flex flex-col lg:flex-row items-center justify-center bg-primary">
+      <div className="bg-gray-50 h-screen text-center shadow-md p-5 rounded-xl w-full lg:w-2/3 flex flex-col ml-4 mt-2">
         <div className="flex justify-start">
           <button
             className="flex gap-2 border border-gray-400 p-2 active:translate-y-[1px] hover:shadow-lg rounded-md"
@@ -180,10 +180,10 @@ const Cart = ({ product, calcularTotal, usuario }) => {
       </div>
 
       {/* Resumen */}
-      <div className="bg-gray-100  text-center shadow-md p-6 rounded-xl w-1/3 m-2 h-screen flex flex-col justify-between">
+      <div className="bg-gray-100 text-center shadow-md p-6 rounded-xl w-full lg:w-1/3 m-4 h-screen flex flex-col justify-between mt-4 lg:mt-4">
         <h1 className="text-xl text-black">Resumen</h1>
-        <div className="p-2">
-          <div className="mt-2 flex justify-center items-center">
+        <div className="p-2 lg:mt-0 -mt-12">
+          <div className="mt-2 flex justify-center items-center ">
             <label className="border border-gray-300 p-2 text-center" htmlFor="nombre">
               Nombre
             </label>
@@ -267,7 +267,7 @@ const Cart = ({ product, calcularTotal, usuario }) => {
           </div>
         </div>
 
-        <div className="p-2 mt-2">
+        <div className="p-2 lg:mt-0 -mt-14">
           <p>Forma de pago</p>
           <div className="flex gap-2 mt-2 justify-center items-center">
             <button
@@ -288,7 +288,7 @@ const Cart = ({ product, calcularTotal, usuario }) => {
             </button>
           </div>
         </div>
-        <div className="p-2 mt-1">
+        <div className="p-2 lg:mt-0 -mt-14">
           <p>Envio</p>
           <div className="flex gap-2 mt-2 justify-center items-center">
             <button
@@ -309,8 +309,8 @@ const Cart = ({ product, calcularTotal, usuario }) => {
             </button>
           </div>
           </div>
-
-        <div className="p-2 mt-4">
+        {/*TOTAL*/}
+        <div className="p-2 mt-4 lg:mt-12 relative sm:-top-10 -top-4">
           <p>Total: ${calcularTotal()}</p>
           <button
             onClick={handleCreateVenta}
