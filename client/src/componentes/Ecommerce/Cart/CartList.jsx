@@ -7,16 +7,20 @@ export default function CartList({ cartItems, calculateTotal }) {
 
   const handleContinuePurchase = () => {
     if (cartItems.length === 0) {
-      toast.error("Error: carrito vacío");
+      toast.error("Error: canasta vacía");
     } else {
       navigate("/cart");
     }
   };
 
   return (
-    <div className="absolute w-max top-8 right-0 bg-white rounded-lg p-4 shadow-lg">
+    <div
+      className={`absolute ${
+        cartItems.length === 0 ? "w-96" : "w-96"
+      } top-12 -right-16 lg:top-10 h-max lg:h-screen lg:-right-24 bg-white rounded-b-lg p-4 border-r border-gray-200 shadow-2xl `}
+    >
       <div
-        className={`${
+        className={`text-center transition duration-50 ease ${
           cartItems.length > 4 ? "h-60 overflow-y-scroll" : "overflow-hidden"
         }`}
       >
@@ -44,7 +48,7 @@ export default function CartList({ cartItems, calculateTotal }) {
             cartItems.length === 0 ? "hidden" : ""
           }`}
         >
-          Continuar Compra
+          Continuar compra
         </button>
       </div>
     </div>

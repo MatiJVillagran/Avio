@@ -51,7 +51,7 @@ const Home = () => {
             : "translate-y-20 opacity-0"
         }`}
       >
-        <h2 className="flex justify-center text-center text-black font-bold text-3xl my-6">Ultimos Productos  </h2>
+       
         <ProdustHome allProducts={sheetsData} />
       </div>
       <div
