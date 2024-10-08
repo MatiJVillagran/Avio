@@ -77,7 +77,7 @@ const ProductCard = ({ id, name, url, sku, price, quantity, onAddToCart, isNew, 
   };
 
   return (
-    <article className="w-59 h-full rounded-xl bg-white p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 mb-6 border border-gray-300 flex flex-col justify-between">
+    <article className="w-auto h-full rounded-xl bg-white p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 mb-6 border border-gray-300 flex flex-col justify-between">
       <div>
         <div className="relative flex items-end overflow-hidden rounded-xl">
           <Link to={`/product/${id}`}>
@@ -87,7 +87,7 @@ const ProductCard = ({ id, name, url, sku, price, quantity, onAddToCart, isNew, 
               <LazyLoadImage
                 src={url}
                 alt={name}
-                className={`w-56 h-56 object-cover ${quantity === 0 ? "grayscale opacity-50" : ""}`}
+                className={`w-64 h-64 object-cover ${quantity === 0 ? "grayscale opacity-50" : ""}`}
               />
             )}
           </Link>

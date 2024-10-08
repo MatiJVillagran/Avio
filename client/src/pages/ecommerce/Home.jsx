@@ -29,7 +29,7 @@ const Home = () => {
   }, [dispatch]);
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-hidden">
       <Navigation />
       <WhatsAppBubble />
       <div

@@ -468,9 +468,11 @@ async function getAllCategories(auth) {
   try {
     const { products } = await getSheetData(auth);
     
-    const normalizedCategories = products.map((product) =>
-      product.categoria.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    );
+    const normalizedCategories = products
+      .filter((product) => product.publicado !== "no") // Filtrar productos no publicados
+      .map((product) =>
+        product.categoria.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      );
 
     const categories = [...new Set(normalizedCategories)];
 
@@ -481,12 +483,18 @@ async function getAllCategories(auth) {
   }
 }
 
-async function getAllMarcas (auth) {
+
+async function getAllMarcas(auth) {
   try {
     const { products } = await getSheetData(auth);
-
-    const marcas = [...new Set(products.map((product) => product.marca.trim().toLowerCase().
-    normalize("NFD").replace(/[\u0300-\u036f]/g, "")))];
+    
+    const marcas = [...new Set(
+      products
+        .filter((product) => product.publicado !== "no") // Filtrar productos no publicados
+        .map((product) =>
+          product.marca.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        )
+    )];
 
     return marcas;
   } catch (error) {
@@ -494,6 +502,7 @@ async function getAllMarcas (auth) {
     throw new Error(error.message);
   }
 }
+
 
 async function getProductsByMarca (auth, marca) {
   try {

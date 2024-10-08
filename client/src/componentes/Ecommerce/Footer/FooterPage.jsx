@@ -8,7 +8,7 @@ function FooterPage() {
           <div className="w-full md:w-1/4">
             <h5 className="uppercase mb-6 font-bold">Avio</h5>
             <p className="mb-4">
-              Productos agroecologicos y/u orgánicos.
+              Productos agroecologicos y orgánicos.
             </p>
           </div>
           <div className="w-full md:w-1/4">
@@ -54,9 +54,9 @@ function FooterPage() {
             </ul>
           </div>
           <div className="w-full md:w-1/4">
-            <h5 className="uppercase mb-6 font-bold mx-3 ml-20">Seguinos</h5>
+            <h5 className="uppercase mb-6 font-bold mx-3 ml-0 lg:ml-20">Seguinos</h5>
             <ul className="flex justify-center mb-4">
-              <li className="mx-3">
+              <li className="mx-3 -ml-80 lg:ml-0 ">
                 <a href="https://www.instagram.com/avio_mercado_itinerante?igsh=d2JyZnNhbm9jcDQw">
                   <img
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/768px-Instagram_icon.png"
