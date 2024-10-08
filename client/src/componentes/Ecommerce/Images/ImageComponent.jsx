@@ -15,7 +15,7 @@ const ImageComponent = ({ imageUrls, isAvailable  }) => {
   return (
     <LazyLoadComponent>
       <LazyLoadImage
-        className={`w-56 h-56 object-cover ${!isAvailable ? "grayscale opacity-50" : ""}`}
+        className={`w-64 h-64 object-cover ${!isAvailable ? "grayscale opacity-50" : ""}`}
         src={selectedUrl}
         alt="Imagen del producto"
       />
