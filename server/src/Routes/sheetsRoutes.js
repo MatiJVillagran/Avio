@@ -23,6 +23,7 @@ const {
   activeProductById,
   createSectionEntry,
   getSectionEntries,
+  getCategoriesDashboard,
 } = require("../Controllers/sheets/sheetsController.js");
 const {handleImageUpload}= require("../Controllers/sheets/handleImageUpload.js");
 
@@ -201,6 +202,17 @@ sheetsRouter.get("/filter/:category", async (req, res) => {
     res.status(404).send("Producto no encontrado");
   }
 });
+
+sheetsRouter.get("/dashboard/categories", async (req, res) => {
+  try {
+    const auth = await authorize();
+    const categories = await getCategoriesDashboard(auth);
+    res.json(categories);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 
 
 sheetsRouter.get("/categories", async (req, res) => {

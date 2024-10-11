@@ -21,7 +21,8 @@ import {
   GET_SECTION,
   SET_VARIABLE,
   SEARCH_PRODUCT,
-  CLEAN_SEARCH_PRODUCT
+  CLEAN_SEARCH_PRODUCT,
+  GET_DASHBOARD_CATEGORIES
 } from "../actions/actions";
 
 const initialState = {
@@ -33,6 +34,7 @@ const initialState = {
   images: [],
   filterProducts: [],
   categories: [],
+  dashboardCategories: [],
   cashFlow: [],
   marcas: [],
   filterMarcas: [],
@@ -115,6 +117,12 @@ const sheetsReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: action.payload,
+      };
+
+    case GET_DASHBOARD_CATEGORIES:
+      return {
+        ...state,
+        dashboardCategories: action.payload
       };
 
     case GET_MARCAS:
