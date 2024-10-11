@@ -65,7 +65,7 @@ async function getSheetDataById(id, auth) {
       range: "Productos!A2:J",
     });
     const rows = res.data.values || [];
-    
+
     const products = rows.map((row) => ({
       id: row[0],
       categoria: row[1],
@@ -180,7 +180,7 @@ async function updateRow(auth, rowData) {
 
 async function registerSale(auth, data) {
   try {
-    
+
     const { productos, cliente, formaPago, envio } = data;
 
     const sheets = google.sheets({ version: "v4", auth });
@@ -305,7 +305,7 @@ async function getSaleData(auth) {
           pago: row[8],
           total: parseFloat(row[9]),
           fecha: row[10],
-          envio:row[11],
+          envio: row[11],
         };
       } else {
         salesMap[id].cantidad += parseInt(row[4]);
@@ -329,7 +329,7 @@ async function getSalesByDate(auth, date) {
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
       range: "Ventas!A2:L", // Ajusta el rango según tu hoja de ventas
     });
-    
+
     const rows = res.data.values || [];
 
     // Filtrar las ventas que coinciden con la fecha
@@ -344,8 +344,8 @@ async function getSalesByDate(auth, date) {
 
 async function getSaleByUserId(auth, uid) {
   try {
-  
-    
+
+
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
@@ -356,8 +356,8 @@ async function getSaleByUserId(auth, uid) {
 
     // Filtrar las ventas que coinciden con el uid en la columna "cliente"
     const salesForUser = rows.filter((row) => row[2] === uid);
-    
-    
+
+
 
     // Obtener la información del producto para cada venta
     const salesData = await Promise.all(
@@ -441,15 +441,15 @@ async function getProductsByCategory(auth, category) {
 
     // Normaliza y elimina espacios en blanco de la categoría recibida
     const trimmedCategory = category.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    
-    
+
+
     // Filtra los productos basándose en la categoría normalizada
     const filteredProducts = products.filter(
       (product) =>
         product.categoria.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === trimmedCategory
     );
 
-    
+
 
     // Si no se encuentran productos, lanzar un error personalizado
     if (filteredProducts.length === 0) {
@@ -467,7 +467,7 @@ async function getProductsByCategory(auth, category) {
 async function getAllCategories(auth) {
   try {
     const { products } = await getSheetData(auth);
-    
+
     const normalizedCategories = products
       .filter((product) => product.publicado !== "no") // Filtrar productos no publicados
       .map((product) =>
@@ -483,11 +483,34 @@ async function getAllCategories(auth) {
   }
 }
 
+async function getCategoriesDashboard(auth) {
+  try {
+    const { products } = await getSheetData(auth);
+
+    // Extrae las categorías de los productos sin filtrar por la propiedad 'publicado'
+    const normalizedCategories = products.map((product) =>
+      product.categoria
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+    );
+
+    const categories = [...new Set(normalizedCategories)];
+
+    return categories;
+  } catch (error) {
+    console.log({ error: error.message });
+    throw new Error(error.message);
+  }
+}
+
+
 
 async function getAllMarcas(auth) {
   try {
     const { products } = await getSheetData(auth);
-    
+
     const marcas = [...new Set(
       products
         .filter((product) => product.publicado !== "no") // Filtrar productos no publicados
@@ -504,7 +527,7 @@ async function getAllMarcas(auth) {
 }
 
 
-async function getProductsByMarca (auth, marca) {
+async function getProductsByMarca(auth, marca) {
   try {
     const { products } = await getSheetData(auth);
 
@@ -600,7 +623,7 @@ async function deleteSalesById(auth, id) {
     throw new Error("ID not found");
   }
 
-  console.log("rowsToDelete: ",rowsToDelete);
+  console.log("rowsToDelete: ", rowsToDelete);
 
   // Crear solicitudes de eliminación para cada fila encontrada
   const requests = rowsToDelete.map((rowIndex) => ({
@@ -722,7 +745,7 @@ async function getCashFlow(auth) {
     });
 
     const rowsVentas = resVentas.data.values || [];
-    
+
     // Añadir las ventas al flujo de caja como ingresos
     const ventasData = rowsVentas.map((ventaRow, index) => {
       const id = lastId + index + 1;  // Incrementar el ID para las nuevas filas
@@ -762,7 +785,7 @@ async function addCashFlowEntry(auth, data) {
     // Obtener la última fila para determinar el ID más reciente
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "FlujoDeCaja!A:A", 
+      range: "FlujoDeCaja!A:A",
     });
 
     const rows = response.data.values || [];
@@ -772,7 +795,7 @@ async function addCashFlowEntry(auth, data) {
     if (rows.length > 1) {
       const lastRow = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-        range: `FlujoDeCaja!F${rows.length}`, 
+        range: `FlujoDeCaja!F${rows.length}`,
       });
 
       saldoAcumulado = lastRow.data.values && lastRow.data.values[0] ? parseFloat(lastRow.data.values[0][0]) || 0 : 0;
@@ -783,7 +806,7 @@ async function addCashFlowEntry(auth, data) {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "FlujoDeCaja!A:F", 
+      range: "FlujoDeCaja!A:F",
       valueInputOption: "RAW",
       resource: { values: [newRow] },
     });
@@ -815,10 +838,10 @@ async function createSectionEntry(req, res) {
     if (rows && rows.length > 1) {
       lastId = rows.length - 1; // La última fila con datos
     }
-    
+
     const secciones = req.body; // Recibe el array de secciones
-    console.log("secciones",req.body);
-    
+    console.log("secciones", req.body);
+
 
     // Iterar sobre las secciones y agregar cada una a la hoja de cálculo
     for (const seccion of secciones) {
@@ -915,6 +938,7 @@ module.exports = {
   decreaseStock,
   getProductsByCategory,
   getAllCategories,
+  getCategoriesDashboard,
   deleteSalesById,
   getSaleByUserId,
   getCashFlow,
