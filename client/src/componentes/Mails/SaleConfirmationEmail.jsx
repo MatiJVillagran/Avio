@@ -2,6 +2,13 @@ import React from "react";
 
 const SaleConfirmationEmail = ({ data }) => {
   const { productos, cliente, envio } = data;
+
+  // Calcular el total a abonar
+  const totalAbonar = productos.reduce(
+    (acc, product) => acc + product.precio * product.cantidad,
+    0
+  );
+
   return (
     <div
       style={{
@@ -13,6 +20,20 @@ const SaleConfirmationEmail = ({ data }) => {
         borderRadius: "0.5rem",
       }}
     >
+      {/* Imagen del logo redondo centrada */}
+      <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+        <img
+          src="https://i.ibb.co/THt2PXT/images-1.jpg" // URL de tu logo
+          alt="Logo de la tienda"
+          style={{
+            width: "150px",
+            height: "150px",
+            borderRadius: "50%",
+            objectFit: "cover",
+          }}
+        />
+      </div>
+
       <h1
         style={{
           fontSize: "1.5rem",
@@ -24,7 +45,7 @@ const SaleConfirmationEmail = ({ data }) => {
         ¡Gracias por tu compra, {cliente.nombre}!
       </h1>
       <p style={{ textAlign: "center", color: "#718096", marginTop: "0.5rem" }}>
-        A continuación, encontrarás los detalles de tu compra:
+        A continuación, encontrarás los detalles:
       </p>
 
       <div style={{ overflowX: "auto", marginTop: "1rem" }}>
@@ -90,15 +111,16 @@ const SaleConfirmationEmail = ({ data }) => {
                 >
                   ${product.precio}
                 </td>
-                
               </tr>
             ))}
           </tbody>
         </table>
-        <p
+
+                {/* Total a abonar */}
+                <p
           style={{ textAlign: "center", color: "#718096", marginTop: "0.5rem" }}
         >
-          El estado de tu pedido se encuentra actualmente en:{" "}
+          Total a abonar:{" "}
           <strong
             style={{
               textAlign: "center",
@@ -106,9 +128,10 @@ const SaleConfirmationEmail = ({ data }) => {
               padding: "1rem",
             }}
           >
-            PENDIENTE
+            ${totalAbonar.toFixed(2)} {/* Muestra el total con dos decimales */}
           </strong>
         </p>
+
         <p
           style={{ textAlign: "center", color: "#718096", marginTop: "1rem" }}
         >
@@ -123,7 +146,22 @@ const SaleConfirmationEmail = ({ data }) => {
             {envio}
           </strong>
         </p>
-        
+        {/* Estado del pedido */}
+        <p
+          style={{ textAlign: "center", color: "#718096", marginTop: "0.5rem" }}
+        >
+          El estado de tu pedido se encuentra actualmente en:{" "}
+          <strong
+            style={{
+              textAlign: "center",
+              color: "#d98f25",
+              padding: "1rem",
+            }}
+          >
+            PENDIENTE
+          </strong>
+        </p>
+
       </div>
 
       <p style={{ textAlign: "center", color: "#718096", marginTop: "1rem" }}>

@@ -483,11 +483,12 @@ async function getAllCategories(auth) {
   }
 }
 
+
 async function getCategoriesDashboard(auth) {
   try {
     const { products } = await getSheetData(auth);
 
-    // Extrae las categorías de los productos sin filtrar por la propiedad 'publicado'
+    // Extrae todas las categorias de los productos
     const normalizedCategories = products.map((product) =>
       product.categoria
         .trim()
