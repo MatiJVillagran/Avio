@@ -73,6 +73,7 @@ export default function ProductList({ allProducts }) {
                   sku={product.sku}
                   price={product.precio}
                   quantity={product.stock}
+                  medida={product.medida}
                   marca={(product.marca)}
                   onAddToCart={() => handleAddToCart (product)} // Pasar directamente handleAddToCart
                   isNew={false}

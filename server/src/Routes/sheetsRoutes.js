@@ -24,6 +24,8 @@ const {
   createSectionEntry,
   getSectionEntries,
   getCategoriesDashboard,
+  getSaleByUserName,
+  updateSectionEntry,
 } = require("../Controllers/sheets/sheetsController.js");
 const {handleImageUpload}= require("../Controllers/sheets/handleImageUpload.js");
 
@@ -119,6 +121,22 @@ sheetsRouter.get("/sale/:id", async (req, res) => {
   }
 });
 
+sheetsRouter.get("/nameSales/:name", async (req, res) => {
+  try {
+    const nombreCliente = req.params.name;
+
+    const auth = await authorize();
+
+    const sales = await getSaleByUserName(auth, nombreCliente);
+    res.status(200).json(sales);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error obteniendo ventas por nombre",
+      error: error.message,
+    });
+  }
+});
+
 sheetsRouter.get("/sales/:uid", async (req, res) => {
   try {
     const { uid } = req.params;
@@ -126,7 +144,6 @@ sheetsRouter.get("/sales/:uid", async (req, res) => {
     const authClient = await authorize();
 
     const sales = await getSaleByUserId(authClient, uid);
-    // console.log(sales)
     res.status(200).json(sales);
   } catch (error) {
     res.status(500).json({
@@ -290,5 +307,7 @@ sheetsRouter.post("/cashflow/add", async (req, res) => {
 sheetsRouter.post("/seccion", createSectionEntry);
 
 sheetsRouter.get("/seccion", getSectionEntries);
+
+sheetsRouter.put("/seccion", updateSectionEntry);
 
 module.exports = sheetsRouter;

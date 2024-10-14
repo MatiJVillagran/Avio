@@ -180,8 +180,9 @@ async function updateRow(auth, rowData) {
 
 async function registerSale(auth, data) {
   try {
-
     const { productos, cliente, formaPago, envio } = data;
+
+    console.log(cliente);
 
     const sheets = google.sheets({ version: "v4", auth });
 
@@ -202,10 +203,14 @@ async function registerSale(auth, data) {
 
     const currentDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
+    // Verifica si cliente.id existe, de lo contrario, asigna "Panel de control"
+    const clientId = cliente.id ? cliente.id : "Panel de control";
+
     const ventaData = productos.map((prod) => [
       newId,
       prod.id,
-      cliente.id,
+      clientId,               // Usamos clientId en lugar de cliente.id
+      cliente.nombre,
       prod.sku,
       prod.cantidad,
       prod.medida,
@@ -214,13 +219,13 @@ async function registerSale(auth, data) {
       formaPago,
       prod.cantidad * prod.precio,
       currentDate,
-      envio
+      envio,
     ]);
 
     // Append the data to the spreadsheet
     const res = await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:L",
+      range: "Ventas!A2:M",
       valueInputOption: "RAW",
       resource: {
         values: ventaData,
@@ -241,12 +246,13 @@ async function registerSale(auth, data) {
   }
 }
 
+
 async function getSaleDataUnitiInfo(auth, id) {
   try {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:L",
+      range: "Ventas!A2:M",
     });
     const rows = res.data.values || [];
 
@@ -257,15 +263,16 @@ async function getSaleDataUnitiInfo(auth, id) {
         id: row[0],
         idProducto: row[1],
         cliente: row[2],
-        sku: row[3],
-        cantidad: row[4],
-        medida: row[5],
-        marca: row[6],
-        subtotal: row[7],
-        pago: row[8],
-        total: row[9],
-        fecha: row[10],
-        envio: row[11],
+        nombre: row[3],
+        sku: row[4],
+        cantidad: row[5],
+        medida: row[6],
+        marca: row[7],
+        subtotal: row[8],
+        pago: row[9],
+        total: row[10],
+        fecha: row[11],
+        envio: row[12],
       }));
 
     return sales;
@@ -280,7 +287,7 @@ async function getSaleData(auth) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:L",
+      range: "Ventas!A2:M",
     });
     const rows = res.data.values || [];
     let lastId = 0;
@@ -297,20 +304,21 @@ async function getSaleData(auth) {
           id: row[0],
           idProducto: row[1],
           cliente: row[2],
-          sku: row[3],
-          cantidad: parseInt(row[4]),
-          medida: row[5],
-          marca: row[6],
-          subtotal: parseFloat(row[7]),
-          pago: row[8],
-          total: parseFloat(row[9]),
-          fecha: row[10],
-          envio: row[11],
+          nombre: row[3],
+          sku: row[4],
+          cantidad: parseInt(row[5]),
+          medida: row[6],
+          marca: row[7],
+          subtotal: parseFloat(row[8]),
+          pago: row[9],
+          total: parseFloat(row[10]),
+          fecha: row[11],
+          envio: row[12],
         };
       } else {
-        salesMap[id].cantidad += parseInt(row[4]);
-        salesMap[id].subtotal += parseFloat(row[7]);
-        salesMap[id].total += parseFloat(row[9]);
+        salesMap[id].cantidad += parseInt(row[5]);
+        salesMap[id].subtotal += parseFloat(row[8]);
+        salesMap[id].total += parseFloat(row[10]);
       }
     });
 
@@ -344,20 +352,16 @@ async function getSalesByDate(auth, date) {
 
 async function getSaleByUserId(auth, uid) {
   try {
-
-
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:L", // Ajusta el rango según tu hoja de ventas
+      range: "Ventas!A2:M", // Ajusta el rango según tu hoja de ventas
     });
 
     const rows = res.data.values || [];
 
     // Filtrar las ventas que coinciden con el uid en la columna "cliente"
     const salesForUser = rows.filter((row) => row[2] === uid);
-
-
 
     // Obtener la información del producto para cada venta
     const salesData = await Promise.all(
@@ -367,15 +371,16 @@ async function getSaleByUserId(auth, uid) {
           id: row[0],
           productId: row[1],
           clientId: row[2],
-          sku: row[3],
-          quantity: row[4],
-          measure: row[5],
-          marca: row[6],
-          price: row[7],
-          paymentMethod: row[8],
-          totalPrice: row[9],
-          date: row[10],
-          shipping: row[11],
+          nombre: row[3],
+          sku: row[4],
+          quantity: row[5],
+          measure: row[6],
+          marca: row[7],
+          price: row[8],
+          paymentMethod: row[9],
+          totalPrice: row[10],
+          date: row[11],
+          shipping: row[12],
           product, // Añadir la información del producto
         };
       })
@@ -388,6 +393,67 @@ async function getSaleByUserId(auth, uid) {
   }
 }
 
+async function getSaleByUserName(auth, nombreCliente) {
+  try {
+    const sheets = google.sheets({ version: "v4", auth });
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      range: "Ventas!A2:M", // Ajusta el rango según tu hoja de ventas
+    });
+
+    const rows = res.data.values || [];
+
+    // Convertir el nombre del cliente buscado a minúsculas para comparación
+    const nombreClienteLowerCase = nombreCliente.toLowerCase();
+
+    // Filtrar las ventas que coinciden con el nombre del cliente (insensible a mayúsculas/minúsculas)
+    const salesForUser = rows.filter((row) => row[3] && row[3].toLowerCase() === nombreClienteLowerCase);
+
+    // Crear un mapa para unificar las ventas por el mismo ID
+    const salesMap = {};
+
+    // Recorrer las filas filtradas para agrupar las ventas por ID
+    for (const row of salesForUser) {
+      const id = row[0];
+
+      if (!salesMap[id]) {
+        salesMap[id] = {
+          id: row[0],
+          idProducto: row[1],
+          cliente: row[2],
+          nombre: row[3],
+          sku: row[4],
+          cantidad: parseInt(row[5]),
+          medida: row[6],
+          marca: row[7],
+          subtotal: parseFloat(row[8]),
+          pago: row[9],
+          total: parseFloat(row[10]),
+          fecha: row[11],
+          envio: row[12],
+          productos: [], // Inicializamos un arreglo de productos si necesitas agregar más detalles
+        };
+      } else {
+        // Si la venta ya está en el mapa, sumamos las cantidades y subtotales
+        salesMap[id].cantidad += parseInt(row[5]);
+        salesMap[id].subtotal += parseFloat(row[8]);
+        salesMap[id].total += parseFloat(row[10]);
+      }
+
+      // Añadir la información del producto si es necesario
+      const product = await getSheetDataById(Number(row[1]), auth); // Convertir productId a número
+      salesMap[id].productos.push(product); // Añadir al arreglo de productos
+    }
+
+    // Convertir el mapa a un arreglo de ventas unificadas
+    const salesData = Object.values(salesMap);
+
+    return salesData;
+  } catch (error) {
+    console.error("Error obteniendo ventas por nombre de cliente:", error);
+    throw new Error("Error obteniendo ventas por nombre de cliente");
+  }
+}
 
 async function increaseStock(auth, productId, amount) {
   const sheets = google.sheets({ version: "v4", auth });
@@ -742,7 +808,7 @@ async function getCashFlow(auth) {
     // Obtener los datos de la hoja de ventas
     const resVentas = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:K",  // Asumiendo que las columnas de interés están en A2:K
+      range: "Ventas!A2:M",  // Asumiendo que las columnas de interés están en A2:K
     });
 
     const rowsVentas = resVentas.data.values || [];
@@ -750,10 +816,10 @@ async function getCashFlow(auth) {
     // Añadir las ventas al flujo de caja como ingresos
     const ventasData = rowsVentas.map((ventaRow, index) => {
       const id = lastId + index + 1;  // Incrementar el ID para las nuevas filas
-      const subtotal = parseFloat(ventaRow[7]);  // Subtotal de la venta
-      const total = parseFloat(ventaRow[9]);  // Total de la venta
-      const descripcion = `Venta Producto: ${ventaRow[3]}, Cliente: ${ventaRow[2]}`;  // SKU y Cliente
-      const fecha = ventaRow[10];  // Fecha de la venta
+      const subtotal = parseFloat(ventaRow[8]);  // Subtotal de la venta
+      const total = parseFloat(ventaRow[10]);  // Total de la venta
+      const descripcion = `Venta Producto: ${ventaRow[4]}, Cliente: ${ventaRow[3]}`;  // SKU y Cliente
+      const fecha = ventaRow[11];  // Fecha de la venta
 
       // Sumar el total de la venta al saldo acumulado
       saldoAcumulado += total;
@@ -921,6 +987,67 @@ async function getSectionEntries(req, res) {
   }
 }
 
+async function updateSectionEntry(req, res) {
+  try {
+    // Autorizar Google Sheets
+    const auth = await authorize();
+    const sheets = google.sheets({ version: "v4", auth });
+
+    // Obtener los datos actuales para comparar las secciones
+    const existingDataRes = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      range: "Imagenes!A2:D", // Asume que las filas de datos comienzan en la fila 2
+    });
+
+    const existingRows = existingDataRes.data.values || [];
+
+    // Obtener el arreglo de secciones a actualizar
+    const secciones = req.body; // Se espera un arreglo de objetos con seccion, texto e imagen
+    console.log("secciones a actualizar", secciones);
+
+    // Recorrer los datos entrantes para verificar si deben actualizarse
+    for (const seccion of secciones) {
+      const { seccion: seccionNombre, texto, imagen } = seccion;
+
+      // Validar que el texto tenga menos de 200 caracteres
+      if (texto.length > 200) {
+        return res.status(400).json({ message: "El texto no debe exceder los 200 caracteres." });
+      }
+
+      // Buscar si ya existe un registro con la misma 'seccion'
+      const existingRowIndex = existingRows.findIndex(row => row[1] === seccionNombre);
+
+      if (existingRowIndex !== -1) {
+        // Si se encuentra un registro con la misma sección, se actualizan el texto e imagen
+        const rowIndex = existingRowIndex + 2; // Ajustar por el offset de fila (A2 empieza en índice 2)
+        await sheets.spreadsheets.values.update({
+          spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+          range: `Imagenes!A${rowIndex}:D${rowIndex}`,
+          valueInputOption: "RAW",
+          resource: {
+            values: [[existingRows[existingRowIndex][0], seccionNombre, texto, imagen || existingRows[existingRowIndex][3]]], // Mantener ID y actualizar texto e imagen
+          },
+        });
+      } else {
+        // Si no existe la 'seccion', se añade como nuevo
+        const newId = existingRows.length + 1; // Generar un nuevo ID
+        await sheets.spreadsheets.values.append({
+          spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+          range: "Imagenes!A2:D",
+          valueInputOption: "RAW",
+          resource: {
+            values: [[newId, seccionNombre, texto, imagen]], // Nuevo ID, nombre de sección, texto y URL de la imagen
+          },
+        });
+      }
+    }
+
+    return res.status(200).json({ message: "Secciones actualizadas exitosamente" });
+  } catch (error) {
+    console.error("Error actualizando las entradas:", error);
+    res.status(500).json({ message: "Error actualizando las secciones", error: error.message });
+  }
+}
 
 
 
@@ -942,11 +1069,13 @@ module.exports = {
   getCategoriesDashboard,
   deleteSalesById,
   getSaleByUserId,
+  getSaleByUserName,
   getCashFlow,
   addCashFlowEntry,
   getAllMarcas,
   getProductsByMarca,
   activeProductById,
   createSectionEntry,
-  getSectionEntries
+  getSectionEntries,
+  updateSectionEntry
 };

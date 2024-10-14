@@ -48,7 +48,7 @@ export function TabViewImages() {
               </div>
 
               {/* Texto debajo de la imagen */}
-              <div className="border border-black h-40 p-5 text-center mt-4">
+              <div className="border border-black h-44 p-5 text-center mt-4">
                 <p>
                   {seccion && seccion.texto
                     ? seccion.texto

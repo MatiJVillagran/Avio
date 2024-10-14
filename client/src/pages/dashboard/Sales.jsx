@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "../../componentes/Dashboard/Layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
-import { getSaleInfo, getSales } from "../../redux/actions/actions";
+import { getSaleByUserName, getSaleInfo, getSales, cleanSales } from "../../redux/actions/actions"; // Importa cleanSales
 import SheetsSales from "../../componentes/Dashboard/Sheets/SheetsSales";
 import TabViewSale from "../../componentes/Dashboard/Popup/TabViewSale";
 import TabDeleteSaleButton from "../../componentes/Dashboard/Popup/TabDeleteSaleButton";
@@ -15,8 +15,17 @@ const Sales = () => {
 
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuth);
-  const sales = useSelector((state) => state.cart.sales);
+  
+  const nameSearch = useSelector((state) => state.cart.nameSales);
+  const allSales = useSelector((state) => state.cart.sales);
   const sale = useSelector((state) => state.cart.saleInfo);
+
+  
+  
+  const [nombre, setNombre] = useState("");
+  const [search, setSearch] = useState(null);
+
+  const sales = search ? nameSearch : allSales;
 
   const toggleModal = (saleInfo) => {
     dispatch(getSaleInfo(saleInfo.id));
@@ -24,8 +33,8 @@ const Sales = () => {
   };
 
   const toggleDeleteModal = (i) => {
-      setDeleteRowIndex(i)
-  }
+    setDeleteRowIndex(i);
+  };
 
   useEffect(() => {
     dispatch(getSales());
@@ -39,6 +48,20 @@ const Sales = () => {
     setCurrentPage(pageNumber);
     updateVisiblePages(pageNumber);
   };
+
+  const handleSearch = () => {
+    if (nombre.trim()) {
+      dispatch(getSaleByUserName(nombre));
+      setSearch(true); 
+    } else {
+      setSearch(null);
+    }
+  };
+
+  const clearSearch = () => {
+    setNombre(""); // Limpia el input
+    setSearch(null); // Reinicia el estado de búsqueda
+    dispatch(cleanSales())}
 
   const updateVisiblePages = (pageNumber) => {
     let startPage, endPage;
@@ -83,6 +106,29 @@ const Sales = () => {
       )}
       <div className="flex justify-between">
         <h1 className="text-xl text-gray-500">Ventas</h1>
+      </div>
+      <div className="mt-4 relative">
+        <input
+          type="text"
+          placeholder="Buscar por nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          className="p-2 border border-gray-400 rounded-md w-full"
+        />
+        {nombre && (
+          <button
+            onClick={clearSearch} // Llama a la función clearSearch cuando se hace clic
+            className="absolute right-2 top-2 text-gray-500"
+          >
+            ✕ {/* Este es el ícono de la cruz */}
+          </button>
+        )}
+        <button
+          onClick={handleSearch}
+          className="mt-2 px-4 py-2 bg-pink-400 text-white rounded-md"
+        >
+          Buscar
+        </button>
       </div>
       <div className="mt-8 h-screen">
         <SheetsSales data={currentItems} onViewSale={toggleModal} toggleDelete={toggleDeleteModal}/>

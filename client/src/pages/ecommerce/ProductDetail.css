@@ -454,4 +454,15 @@
     color: #333;
     text-align: left;
   }
+
+  @media (max-width: 768px) {
+    .image-container img {
+      width: 100%;
+      height: auto; /* Esto asegura que la imagen mantenga sus proporciones */
+    }
+    .image-container {
+      justify-content: center; /* Centra la imagen en la vista móvil */
+    }
+  }
+  
   

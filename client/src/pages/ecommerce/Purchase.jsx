@@ -15,6 +15,9 @@ const Purchase = () => {
   const sale = useSelector((state) => state.cart.saleInfo);
   const user = useSelector((state) => state.auth.user);
 
+  console.log("sale",sale);
+  
+
   useEffect(() => {
     const fetchData = async () => {
        dispatch(getSaleByUserID(id));

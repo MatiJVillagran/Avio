@@ -6,7 +6,7 @@ import Dashboard from "../../../pages/dashboard/Dashboard";
 const Filter = () => {
   const categories = useSelector((state) => state.sheets.dashboardCategories);
   const dispatch = useDispatch();
-  console.log("DashboardCategories", categories);
+  
   
  
 

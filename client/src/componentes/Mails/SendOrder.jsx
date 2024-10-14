@@ -58,6 +58,14 @@ const SendOrder = ({ data }) => {
                   borderBottom: "1px solid #e2e8f0",
                 }}
               >
+                Medida
+              </th>
+              <th
+                style={{
+                  padding: "0.5rem 1rem",
+                  borderBottom: "1px solid #e2e8f0",
+                }}
+              >
                 Cantidad
               </th>
               <th
@@ -88,6 +96,14 @@ const SendOrder = ({ data }) => {
                   }}
                 >
                   {product.nombre}
+                </td>
+                <td
+                  style={{
+                    padding: "0.5rem 1rem",
+                    borderBottom: "1px solid #e2e8f0",
+                  }}
+                >
+                  {product.medida}
                 </td>
                 <td
                   style={{
