@@ -93,7 +93,7 @@ const Navigation = () => {
                     onClick={handleDashboard}
                     className={`border hover:shadow-lg hover:border-secondary hover:text-secondary rounded-lg w-auto p-2 flex items-center`}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="28px" height="28px" viewBox="0 -4 28 28" version="1.1">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink ="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="28px" height="28px" viewBox="0 -4 28 28" version="1.1">
 
                       <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" sketch:type="MSPage">
                         <g id="Icon-Set" sketch:type="MSLayerGroup" transform="translate(-570.000000, -209.000000)" fill="#000000">

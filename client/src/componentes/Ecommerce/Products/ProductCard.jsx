@@ -38,7 +38,7 @@ const PrevArrow = (props) => {
   );
 };
 
-const ProductCard = ({ id, name, url, sku, price, quantity, onAddToCart, isNew, marca }) => {
+const ProductCard = ({ id, name, url, sku, price, quantity, onAddToCart, isNew, marca, medida }) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -102,9 +102,15 @@ const ProductCard = ({ id, name, url, sku, price, quantity, onAddToCart, isNew, 
           </div>
         )}
         <div className="mt-1 p-2">
-          <h2 className="text-slate-700">{name}</h2>
-          <p className="mt-1 text-sm text-slate-400">{marca}</p>
-          <p className="text-lg font-bold text-secondary mt-3">${price}</p>
+          <div className="min-h-[6rem]"> {/* Añadiendo una altura mínima aquí */}
+            <h2 className="text-slate-700">{name}</h2>
+            <p className="mt-1 text-sm text-slate-400">{marca}</p>
+            <p className="mt-1 text-sm text-slate-400">{medida}</p>
+            
+          </div>
+          <div className="mt-2">
+            <p className="text-lg font-bold text-gray-500">${price}</p>
+          </div>
         </div>
       </div>
       <button

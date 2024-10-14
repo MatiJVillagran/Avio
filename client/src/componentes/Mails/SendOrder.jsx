@@ -2,6 +2,13 @@ import React from "react";
 
 const SendOrder = ({ data }) => {
   const { productos, cliente, formaPago, envio } = data;
+
+  // Calcular el total a abonar
+  const totalAbonar = productos.reduce(
+    (acc, product) => acc + product.precio * product.cantidad,
+    0
+  );
+
   return (
     <div
       style={{
@@ -24,7 +31,7 @@ const SendOrder = ({ data }) => {
         ¡Felicidades por tu venta, el nombre de tu cliente es {cliente.nombre}!
       </h1>
       <p style={{ textAlign: "center", color: "#718096", marginTop: "0.5rem" }}>
-        A continuación, encontrarás los detalles de tu venta:
+        Detalles de la venta:
       </p>
 
       <div style={{ overflowX: "auto", marginTop: "1rem" }}>
@@ -44,6 +51,14 @@ const SendOrder = ({ data }) => {
                 }}
               >
                 Producto
+              </th>
+              <th
+                style={{
+                  padding: "0.5rem 1rem",
+                  borderBottom: "1px solid #e2e8f0",
+                }}
+              >
+                Medida
               </th>
               <th
                 style={{
@@ -88,6 +103,14 @@ const SendOrder = ({ data }) => {
                     borderBottom: "1px solid #e2e8f0",
                   }}
                 >
+                  {product.medida}
+                </td>
+                <td
+                  style={{
+                    padding: "0.5rem 1rem",
+                    borderBottom: "1px solid #e2e8f0",
+                  }}
+                >
                   {product.cantidad}
                 </td>
                 <td
@@ -110,13 +133,23 @@ const SendOrder = ({ data }) => {
             ))}
           </tbody>
         </table>
+
+        {/* Total a abonar */}
+        <p
+          style={{ textAlign: "center", color: "#718096", marginTop: "1rem" }}
+        >
+          Total a abonar:{" "}
+          <strong style={{ color: "#d98f25" }}>
+            ${totalAbonar.toFixed(2)} {/* Muestra el total con dos decimales */}
+          </strong>
+        </p>
       </div>
 
       <div style={{ overflowX: "auto", marginTop: "1rem" }}>
         <p
           style={{ textAlign: "center", color: "#718096", marginTop: "0.5rem" }}
         >
-          Aqui la informacion del pedido:
+          Aquí la información del pedido:
         </p>
         <table
           style={{
@@ -133,7 +166,7 @@ const SendOrder = ({ data }) => {
                   borderBottom: "1px solid #e2e8f0",
                 }}
               >
-                Forma de envio
+                Forma de envío
               </th>
               <th
                 style={{
@@ -157,7 +190,7 @@ const SendOrder = ({ data }) => {
                   borderBottom: "1px solid #e2e8f0",
                 }}
               >
-                Direccion
+                Dirección
               </th>
               <th
                 style={{
@@ -165,7 +198,7 @@ const SendOrder = ({ data }) => {
                   borderBottom: "1px solid #e2e8f0",
                 }}
               >
-                Codigo Postal
+                Código Postal
               </th>
               <th
                 style={{
@@ -247,11 +280,6 @@ const SendOrder = ({ data }) => {
           </tbody>
         </table>
       </div>
-
-      <p style={{ textAlign: "center", color: "#718096", marginTop: "1rem" }}>
-        Esperamos que disfrutes de nuestro servicio. ¡Gracias por confiar en
-        nosotros!
-      </p>
     </div>
   );
 };

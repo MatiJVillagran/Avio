@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Filter from "../Filter/Filter";
-import { addToCart, cleanCart, createSale, decrementQuantity, incrementQuantity } from "../../../redux/actions/actions";
+import { addToCart, cleanCart, createSale, decrementQuantity, incrementQuantity, removeFromCart } from "../../../redux/actions/actions";
 
 
 
 const DisplayProductDashboard = ({ products }) => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const [formaPago, setFormaPago] = useState("");
-  const [nombreCliente, setNombreCliente] = useState("");
+  const [cliente, setCliente] = useState({ nombre: "", id: "" });
+  const [envio, setEnvio] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
 
@@ -50,7 +51,14 @@ const DisplayProductDashboard = ({ products }) => {
   };
 
   const handleNombreClienteChange = (e) => {
-    setNombreCliente(e.target.value);
+    setCliente((prevCliente) => ({
+    
+      nombre: e.target.value,  // Actualizamos solo el nombre
+    }));
+  };
+
+  const handleEnvioChange = (e) => {
+    setEnvio(e.target.value);
   };
 
   const handleCreateVenta = () => {
@@ -66,21 +74,22 @@ const DisplayProductDashboard = ({ products }) => {
       })),
       total: calculateTotal(),
       formaPago,
-      nombreCliente,
-      medio: "Casa central"
+      cliente,
+      envio
     };
     if (venta.formaPago === "") {
       toast.error("Falta forma de pago");
     } else if (venta.productos.length === 0) {
       toast.error("El carrito está vacío");
-    } else if (venta.nombreCliente.trim() === "") {
+    } else if (venta.envio === "") {
+      toast.error("Falta envio");
+    } else if (venta.cliente.nombre.trim() === "") {
       toast.error("Falta nombre del cliente");
     } else {
       toast.success("Venta creada exitosamente...");
       dispatch(createSale(venta));
       dispatch(cleanCart())
     }
-    console.log("venta",venta);
   };
  
   
@@ -206,6 +215,9 @@ const DisplayProductDashboard = ({ products }) => {
                     <h4 className="mt-2 text-sm font-medium text-primary">
                       {product.nombre}
                     </h4>
+                    <p className="text-secondary mt-2 text-sm">
+                      {product.medida}
+                    </p>
                     <p className="text-tertiary mt-2 text-sm">
                       ${product.precio}
                     </p>
@@ -242,10 +254,10 @@ const DisplayProductDashboard = ({ products }) => {
                       <div className="flex flex-row items-center w-2/5">
                         <LazyLoadImage
                           src={imgUrl}
-                          className="w-12 h-12 object-cover rounded-md"
+                          className="w-9 h-9 object-cover rounded-md"
                           alt={`${item.nombre}-${i}`}
                         />
-                        <span className="ml-4 font-semibold text-sm text-primary text-center">
+                        <span className="ml-4 font-semibold text-xs text-primary text-center flex-col">
                           {item?.nombre}
                         </span>
                       </div>
@@ -286,20 +298,28 @@ const DisplayProductDashboard = ({ products }) => {
           <div className="px-5">
             <input
               type="text"
-              value={nombreCliente}
+              value={cliente.nombre}
               onChange={handleNombreClienteChange}
               placeholder="Nombre del cliente"
-              className="border p-2 rounded-md w-full border-gray-400 mb-4"
+              className="border p-2 rounded-md w-full border-gray-400 mb-2"
             />
             <select
               value={formaPago}
               onChange={handleFormaPagoChange}
-              className="border p-2 rounded-md w-full border-gray-400"
+              className="border p-2 rounded-md w-full border-gray-400 mb-2"
             >
               <option value="">Seleccione forma de pago</option>
               <option value="efectivo">Efectivo</option>
               <option value="transferencia">transferencia</option>
-
+            </select>
+            <select
+              value={envio}
+              onChange={handleEnvioChange}
+              className="border p-2 rounded-md w-full border-gray-400"
+            >
+              <option value="">Seleccione envio</option>
+              <option value="retiro">Retiro</option>
+              <option value="envio">Envio</option>
             </select>
           </div>
           <div className="flex flex-row justify-between items-center px-5 mt-10">

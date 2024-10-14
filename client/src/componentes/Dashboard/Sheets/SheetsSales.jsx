@@ -1,4 +1,5 @@
 const SheetsSales = ({ data, onViewSale, toggleDelete }) => {
+
   return (
     <div className="border border-gray-400 p-4">
       <div className="overflow-x-auto custom-scroll">
@@ -8,6 +9,7 @@ const SheetsSales = ({ data, onViewSale, toggleDelete }) => {
               <th>Cod. Venta</th>
               <th>Cliente</th>
               <th>Forma de pago</th>
+              <th>Entrega</th>
               <th>Total</th>
               <th>Acciones</th>
             </tr>
@@ -17,8 +19,9 @@ const SheetsSales = ({ data, onViewSale, toggleDelete }) => {
               data.map((prod, index) => (
                 <tr key={index}>
                   <td>{prod.id}</td>
-                  <td>{prod.cliente}</td>
+                  <td>{prod.nombre.toLowerCase()}</td>
                   <td>{prod.pago}</td>
+                  <td>{prod.envio}</td>
                   <td>{prod.total}</td>
                   <td className="flex justify-center items-center gap-2">
                     <button

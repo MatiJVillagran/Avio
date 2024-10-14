@@ -1,7 +1,7 @@
 const PurchaseProduct = ({ sale }) => {
 
   return (
-    <div className="flex items-center gap-4 border rounded-lg p-4 bg-secondary text-white border-primary w-full">
+    <div className="flex items-center gap-4 border rounded-lg p-4 bg-gray-400 text-white border-primary w-full">
       <img
         src={sale?.product?.url.split(',')[0]}
         alt={`${sale?.product?.nombre}`}
@@ -18,11 +18,15 @@ const PurchaseProduct = ({ sale }) => {
         <p className="text-sm text-muted-foreground">
           Cantidad: {sale?.quantity}
         </p>
+        <p className="text-sm text-muted-foreground">
+          Medida: {sale?.measure}
+        </p>
         <p className="text-sm text-muted-foreground">Fecha: {sale?.date}</p>
       </div>
       <div className="text-right">
         <p className="text-lg font-semibold">${sale?.totalPrice}</p>
-        <p className="text-sm text-muted-foreground">Metodo: {sale?.paymentMethod}</p>
+        <p className="text-sm text-muted-foreground">Pago: {sale?.paymentMethod}</p>
+        <p className="text-sm text-muted-foreground">Envio: {sale?.shipping}</p>
       </div>
     </div>
   );

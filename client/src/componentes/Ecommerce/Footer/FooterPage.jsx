@@ -6,13 +6,19 @@ function FooterPage() {
       <div className="container mx-auto px-6 flex justify-center items-center flex-col">
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/4">
-            <h5 className="uppercase mb-6 font-bold">Avio</h5>
-            <p className="mb-4">
-              Productos agroecologicos y orgánicos.
-            </p>
+            <h5 className="uppercase mb-5 font-bold">Avio</h5>
+           
+            <ul className="-ml-3 mb-4">
+              <li>
+                <a>Productos agroecologicos y orgánicos.</a>
+              </li>
+            <li>
+              <a>&copy; 2024 Avio. Todos los derechos reservados.</a>
+              </li>
+            </ul>
           </div>
           <div className="w-full md:w-1/4">
-            <h5 className="uppercase mb-6 font-bold">Enlaces</h5>
+            <h5 className="uppercase mb-5 font-bold">Enlaces</h5>
             <ul className="mx-3 mb-4">
               <li>
                 <a href="#" className="hover:underline">
@@ -33,7 +39,7 @@ function FooterPage() {
             </ul>
           </div>
           <div className="w-full md:w-1/4">
-            <h5 className="uppercase mb-6 font-bold">Contacto</h5>
+            <h5 className="uppercase mb-5 font-bold">Contacto</h5>
             <ul className="mx-2 mb-4">
               <li>
                 Email:{" "}
@@ -46,15 +52,15 @@ function FooterPage() {
               </li>
               <li>
                 Teléfono:{" "}
-                <a href="https://wa.me/2614161558" className="hover:underline">
-                  +543424093379
+                <a href="https://wa.me/3454406764" className="hover:underline">
+                  +543454406764
                 </a>
               </li>
               <li>Lugar: Santa fe ciudad, CP 3000</li>
             </ul>
           </div>
           <div className="w-full md:w-1/4">
-            <h5 className="uppercase mb-6 font-bold mx-3 ml-0 lg:ml-20">Seguinos</h5>
+            <h5 className="uppercase mb-5 font-bold mx-3 ml-0 lg:ml-20">Seguinos</h5>
             <ul className="flex justify-center mb-4">
               <li className="mx-3 -ml-80 lg:ml-0 ">
                 <a href="https://www.instagram.com/avio_mercado_itinerante?igsh=d2JyZnNhbm9jcDQw">
@@ -68,8 +74,6 @@ function FooterPage() {
             </ul>
           </div>
         </div>
-
-        
       </div>
     </footer>
   );

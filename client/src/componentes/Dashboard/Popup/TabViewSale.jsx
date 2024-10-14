@@ -90,7 +90,7 @@ const TabViewSale = ({ isOpen, onClose, sale, infoVentas }) => {
                         </svg>
                       </span>
                       <div className="flex flex-col flex-1">
-                        <h3 className="text-sm font-medium">{info.cliente}</h3>
+                        <h3 className="text-sm font-medium">{info.nombre}</h3>
                         <div className="divide-x divide-gray-200 mt-auto">
                           <span className="inline-block px-3 text-xs leading-none text-gray-400 font-normal first:pl-0">
                             {info.cantidad} cantidad

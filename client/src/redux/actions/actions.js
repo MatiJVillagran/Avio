@@ -46,10 +46,12 @@ export const DECREMENT_QUANTITY = "DECREMENT_QUANTITY";
 
 export const GET_SALES = "GET_SALES";
 export const GET_SALE_BY_ID = "GET_SALE_BY_ID";
+export const GET_SALE_BY_USER_NAME = "GET_SALE_BY_USER_NAME";
 export const CREATED_SALE = "CREATED_SALE";
 export const DELETE_SALE_ROW = "DELETE_SALE_ROW";
 export const GET_SALE_BY_USER_ID = "GET_SALE_BY_USER_ID";
 export const GET_SALE_CHANGE_STATE = "GET_SALE_CHANGE_STATE";
+export const CLEAN_SALES = "CLEAN_SALES";
 
 export const GET_CASH_FLOW = "GET_CASH_FLOW";
 export const ADD_CASH_FLOW_ENTRY = "ADD_CASH_FLOW_ENTRY";
@@ -228,6 +230,25 @@ export const getSaleByUserID = (uid) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const getSaleByUserName = (name) => async (dispatch) => {
+  try {
+
+    const res = await instance.get(`/api/sheets/nameSales/${name}`);
+    if (res.status === 200) {
+      dispatch({
+        type: GET_SALE_BY_USER_NAME,
+        payload: res.data,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const cleanSales = () => ({
+  type: CLEAN_SALES,
+});
 
 export const getSaleChangeState = (id, state) => async (dispatch) => {
   try {
@@ -687,5 +708,18 @@ export const getSection = () => async (dispatch) => {
   } catch (error) {
     console.error("Error al obtener los datos:", error);
     // toast.error("Error al obtener los datos");
+  }
+};
+
+export const updateSection = (data) => async (dispatch) => {
+  try {
+    const response = await instance.put("/api/sheets/seccion", data);
+    if (response.status === 200) {
+      toast.success("Carrusel actualizado exitosamente");
+      dispatch(getSection()); // Volver a cargar los datos actualizados
+    }
+  } catch (error) {
+    console.error("Error al actualizar el carrusel:", error);
+    toast.error("Error al actualizar el carrusel");
   }
 };

@@ -113,6 +113,8 @@ export default function TabFormImages({ isOpen, onClose }) {
     dispatch(createSection(secciones));
     console.log("secciones", secciones);
 
+    window.location.reload();
+
     onClose(); // Cierra el modal
   };
 

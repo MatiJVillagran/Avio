@@ -19,8 +19,9 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(getProductById(id));
-      setIsLoading(false);
+      setIsLoading(true); // Mostrar el loader antes de obtener el producto
+      await dispatch(getProductById(id));
+      setIsLoading(false); // Ocultar el loader después de obtener el producto
     };
 
     fetchData();
@@ -75,129 +76,134 @@ const ProductDetail = () => {
 
   return (
     <div className="w-full">
+      <Navigation isCart={false} />
+
       {isLoading ? (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center h-screen mt-20">
           <Loader />
         </div>
       ) : (
-        <>
-          <Navigation isCart={false} />
-
-          <div className="w-full">
-            <div className="detail-cont flex flex-col justify-center items-center lg:flex-row p-4 my-2">
-              <div className="p-2 flex justify-center items-center flex-col-reverse rounded-lg">
-                <div className="flex gap-2 border mt-2 border-gray-400 rounded-lg shadow-md w-full p-2 overflow-x-auto">
-                  {imgUrl?.length > 1 ? (
-                    <div className="flex space-x-2">
-                      {imgUrl?.map((image, index) => (
-                        <img
-                          key={index}
-                          src={image}
-                          alt={`Thumbnail ${index + 1}`}
-                          className={`thumbnail rounded-md object-cover border border-gray-500 p-1 w-24 h-24 ${
-                            product.cantidad === "0" ? "grayscale opacity-50" : ""
-                          } ${currentImageIndex === index ? "selected" : ""}`}
-                          onClick={() => handleThumbnailClick(index)}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <img
-                      className={`w-16 h-16 rounded-md object-cover border border-gray-500 p-1 ${
-                        product?.cantidad === "0" ? "grayscale opacity-50" : ""
-                      }`}
-                      src={imgUrl ? imgUrl : "avio.jpeg"}
-                      alt={`Product Image ${currentImageIndex + 1}`}
-                    />
-                  )}
-                </div>
-                <div className={`image-container border border-gray-400 rounded-lg p-2 shadow-md ${product?.cantidad === "0" ? "grayscale opacity-50" : ""}`}>
-                  {imgUrl?.length > 1 && (
-                    <button onClick={handlePrevImage}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.75 19.5 8.25 12l7.5-7.5"
-                        />
-                      </svg>
-                    </button>
-                  )}
+        <div className="w-full">
+          <div className="detail-cont flex flex-col justify-center items-center lg:flex-row p-4 my-2">
+            <div className="p-2 flex justify-center items-center flex-col-reverse rounded-lg">
+              <div className="flex gap-2 border mt-2 border-gray-400 rounded-lg shadow-md w-full p-2 overflow-x-auto">
+                {imgUrl?.length > 1 ? (
+                  <div className="flex space-x-2">
+                    {imgUrl?.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Thumbnail ${index + 1}`}
+                        className={`thumbnail rounded-md object-cover border border-gray-500 p-1 w-24 h-24 ${
+                          product.cantidad === "0" ? "grayscale opacity-50" : ""
+                        } ${currentImageIndex === index ? "selected" : ""}`}
+                        onClick={() => handleThumbnailClick(index)}
+                      />
+                    ))}
+                  </div>
+                ) : (
                   <img
-                    src={imgUrl ? imgUrl[currentImageIndex] : "avio.jpeg"}
+                    className={`w-16 h-16 rounded-md object-cover border border-gray-500 p-1 ${
+                      product?.cantidad === "0" ? "grayscale opacity-50" : ""
+                    }`}
+                    src={imgUrl ? imgUrl : "avio.jpeg"}
                     alt={`Product Image ${currentImageIndex + 1}`}
                   />
-                  {imgUrl?.length > 1 && (
-                    <button onClick={handleNextImage}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                        />
-                      </svg>
-                    </button>
-                  )}
-                </div>
+                )}
               </div>
-
-              <div className="info-container md:h-screen border border-gray-400 w-full">
-                <div>
-                  <p className="product-date">
-                    Marca: {product ? product.marca : null}
-                  </p>
-                  <h1 className="product-name">{product?.nombre}</h1>
-                  <p className="brand">Categoria: {product?.categoria}</p>
-                  <p className="product-price">${product?.precio}</p>
-                </div>
-                <div className="product-quantity flex justify-center items-center flex-col gap-2">
-                  <div className="flex flex-row">
-                    <label htmlFor="quantity-select">Cantidad: </label>
-                    <span className="total-available">
-                      ({product?.cantidad} {"Disponible"})
-                    </span>
-                  </div>
-                  <input
-                    value={selectedQuantity}
-                    onChange={handleQuantityChange}
-                    className="border p-2 w-16 border-gray-500 rounded-md text-center"
-                    type="number"
-                    name="quantity-select"
-                    id="quantity-select"
-                    min="1"
-                    max={product?.cantidad}
-                  />
-                </div>
-                <div className="flex w-full">
-                  <button
-                    onClick={() => handleAddToCart(product)}
-                    className={`p-3 rounded-md text-white w-full shadow-md ${
-                      product?.cantidad === "0"
-                        ? "cursor-not-allowed bg-gray-400"
-                        : "bg-tertiary"
-                    }`}
-                  >
-                    {product.cantidad===0 ? "Sin stock" : "Agregar a la canasta"}
+              {/* Ajuste para la imagen principal con Tailwind */}
+              <div className={`image-container border border-gray-400 rounded-lg p-2 shadow-md w-full`}>
+                {imgUrl?.length > 1 && (
+                  <button onClick={handlePrevImage}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.75 19.5 8.25 12l7.5-7.5"
+                      />
+                    </svg>
                   </button>
+                )}
+
+                {/* Imagen principal */}
+                <img
+                  src={imgUrl ? imgUrl[currentImageIndex] : "avio.jpeg"}
+                  alt={`Product Image ${currentImageIndex + 1}`}
+                  className={`max-w-full h-auto object-contain border ${
+                    product?.cantidad === "0" ? "grayscale opacity-50" : ""
+                  }`}
+                />
+
+                {imgUrl?.length > 1 && (
+                  <button onClick={handleNextImage}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="info-container md:h-screen border border-gray-400 w-full">
+              <div>
+                <p className="product-date">
+                  Marca: {product ? product.marca : null}
+                </p>
+                <h1 className="product-name">{product?.nombre}</h1>
+                <p className="brand">Categoria: {product?.categoria}</p>
+                <p className="product-price">${product?.precio}</p>
+              </div>
+              <div className="product-quantity flex justify-center items-center flex-col gap-2">
+                <div className="flex flex-row">
+                  <label htmlFor="quantity-select">Cantidad: </label>
+                  <span className="total-available">
+                    ({product?.cantidad} {"Disponible"})
+                  </span>
                 </div>
+                {/* <input
+                  value={selectedQuantity}
+                  onChange={handleQuantityChange}
+                  className="border p-2 w-16 border-gray-500 rounded-md text-center"
+                  type="number"
+                  name="quantity-select"
+                  id="quantity-select"
+                  min="1"
+                  max={product?.cantidad}
+                /> */}
+              </div>
+              <div className="flex w-full">
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className={`p-3 rounded-md text-white w-full shadow-md ${
+                    product?.cantidad === "0"
+                      ? "cursor-not-allowed bg-gray-400"
+                      : "bg-tertiary"
+                  }`}
+                >
+                  {product.cantidad === 0 ? "Sin stock" : "Agregar a la canasta"}
+                </button>
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

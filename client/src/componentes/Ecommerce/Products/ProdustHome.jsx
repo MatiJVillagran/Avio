@@ -15,7 +15,7 @@ const ProdustHome = ({ allProducts }) => {
   const latestProducts = publishedProducts?.slice(-8);
 
   return (
-    <div className="max-w-screen grid grid-cols-1 mt-8 mb-8 sm:grid-cols-2 lg:grid-cols-4 gap-12 p-2">
+    <div className="max-w-screen grid grid-cols-2 mt-8 mb-8 sm:grid-cols-2 lg:grid-cols-4 gap-12 p-2">
       {latestProducts.map((product) => (
         <FloatingProductCard
           key={product.id}
@@ -42,6 +42,7 @@ const FloatingProductCard = ({ product, dispatch }) => {
         name={product.nombre}
         url={product.url}
         sku={product.sku}
+        medida={product.medida}
         price={product.precio}
         quantity={product.stock}
         onAddToCart={() => handleAddToCart(product, dispatch)}

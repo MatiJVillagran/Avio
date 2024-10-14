@@ -9,6 +9,8 @@ import {
   GET_SALES,
   GET_SALE_BY_ID,
   GET_SALE_BY_USER_ID,
+  GET_SALE_BY_USER_NAME,
+  CLEAN_SALES,
   DECREMENT_QUANTITY,
   INCREMENT_QUANTITY,
 } from "../actions/actions";
@@ -16,6 +18,7 @@ import {
 const initialState = {
   cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
   sales: [],
+  nameSales:[],
   saleInfo: [],
   cartSent: false,
   cartError: null,
@@ -107,6 +110,17 @@ const cartReducer = (state = initialState, action) => {
           ...state,
           saleInfo: payload,
         };
+
+      case GET_SALE_BY_USER_NAME:
+        return {
+          ...state,
+          nameSales: payload,
+        };  
+      case CLEAN_SALES:
+        return {
+          ...state,
+          nameSales: [],
+        };  
 
     case INCREMENT_QUANTITY:
       updatedCartItems = state.cartItems.map((item) =>
