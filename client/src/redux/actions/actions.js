@@ -204,7 +204,7 @@ export const createSale = (data) => async (dispatch) => {
     if (res.status === 200) {
       dispatch(getSales());
       await sendEmail(data.cliente.correo, data);
-      await sendEmailOrder("matiassjv@gmail.com", data);
+      await sendEmailOrder("aviomercadoagroecologico@gmail.com", data);
       dispatch({
         type: CREATED_SALE,
         payload: res,
@@ -295,14 +295,14 @@ export const setVariable = (variable) => async (dispatch) => {
 
 export const searchProduct = (name) => async (dispatch) =>{
   try {
-    
-    dispatch({ type: SEARCH_PRODUCT, payload: name });
-    
-    
+    const res= await instance.get(`/api/sheets/search/${name}`)
+    const products = res.data.products
+    dispatch({ type: SEARCH_PRODUCT, payload: products });
+     
   }
   catch (error) {
     console.error("Error searching product:", error);
-    toast.error("Error buscando el producto");
+    toast.error("No se encontraron resultados");
   }
 }
 
@@ -582,6 +582,7 @@ export const getProductsByMarca = (marca) => async (dispatch) => {
     console.error("Error fetching products by marca:", error);
   }
 };
+
 
 export const publicProductById = (id) => async (dispatch) => {
   try {

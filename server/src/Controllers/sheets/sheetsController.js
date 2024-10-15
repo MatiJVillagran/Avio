@@ -201,7 +201,12 @@ async function registerSale(auth, data) {
 
     const newId = lastId + 1;
 
-    const currentDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const currentDate = new Date().toLocaleDateString('en-CA', {
+      timeZone: 'America/Argentina/Buenos_Aires',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }); // YYYY-MM-DD
 
     // Verifica si cliente.id existe, de lo contrario, asigna "Panel de control"
     const clientId = cliente.id ? cliente.id : "Panel de control";
@@ -515,8 +520,6 @@ async function getProductsByCategory(auth, category) {
         product.categoria.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === trimmedCategory
     );
 
-
-
     // Si no se encuentran productos, lanzar un error personalizado
     if (filteredProducts.length === 0) {
       throw new Error("Producto no encontrado");
@@ -615,6 +618,32 @@ async function getProductsByMarca(auth, marca) {
     throw new Error(error.message);
   }
 }
+
+async function getProductsBySearch(auth, searchTerm) {
+  try {
+    const { products } = await getSheetData(auth);
+
+    // Normaliza y elimina espacios en blanco del término de búsqueda recibido
+    const trimmedSearchTerm = searchTerm.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    // Filtra los productos basándose en una coincidencia parcial del término de búsqueda
+    const filteredProducts = products.filter((product) =>
+      product.nombre &&
+      product.nombre.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(trimmedSearchTerm)
+    );
+
+    // Si no se encuentran productos, lanzar un error personalizado
+    if (filteredProducts.length === 0) {
+      throw new Error("Producto no encontrado");
+    }
+
+    return { products: filteredProducts };
+  } catch (error) {
+    console.log({ error: error.message });
+    throw new Error(error.message);
+  }
+}
+
 
 
 async function deleteRowById(auth, id) {
@@ -1077,5 +1106,6 @@ module.exports = {
   activeProductById,
   createSectionEntry,
   getSectionEntries,
-  updateSectionEntry
+  updateSectionEntry,
+  getProductsBySearch
 };

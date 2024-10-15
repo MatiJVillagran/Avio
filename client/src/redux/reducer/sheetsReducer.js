@@ -153,14 +153,9 @@ const sheetsReducer = (state = initialState, action) => {
       return { ...state, filterVar: action.payload };
 
     case SEARCH_PRODUCT:
-      const searchTerm = action.payload.toLowerCase();
-      // Verifica que item.nombre exista y no sea undefined
-      const searchedProducts = state.sheetsData.filter(item =>
-        item.nombre && item.nombre.toLowerCase().includes(searchTerm)
-      );
       return {
         ...state,
-        searchedProducts
+        searchedProducts: action.payload
       };
 
     case CLEAN_SEARCH_PRODUCT:

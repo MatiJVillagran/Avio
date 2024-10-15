@@ -42,7 +42,7 @@ const TabViewSale = ({ isOpen, onClose, sale, infoVentas }) => {
                 Informacion de ventas
               </h3>
               <p className="text-sm font-normal text-gray-400 leading-none">
-                Fecha {infoVentas[0].fecha}
+                {/* Fecha {infoVentas[0].fecha} */}
               </p>
             </div>
             <button

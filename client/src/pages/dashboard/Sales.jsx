@@ -27,6 +27,8 @@ const Sales = () => {
 
   const sales = search ? nameSearch : allSales;
 
+  
+
   const toggleModal = (saleInfo) => {
     dispatch(getSaleInfo(saleInfo.id));
     setOpenModal(!openModal);

@@ -26,6 +26,7 @@ const {
   getCategoriesDashboard,
   getSaleByUserName,
   updateSectionEntry,
+  getProductsBySearch,
 } = require("../Controllers/sheets/sheetsController.js");
 const {handleImageUpload}= require("../Controllers/sheets/handleImageUpload.js");
 
@@ -206,6 +207,17 @@ sheetsRouter.put("/decrease-stock", async (req, res) => {
     res.json(result);
   } catch (error) {
     res.status(500).send(error.message);
+  }
+});
+
+sheetsRouter.get("/search/:term", async (req, res) => {
+  try {
+    const auth = await authorize();
+    const searchTerm = req.params.term;
+    const data = await getProductsBySearch(auth, searchTerm);
+    res.json(data);
+  } catch (error) {
+    res.status(404).send("Producto no encontrado");
   }
 });
 
