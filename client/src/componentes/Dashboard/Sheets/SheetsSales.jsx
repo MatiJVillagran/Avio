@@ -1,5 +1,8 @@
 const SheetsSales = ({ data, onViewSale, toggleDelete }) => {
 
+   // Ordena los datos por fecha (de la más antigua a la más reciente)
+   const sortedData = [...data].sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+
   return (
     <div className="border border-gray-400 p-4">
       <div className="overflow-x-auto custom-scroll">
@@ -9,18 +12,20 @@ const SheetsSales = ({ data, onViewSale, toggleDelete }) => {
               <th>Cod. Venta</th>
               <th>Cliente</th>
               <th>Forma de pago</th>
+              <th>Fecha</th>
               <th>Entrega</th>
               <th>Total</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody className="text-center">
-            {data.length > 0 ? (
-              data.map((prod, index) => (
+            {sortedData.length > 0 ? (
+              sortedData.map((prod, index) => (
                 <tr key={index}>
                   <td>{prod.id}</td>
                   <td>{prod.nombre.toLowerCase()}</td>
                   <td>{prod.pago}</td>
+                  <td>{prod.fecha}</td>
                   <td>{prod.envio}</td>
                   <td>{prod.total}</td>
                   <td className="flex justify-center items-center gap-2">

@@ -14,11 +14,14 @@ export default function ProductList({ allProducts }) {
   const [visibleProducts, setVisibleProducts] = useState(8); // Mostrar 8 productos inicialmente
   const dispatch = useDispatch();
   const cartError = useSelector((state) => state.cart.cartError);
+  const searchterm = useSelector((state) => state.sheets.searchedProducts);
+
+  
 
   const publishedProducts = allProducts?.filter(
     (product) => product.publicado === "si"
   );
-
+  
   // Productos a mostrar basado en el número de productos visibles
   const currentProducts = publishedProducts.slice(0, visibleProducts);
 
