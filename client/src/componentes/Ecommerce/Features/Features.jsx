@@ -25,7 +25,7 @@ const Features = () => {
             </svg>
             Productos de calidad
           </h3>
-          <p>Ofrecemos productos agroecologicos  y/u orgánicos, garantizando la mejor calidad del mercado.</p>
+          <p>Ofrecemos productos agroecologicos  y orgánicos, garantizando la mejor calidad del mercado.</p>
         </div>
         
         <div className="bg-gray-100 border border-secondary rounded-lg p-6 max-w-sm shadow-lg">
