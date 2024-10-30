@@ -264,10 +264,10 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
             <option value="Legumbres">Legumbres</option>
             <option value="Bebidas">Bebidas</option>
             <option value="Arroz">Arroz</option>
-            <option value="Harinas y fecula">Harinas y fecula</option>
-            <option value="Azucar">Azucar</option>
+            <option value="Harinas y Fécula">Harinas y Fécula</option>
+            <option value="Azúcar">Azúcar</option>
             <option value="Fideos">Fideos</option>
-            <option value="Hierbas y tes">Hierbas y tes</option>
+            <option value="Hierbas e Infusiones">Hierbas e Infusiones</option>
             <option value="Semillas">Semillas</option>
             <option value="Condimentos">Condimentos</option>
             <option value="Aceitunas y Aceites">Aceitunas y Aceites</option>
