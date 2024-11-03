@@ -18,6 +18,7 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
     marca: "",
     precio: 0,
     url: [],
+    descripcion: "",
   });
   const [errors, setErrors] = useState({});
   const img = useSelector((state) => state.sheets.images); // Selector de imágenes
@@ -41,6 +42,7 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
         cantidad: product.stock || "",
         precio: product.precio || "",
         url: product.url ? product.url.split(",").map((url) => url.trim()) : [],
+        descripcion: product.descripcion || "",
       });
     }
   }, [product]);
@@ -77,6 +79,7 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
           cantidad: formData.cantidad,
           precio: formData.precio,
           url: formData.url.join(", "),
+          descripcion: formData.descripcion,
         };
 
         if (product) {
@@ -89,6 +92,7 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
             cantidad: formData.cantidad,
             precio: formData.precio,
             url: formData.url.join(", "),
+            descripcion: formData.descripcion,
           };
 
           dispatch(updateRow(updatedRows));
@@ -161,7 +165,7 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
       <form
-        className="bg-white h-auto text-center shadow-md p-6 rounded-xl md:w-1/2 lg:w-auto m-2 flex flex-col"
+        className="bg-white  h-min-screen text-center shadow-md p-6 rounded-xl md:w-1/2 lg:w-auto m-2 flex flex-col max-h-[100vh] overflow-y-auto"
         onSubmit={handleSubmit}
       >
         <button
@@ -178,24 +182,24 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
 
                 {formData?.url?.length > 0
                   ? formData?.url?.map((url, index) => (
-                      <div
-                        key={index}
-                        className="relative mr-[5px] flex shadow-md rounded-full p-2 w-24 h-24 justify-center items-center border border-gray-800"
+                    <div
+                      key={index}
+                      className="relative mr-[5px] flex shadow-md rounded-full p-2 w-24 h-24 justify-center items-center border border-gray-800"
+                    >
+                      <img
+                        src={url}
+                        alt={`uploaded-${index}`}
+                        className="w-16 h-16 rounded-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleImageDelete(index)}
+                        className="absolute bottom-0 right-0 flex justify-center items-center bg-red-500 text-white rounded-full p-1 w-6 h-6"
                       >
-                        <img
-                          src={url}
-                          alt={`uploaded-${index}`}
-                          className="w-16 h-16 rounded-full object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleImageDelete(index)}
-                          className="absolute bottom-0 right-0 flex justify-center items-center bg-red-500 text-white rounded-full p-1 w-6 h-6"
-                        >
-                          &times;
-                        </button>
-                      </div>
-                    ))
+                        &times;
+                      </button>
+                    </div>
+                  ))
                   : ""}
               </div>
 
@@ -232,9 +236,8 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
         <div className="mt-2">
           <label htmlFor="nombre">Nombre</label>
           <input
-            className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${
-              errors.nombre ? "border-red-500" : "border-gray-400"
-            }`}
+            className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${errors.nombre ? "border-red-500" : "border-gray-400"
+              }`}
             type="text"
             id="nombre"
             name="nombre"
@@ -253,9 +256,8 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
             name="categoria"
             value={formData.categoria}
             onChange={handleChange}
-            className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${
-              errors.categoria ? "border-red-500" : "border-gray-400"
-            }`}
+            className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${errors.categoria ? "border-red-500" : "border-gray-400"
+              }`}
           >
             <option value="" disabled>
               Selecciona una categoría
@@ -282,9 +284,8 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
           <div className="mt-2 w-1/2">
             <label htmlFor="medida">Medida</label>
             <input
-              className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${
-                errors.medida ? "border-red-500" : "border-gray-400"
-              }`}
+              className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${errors.medida ? "border-red-500" : "border-gray-400"
+                }`}
               type="text"
               id="medida"
               name="medida"
@@ -299,9 +300,8 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
           <div className="mt-2 w-1/2">
             <label htmlFor="cantidad">Cantidad</label>
             <input
-              className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${
-                errors.stock ? "border-red-500" : "border-gray-400"
-              }`}
+              className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${errors.stock ? "border-red-500" : "border-gray-400"
+                }`}
               type="text"
               id="cantidad"
               name="cantidad"
@@ -318,9 +318,8 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
           <div className="mt-2 w-1/2">
             <label htmlFor="marca">Marca</label>
             <input
-              className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${
-                errors.marca ? "border-red-500" : "border-gray-400"
-              }`}
+              className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${errors.marca ? "border-red-500" : "border-gray-400"
+                }`}
               type="text"
               id="marca"
               name="marca"
@@ -335,9 +334,8 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
           <div className="mt-2 w-1/2">
             <label htmlFor="precio">Precio</label>
             <input
-              className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${
-                errors.precio ? "border-red-500" : "border-gray-400"
-              }`}
+              className={`bg-white w-full p-2 text-center mt-2 rounded-md border ${errors.precio ? "border-red-500" : "border-gray-400"
+                }`}
               type="number"
               id="precio"
               name="precio"
@@ -349,6 +347,23 @@ export default function TabFormCreateProduct({ isOpen, onClose, product }) {
               <p className="text-red-500 text-xs">{errors.precio}</p>
             )}
           </div>
+        </div>
+        {/* Campo de Descripción */}
+        <div className="mt-1">
+          <label htmlFor="descripcion">Descripción</label>
+          <textarea
+            className={`bg-white w-full p-2 mt-2 rounded-md border ${errors.descripcion ? "border-red-500" : "border-gray-400"
+              }`}
+            id="descripcion"
+            name="descripcion"
+            value={formData.descripcion}
+            onChange={handleChange}
+            placeholder="Descripción del producto"
+            rows="4"
+          />
+          {errors.descripcion && (
+            <p className="text-red-500 text-xs">{errors.descripcion}</p>
+          )}
         </div>
         <button
           type="submit"

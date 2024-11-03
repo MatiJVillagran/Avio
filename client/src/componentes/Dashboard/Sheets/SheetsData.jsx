@@ -5,10 +5,11 @@ const SheetsData = ({
   toggleModal,
   toggleDeleteModal,
   toggleActiveModal,
+  toggleDescriptionModal,
 }) => {
   return (
-    <div className="border border-gray-300 p-4">
-      
+    <div className="border border-gray-300 p-1/2">
+
       <div className="overflow-x-auto custom-scroll border border-gray-300 p-2">
         <table className="basic mt-2">
           <thead>
@@ -16,6 +17,7 @@ const SheetsData = ({
               <th>ID</th>
               <th>Categoría</th>
               <th>Nombre</th>
+              <th>Detalle</th>
               <th>Marca</th>
               <th>Medida</th>
               <th>Stock</th>
@@ -45,6 +47,10 @@ const SheetsData = ({
                     <td>{row.id}</td>
                     <td>{row.categoria}</td>
                     <td>{row.nombre}</td>
+                    <td>{<button
+                      onClick={() => toggleDescriptionModal(row.descripcion)}
+                      className="mt-2 text-sm text-blue-600">
+                      ver</button>}</td>
                     <td>{row.marca}</td>
                     <td>{row.medida}</td>
                     <td>{row.stock}</td>
@@ -112,11 +118,10 @@ const SheetsData = ({
                       {row.stock !== 0 ? (
                         <button
                           title="Publicar en la pagina"
-                          className={`${
-                            row.publicado === "si"
+                          className={`${row.publicado === "si"
                               ? "text-blue-500"
                               : "text-gray-800"
-                          }`}
+                            }`}
                           onClick={() => toggleActiveModal(row.id)}
                         >
                           {row.publicado === "si" ? (

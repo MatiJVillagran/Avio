@@ -26,6 +26,11 @@ const validationProductForm = (formData) => {
     errors.marca = "La marca es requerida";
   }
 
+    // Validación de descripcion
+    if (formData.descripcion && !formData.descripcion.trim()) {
+      errors.descripcion = "La descripcion es requerida";
+    }
+
   // Asegúrate de que formData.precio sea una cadena
   const precioString = formData.precio ? formData.precio.toString() : '';
   const sanitizedPrice = precioString.replace(/,/g, '');

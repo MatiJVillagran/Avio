@@ -30,7 +30,7 @@ async function getSheetData(auth) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Productos!A2:J",
+      range: "Productos!A2:K",
     });
     const rows = res.data.values || [];
     let lastId = 0;
@@ -49,6 +49,7 @@ async function getSheetData(auth) {
       url: row[7],
       sku: row[8],
       publicado: row[9],
+      descripcion: row[10],
     }));
 
     return { products, lastId };
@@ -62,7 +63,7 @@ async function getSheetDataById(id, auth) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Productos!A2:J",
+      range: "Productos!A2:K",
     });
     const rows = res.data.values || [];
 
@@ -77,6 +78,7 @@ async function getSheetDataById(id, auth) {
       url: row[7],
       sku: row[8],
       publicado: row[9],
+      descripcion: row[10],
     }));
 
     const product = products.find((product) => product.id === id.toString());
@@ -105,7 +107,7 @@ async function appendRow(auth, rowData) {
   const sheets = google.sheets({ version: "v4", auth });
   const { rows, lastId } = await getSheetData(auth);
   const newId = lastId + 1;
-  const { categoria, nombre, marca, medida, cantidad, precio, url } = rowData;
+  const { categoria, nombre, marca, medida, cantidad, precio, url, descripcion } = rowData;
   const sku = generateSKU(categoria, nombre, marca, newId);
   const urlString = Array.isArray(url) ? url.join(", ") : url;
   const publicadoValue = "no"; // Nueva variable para el valor de publicado
@@ -120,10 +122,11 @@ async function appendRow(auth, rowData) {
     urlString,
     sku,
     publicadoValue, // Usar la nueva variable aquí
+    descripcion
   ];
   const res = await sheets.spreadsheets.values.append({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: "Productos!A2:J",
+    range: "Productos!A2:K",
     valueInputOption: "RAW",
     resource: {
       values: [newRow],
@@ -163,12 +166,13 @@ async function updateRow(auth, rowData) {
     urlString,
     rowData.sku,
     rowData.publicado,
+    rowData.descripcion,
   ];
 
   // Actualizar la fila en la hoja de cálculo
   const res = await sheets.spreadsheets.values.update({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: `Productos!A${rowIndex + 2}:J${rowIndex + 2}`,
+    range: `Productos!A${rowIndex + 2}:K${rowIndex + 2}`,
     valueInputOption: "RAW",
     resource: {
       values: [updatedRow],
@@ -473,7 +477,7 @@ async function increaseStock(auth, productId, amount) {
 
   const res = await sheets.spreadsheets.values.update({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: `Productos!A${rowIndex + 2}:J${rowIndex + 2}`,
+    range: `Productos!A${rowIndex + 2}:K${rowIndex + 2}`,
     valueInputOption: "RAW",
     resource: {
       values: [Object.values(products[rowIndex])],
@@ -498,7 +502,7 @@ async function decreaseStock(auth, productId, amount) {
 
   const res = await sheets.spreadsheets.values.update({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: `Productos!A${rowIndex + 2}:J${rowIndex + 2}`,
+    range: `Productos!A${rowIndex + 2}:K${rowIndex + 2}`,
     valueInputOption: "RAW",
     resource: {
       values: [updatedRow],
@@ -652,7 +656,7 @@ async function deleteRowById(auth, id) {
   // Obtener todos los datos de la hoja
   const getRows = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: "Productos!A:I", // Ajusta el rango según sea necesario
+    range: "Productos!A:K", // Ajusta el rango según sea necesario
   });
 
   const rows = getRows.data.values;
@@ -752,7 +756,7 @@ async function activeProductById(auth, id) {
   // Obtener todos los datos de la hoja
   const getRows = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: "Productos!A:J", // Ajusta el rango para incluir hasta la columna J
+    range: "Productos!A:K", // Ajusta el rango para incluir hasta la columna J
   });
 
   const rows = getRows.data.values;
