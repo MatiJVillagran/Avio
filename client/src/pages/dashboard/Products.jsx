@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSheets } from "../../redux/actions/actions";
 import TabDeleteRowButton from "../../componentes/Dashboard/Popup/TabDeleteRowButton";
 import TabConfirmPublicProduct from "../../componentes/Dashboard/Popup/TabConfirmPublicProduct";
+import TabDescriptionModal from "../../componentes/Dashboard/Popup/TabDescriptionModal";
 
 const Products = () => {
   const [activeForm, setActiveForm] = useState(false);
@@ -18,6 +19,8 @@ const Products = () => {
   const [visiblePages, setVisiblePages] = useState([1, 2, 3, 4]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+  const [currentDescription, setCurrentDescription] = useState('');
 
   const isAuth = useSelector((state) => state.auth.isAuth);
   const dispatch = useDispatch();
@@ -42,6 +45,11 @@ const Products = () => {
 
   const toggleActiveModal = (id) => {
     setActivePublicProd(id);
+  };
+
+  const toggleDescriptionModal = (description) => {
+    setCurrentDescription(description);
+    setShowDescriptionModal(!showDescriptionModal);
   };
 
   const handleSearch = (event) => {
@@ -113,9 +121,15 @@ const Products = () => {
         />
       )}
       {activePublicProd !== null && (
-        <TabConfirmPublicProduct 
+        <TabConfirmPublicProduct
           id={activePublicProd}
           onClose={() => toggleActiveModal(null)}
+        />
+      )}
+      {showDescriptionModal && (
+        <TabDescriptionModal
+          description={currentDescription}
+          onClose={() => setShowDescriptionModal(false)}
         />
       )}
       <div className="flex justify-between">
@@ -142,6 +156,7 @@ const Products = () => {
           toggleModal={toggleModal}
           toggleDeleteModal={toggleDeleteModal}
           toggleActiveModal={toggleActiveModal}
+          toggleDescriptionModal={toggleDescriptionModal}
         />
         <div className="flex justify-center mt-4">
           <button
@@ -155,9 +170,8 @@ const Products = () => {
             <button
               key={number}
               onClick={() => handlePageChange(number)}
-              className={`px-4 py-2 mx-1 border border-gray-400 rounded-md ${
-                currentPage === number ? "bg-primary text-white" : "bg-white"
-              }`}
+              className={`px-4 py-2 mx-1 border border-gray-400 rounded-md ${currentPage === number ? "bg-primary text-white" : "bg-white"
+                }`}
             >
               {number}
             </button>

@@ -201,6 +201,10 @@ const ProductDetail = () => {
                   {product.cantidad === 0 ? "Sin stock" : "Agregar a la canasta"}
                 </button>
               </div>
+              <div className=" p-1 rounded-xl mt-4">
+                  <h2 className="text-lg font-semibold mb-2 ">Descripción</h2>
+                  <p className="text-gray-700 text-base leading-relaxed">{product?.descripcion}</p>
+                </div>
             </div>
           </div>
         </div>
