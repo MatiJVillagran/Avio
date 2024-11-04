@@ -21,7 +21,7 @@ const Login = () => {
         />
       </div>
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full h-full lg:w-1/2 flex justify-center gap-2 items-center flex-col">
-        <h1 className="text-2xl font-semibold mb-4 text-center">Inicar Sesion</h1>
+        <h1 className="text-2xl font-semibold mb-4 text-center">Inicar </h1>
         <img
                   className="h-12 w-12 object-cover rounded-full"
                   src="https://i.ibb.co/THt2PXT/images-1.jpg"

@@ -167,7 +167,7 @@ export const Nav = ({ user, showNav }) => {
               clipRule="evenodd"
             />
           </svg>
-          <span className="">Cerrar sesion</span>
+          <span className="">Cerrar Sesión</span>
         </button>
       </div>
     </div>
