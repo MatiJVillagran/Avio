@@ -202,6 +202,7 @@ const ProductDetail = () => {
                 </button>
               </div>
               <div className=" p-1 rounded-xl mt-4">
+                <hr className="border-t border-gray-300 mb-2"/>
                   <h2 className="text-lg font-semibold mb-2 ">Descripción</h2>
                   <p className="text-gray-700 text-base leading-relaxed">{product?.descripcion}</p>
                 </div>
