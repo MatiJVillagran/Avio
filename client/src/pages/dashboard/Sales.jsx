@@ -50,17 +50,17 @@ const Sales = () => {
     dispatch(getSales());
   }, [dispatch]);
 
-  const filteredSales = sales.filter((sale) => sale.estadoPago !== "Anulado");
+  // const filteredSales = sales.filter((sale) => sale.estadoPago !== "Anulado");
   // Filtrar las ventas
-  const searchedSales  = filteredSales?.filter((sale) => {
-    const lowercasedFilter = searchTerm.toLowerCase();
+  const searchedSales  = sales?.filter((sale) => {
+    const lowercasedFilter = searchTerm ? searchTerm.toLowerCase() : "";
     return (
-      sale.id.toString().toLowerCase().includes(lowercasedFilter) ||
-      sale.nombre.toLowerCase().includes(lowercasedFilter) ||
-      sale.total.toString().toLowerCase().includes(lowercasedFilter) ||
-      sale.fecha.toLowerCase().includes(lowercasedFilter) ||
-      sale.hora.toLowerCase().includes(lowercasedFilter) ||
-      sale.pago.toLowerCase().includes(lowercasedFilter)
+      sale.id?.toString().toLowerCase().includes(lowercasedFilter) ||
+      sale.nombre?.toLowerCase().includes(lowercasedFilter) ||
+      sale.total?.toString().toLowerCase().includes(lowercasedFilter) ||
+      sale.fecha?.toLowerCase().includes(lowercasedFilter) ||
+      sale.hora?.toLowerCase().includes(lowercasedFilter) ||
+      sale.pago?.toLowerCase().includes(lowercasedFilter)
     );
   });
 
