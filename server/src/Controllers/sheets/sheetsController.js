@@ -186,7 +186,6 @@ async function registerSale(auth, data) {
   try {
     const { productos, cliente, formaPago, envio } = data;
 
-    console.log(cliente);
 
     const sheets = google.sheets({ version: "v4", auth });
 
@@ -212,6 +211,12 @@ async function registerSale(auth, data) {
       day: '2-digit'
     }); // YYYY-MM-DD
 
+    const currentTime = new Date().toLocaleTimeString("es-AR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
     // Verifica si cliente.id existe, de lo contrario, asigna "Panel de control"
     const clientId = cliente.id ? cliente.id : "Panel de control";
 
@@ -221,6 +226,7 @@ async function registerSale(auth, data) {
       clientId,               // Usamos clientId en lugar de cliente.id
       cliente.nombre,
       prod.sku,
+      prod.nombre,
       prod.cantidad,
       prod.medida,
       prod.marca,
@@ -228,13 +234,19 @@ async function registerSale(auth, data) {
       formaPago,
       prod.cantidad * prod.precio,
       currentDate,
+      currentTime,
       envio,
+      cliente.correo,
+      cliente.direccion,
+      cliente.provincia,
+      cliente.cp,
+      cliente.celular,
     ]);
 
     // Append the data to the spreadsheet
     const res = await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:M",
+      range: "Ventas!A2:T",
       valueInputOption: "RAW",
       resource: {
         values: ventaData,
@@ -261,7 +273,7 @@ async function getSaleDataUnitiInfo(auth, id) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:M",
+      range: "Ventas!A2:T",
     });
     const rows = res.data.values || [];
 
@@ -274,14 +286,21 @@ async function getSaleDataUnitiInfo(auth, id) {
         cliente: row[2],
         nombre: row[3],
         sku: row[4],
-        cantidad: row[5],
-        medida: row[6],
-        marca: row[7],
-        subtotal: row[8],
-        pago: row[9],
-        total: row[10],
-        fecha: row[11],
-        envio: row[12],
+        producto: row[5],
+        cantidad: row[6],
+        medida: row[7],
+        marca: row[8],
+        subtotal: row[9],
+        pago: row[10],
+        total: row[11],
+        fecha: row[12],
+        hora: row[13],
+        envio: row[14],
+        correo: row[15],
+        direccion: row[16],
+        provincia: row[17],
+        cp: row[18],
+        celular: row[19],
       }));
 
     return sales;
@@ -296,7 +315,7 @@ async function getSaleData(auth) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:M",
+      range: "Ventas!A2:T",
     });
     const rows = res.data.values || [];
     let lastId = 0;
@@ -315,19 +334,26 @@ async function getSaleData(auth) {
           cliente: row[2],
           nombre: row[3],
           sku: row[4],
-          cantidad: parseInt(row[5]),
-          medida: row[6],
-          marca: row[7],
-          subtotal: parseFloat(row[8]),
-          pago: row[9],
-          total: parseFloat(row[10]),
-          fecha: row[11],
-          envio: row[12],
+          producto: row[5],
+          cantidad: parseInt(row[6]),
+          medida: row[7],
+          marca: row[8],
+          subtotal: parseFloat(row[9]),
+          pago: row[10],
+          total: parseFloat(row[11]),
+          fecha: row[12],
+          hora: row[13],
+          envio: row[14],
+          correo: row[15],
+          direccion: row[16],
+          provincia: row[17],
+          cp: row[18],
+          celular: row[19],
         };
       } else {
-        salesMap[id].cantidad += parseInt(row[5]);
-        salesMap[id].subtotal += parseFloat(row[8]);
-        salesMap[id].total += parseFloat(row[10]);
+        salesMap[id].cantidad += parseInt(row[6]);
+        salesMap[id].subtotal += parseFloat(row[9]);
+        salesMap[id].total += parseFloat(row[11]);
       }
     });
 
@@ -364,7 +390,7 @@ async function getSaleByUserId(auth, uid) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:M", // Ajusta el rango según tu hoja de ventas
+      range: "Ventas!A2:T", // Ajusta el rango según tu hoja de ventas
     });
 
     const rows = res.data.values || [];
@@ -389,7 +415,8 @@ async function getSaleByUserId(auth, uid) {
           paymentMethod: row[9],
           totalPrice: row[10],
           date: row[11],
-          shipping: row[12],
+          time: row[12],
+          shipping: row[13],
           product, // Añadir la información del producto
         };
       })
@@ -407,7 +434,7 @@ async function getSaleByUserName(auth, nombreCliente) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:M", // Ajusta el rango según tu hoja de ventas
+      range: "Ventas!A2:T", // Ajusta el rango según tu hoja de ventas
     });
 
     const rows = res.data.values || [];
@@ -432,21 +459,22 @@ async function getSaleByUserName(auth, nombreCliente) {
           cliente: row[2],
           nombre: row[3],
           sku: row[4],
-          cantidad: parseInt(row[5]),
-          medida: row[6],
-          marca: row[7],
-          subtotal: parseFloat(row[8]),
-          pago: row[9],
-          total: parseFloat(row[10]),
-          fecha: row[11],
-          envio: row[12],
+          cantidad: parseInt(row[6]),
+          medida: row[7],
+          marca: row[8],
+          subtotal: parseFloat(row[9]),
+          pago: row[10],
+          total: parseFloat(row[11]),
+          fecha: row[12],
+          hora: row[13],
+          envio: row[14],
           productos: [], // Inicializamos un arreglo de productos si necesitas agregar más detalles
         };
       } else {
         // Si la venta ya está en el mapa, sumamos las cantidades y subtotales
-        salesMap[id].cantidad += parseInt(row[5]);
-        salesMap[id].subtotal += parseFloat(row[8]);
-        salesMap[id].total += parseFloat(row[10]);
+        salesMap[id].cantidad += parseInt(row[6]);
+        salesMap[id].subtotal += parseFloat(row[9]);
+        salesMap[id].total += parseFloat(row[11]);
       }
 
       // Añadir la información del producto si es necesario
@@ -462,6 +490,76 @@ async function getSaleByUserName(auth, nombreCliente) {
     console.error("Error obteniendo ventas por nombre de cliente:", error);
     throw new Error("Error obteniendo ventas por nombre de cliente");
   }
+}
+
+async function putSaleChangeState(auth, id, state) {
+  const sheets = google.sheets({ version: "v4", auth });
+
+  // Obtener todos los datos de la hoja
+  const { salesData } = await getSaleData(auth);
+
+  // Filtrar todas las filas que coincidan con el ID proporcionado
+  const rowsToUpdate = salesData.filter((sale) => sale.id === id);
+
+  if (rowsToUpdate.length === 0) {
+    throw new Error("ID not found");
+  }
+
+  // Corregir el valor de 'state' si es necesario
+  const correctedState = state === "En preparacion" ? "En preparacion" : state;
+
+  // Obtener el ID de la hoja de cálculo
+  const sheetInfo = await sheets.spreadsheets.get({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+  });
+
+  const sheet = sheetInfo.data.sheets.find(
+    (s) => s.properties.title === "Ventas" // Asegúrate de que este sea el nombre correcto de tu hoja
+  );
+
+  if (!sheet) {
+    throw new Error("Sheet not found");
+  }
+
+  const sheetId = sheet.properties.sheetId;
+
+  // Crear las solicitudes de actualización para todas las filas coincidentes
+  const requests = rowsToUpdate.map((sale) => {
+    const rowIndex = salesData.indexOf(sale);
+    return {
+      updateCells: {
+        range: {
+          sheetId: sheetId, // Usamos el sheetId obtenido
+          startRowIndex: rowIndex + 1, // +1 porque las filas en Google Sheets empiezan en 1
+          endRowIndex: rowIndex + 2,
+          startColumnIndex: 10, // Columna del estadoPago (columna J)
+          endColumnIndex: 11,
+        },
+        rows: [
+          {
+            values: [
+              {
+                userEnteredValue: {
+                  stringValue: correctedState,
+                },
+              },
+            ],
+          },
+        ],
+        fields: "userEnteredValue",
+      },
+    };
+  });
+
+  // Ejecutar la actualización
+  const res = await sheets.spreadsheets.batchUpdate({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+    resource: {
+      requests,
+    },
+  });
+
+  return res.data;
 }
 
 async function increaseStock(auth, productId, amount) {
@@ -705,7 +803,7 @@ async function deleteSalesById(auth, id) {
   // Obtener todos los datos de la hoja
   const getRows = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: "Ventas!A:K", // Ajusta el rango según sea necesario
+    range: "Ventas!A:S", // Ajusta el rango según sea necesario
   });
 
   const rows = getRows.data.values;
@@ -1111,5 +1209,6 @@ module.exports = {
   createSectionEntry,
   getSectionEntries,
   updateSectionEntry,
-  getProductsBySearch
+  getProductsBySearch,
+  putSaleChangeState
 };

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "../../componentes/Dashboard/Layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
-
+import {
+  getSaleChangeState,
+  getSaleInfo,
+  getSales,
+} from "../../redux/actions/salesActions";
 import SheetsSales from "../../componentes/Dashboard/Sheets/SheetsSales";
 import TabViewSale from "../../componentes/Dashboard/Popup/TabViewSale";
 import TabDeleteSaleButton from "../../componentes/Dashboard/Popup/TabDeleteSaleButton";
 import TabConfirmStateChangeSale from "../../componentes/Dashboard/Popup/TabConfirmStateChangeSale";
-import { getSaleInfo, getSales, getSaleChangeState } from "../../redux/actions/actions";
 
 const Sales = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -56,7 +59,7 @@ const Sales = () => {
     const lowercasedFilter = searchTerm.toLowerCase();
     return (
       sale.id.toString().toLowerCase().includes(lowercasedFilter) ||
-      sale.nombre.toLowerCase().includes(lowercasedFilter) ||
+      sale.cliente.toLowerCase().includes(lowercasedFilter) ||
       sale.total.toString().toLowerCase().includes(lowercasedFilter) ||
       sale.fecha.toLowerCase().includes(lowercasedFilter) ||
       sale.hora.toLowerCase().includes(lowercasedFilter) ||

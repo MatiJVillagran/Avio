@@ -21,11 +21,11 @@ const TabViewSale = ({ isOpen, onClose, sale, loading }) => {
   const primerVenta = sale[0] || {};
 
   // Mapear las formas de envío del primer objeto
-  const formasEnvio = primerVenta?.envio ? (
+  const formasEnvio = primerVenta?.formaEnvio ? (
     <li className="bg-gray-100 p-4 rounded-lg mb-2">
       <p>
         <span className="font-bold">Forma de Envío: </span>
-        {primerVenta?.envio}
+        {primerVenta?.formaEnvio}
       </p>
       <p>
         <span className="font-bold">Dirección: </span>
@@ -147,11 +147,11 @@ const TabViewSale = ({ isOpen, onClose, sale, loading }) => {
                         </span>
                         <div className="flex flex-col flex-1">
                           <h3 className="text-sm font-medium">
-                            {info.nombre}
+                            {info.cliente}
                           </h3>
                           <div className="divide-x divide-gray-200 mt-auto">
                             <span className="inline-block px-3 text-xs leading-none text-gray-400 font-normal first:pl-0">
-                               cantidad {info.cantidad}
+                              {info.cantidad} cantidad
                             </span>
                             <span className="inline-block px-3 text-xs leading-none text-gray-400 font-normal first:pl-0">
                               ${info.total} total
@@ -215,24 +215,17 @@ const TabViewSale = ({ isOpen, onClose, sale, loading }) => {
                           </p>
                           <p>
                             <span className="text-gray-800 p-2 font-bold">
-                              Producto:
+                              Talle:
                             </span>
 
-                            {info.producto}
+                            {info.talle}
                           </p>
                           <p>
                             <span className="text-gray-800 p-2 font-bold">
-                              Medida:
+                              Color:
                             </span>
 
-                            {info.medida}
-                          </p>
-                          <p>
-                            <span className="text-gray-800 p-2 font-bold">
-                              Marca:
-                            </span>
-
-                            {info.marca}
+                            {info.color}
                           </p>
                           <p>
                             <span className="text-gray-800 p-2 font-bold">

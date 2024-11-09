@@ -147,6 +147,22 @@ const SaleConfirmationEmail = ({ data }) => {
             ${totalAbonar.toFixed(2)} {/* Muestra el total con dos decimales */}
           </strong>
         </p>
+        
+                {/* Numero de pedido */}
+                <p
+          style={{ textAlign: "center", color: "#718096", marginTop: "0.5rem" }}
+        >
+          Pedido N°:{" "}
+          <strong
+            style={{
+              textAlign: "center",
+              color: "#d98f25",
+              padding: "1rem",
+            }}
+          >
+            {data.id}
+          </strong>
+        </p>
 
         <p
           style={{ textAlign: "center", color: "#718096", marginTop: "1rem" }}

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const SendEmailStateChanged = ({data}) => {
+export const SendEmailStateChanged = ({ data }) => {
   const { cliente, newStatus, orderNumber } = data;
 
   return (
@@ -15,6 +15,18 @@ export const SendEmailStateChanged = ({data}) => {
         fontFamily: "Arial, sans-serif",
       }}
     >
+      <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+        <img
+          src="https://i.ibb.co/THt2PXT/images-1.jpg" // URL de tu logo
+          alt="Logo de la tienda"
+          style={{
+            width: "150px",
+            height: "150px",
+            borderRadius: "50%",
+            objectFit: "cover",
+          }}
+        />
+      </div>
       <h1
         style={{
           fontSize: "1.5rem",
@@ -78,7 +90,7 @@ export const SendEmailStateChanged = ({data}) => {
                   padding: "0.5rem 1rem",
                   borderBottom: "1px solid #e2e8f0",
                   fontWeight: "bold",
-                  color: newStatus === "Confirmada" ? "#38a169" : "#DD6B20",
+                  color: newStatus === "Listo" ? "#38a169" : "#DD6B20",
                 }}
               >
                 {newStatus}
@@ -101,7 +113,7 @@ export const SendEmailStateChanged = ({data}) => {
 
       <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
         <a
-          href="https://wa.me/3772430213"
+          href="https://wa.me/3454406764"
           target="_blank"
           rel="noopener noreferrer"
           style={{

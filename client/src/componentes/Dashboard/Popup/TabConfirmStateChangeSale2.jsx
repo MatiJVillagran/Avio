@@ -1,5 +1,5 @@
 import React from "react";
-
+import { getSaleInfo } from "../../../redux/actions/salesActions";
 
 const TabConfirmStateChangeSale = ({ isOpen, buttonChange, onClose }) => {
   if (!isOpen) {
@@ -18,7 +18,7 @@ const TabConfirmStateChangeSale = ({ isOpen, buttonChange, onClose }) => {
         </div>
         <div className="text-center">
           <h1 className="text-lg font-semibold">Estado del Pedido</h1>
-          <p>Avisar al cliente cómo está su pedido</p>
+          <p>Vamos a avisar al cliente cómo está su pedido</p>
         </div>
         <div className="flex flex-row gap-2">
           <button
@@ -29,7 +29,7 @@ const TabConfirmStateChangeSale = ({ isOpen, buttonChange, onClose }) => {
           </button>
           <button
             className="px-4 py-2 rounded-md bg-yellow-500 text-white hover:bg-yellow-600"
-            onClick={() => buttonChange("En preparación")}
+            onClick={() => buttonChange("En preparacion")}
           >
             En preparación
           </button>
