@@ -7,7 +7,6 @@ function CartItem({ product }) {
   const [cartQuantity, setCartQuantity] = useState(product?.cantidad || 1);
   const dispatch = useDispatch();
 
-  console.log("productcart", product);
   
 
   // Sincronizar el estado con el producto si la cantidad cambia

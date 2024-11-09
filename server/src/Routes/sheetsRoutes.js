@@ -27,6 +27,7 @@ const {
   getSaleByUserName,
   updateSectionEntry,
   getProductsBySearch,
+  putSaleChangeState,
 } = require("../Controllers/sheets/sheetsController.js");
 const {handleImageUpload}= require("../Controllers/sheets/handleImageUpload.js");
 
@@ -206,6 +207,19 @@ sheetsRouter.put("/decrease-stock", async (req, res) => {
     const result = await decreaseStock(auth, productId, amount);
     res.json(result);
   } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+sheetsRouter.put("/sale/:id/changestate/:state", async (req, res) => {
+  try {
+    const { id, state } = req.params;
+    const auth = await authorize();
+    const saleChanged = await putSaleChangeState(auth, id, state);
+
+    res.json(saleChanged);
+  } catch (error) {
+    console.error("Error:", error);
     res.status(500).send(error.message);
   }
 });

@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-
+import { deleteSaleRow } from "../../../redux/actions/salesActions";
 import Loader from "../../Ecommerce/Loader/Loader";
-import { deleteSaleRow } from "../../../redux/actions/actions";
 
 const TabDeleteSaleButton = ({ rowIndex, onClose, loading }) => {
   const dispatch = useDispatch();

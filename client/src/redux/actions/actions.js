@@ -266,7 +266,7 @@ export const getSaleChangeState = (id, state) => async (dispatch) => {
       const paymentDetail = {
         orderNumber: saleInfo[0].id,
         newStatus: state,
-        cliente: { nombre: saleInfo[0].cliente }, // Datos del cliente
+        cliente: { nombre: saleInfo[0].nombre }, // Datos del cliente
       };
 
       // Enviamos el correo electrónico
@@ -632,6 +632,8 @@ export const sendEmail = async (userMail, paymentDetail) => {
     subject: "Gracias por tu compra",
     message: renderEmail(paymentDetail), // Renderiza el HTML en el frontend
   };
+  console.log("email",paymentDetail);
+  
 
   try {
     const response = await instance.post(`/api/mails/`, emailContent);
@@ -648,6 +650,7 @@ export const sendEmailOrder = async (userMail, paymentDetail) => {
     subject: "Tenes una nueva Venta!",
     message: renderEmailOrder(paymentDetail), // Renderiza el HTML en el frontend
   };
+  
 
   try {
     const response = await instance.post(`/api/mails/`, emailContent);
@@ -663,8 +666,10 @@ export const sendEmailChangeStateOrder = async (userMail, paymentDetail) => {
     to: userMail,
     subject: "Actualizamos el estado de tu compra!",
     message: renderEmailOrderStateChange(paymentDetail), // Renderiza el HTML en el frontend
+    
+    
   };
-
+  
   try {
     const response = await instance.post(`/api/mails/`, emailContent);
     return response;

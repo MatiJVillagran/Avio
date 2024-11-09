@@ -52,25 +52,30 @@ const Cart = ({ product, calcularTotal, usuario }) => {
       cliente: formCliente,
     };
 
-    
-    
+    // Validación de todos los campos requeridos antes de continuar
+    const { nombre, correo, provincia, direccion, cp, celular } = venta.cliente;
+    if (!nombre.trim() || !correo.trim() || !provincia.trim() || !direccion.trim() || !cp.trim() || !celular.trim()) {
+      toast.error("Hay campos sin completar");
+      return;
+    }
+
 
     if (venta.formaPago === "") {
       toast.error("Falta forma de pago");
     } else if (venta.envio === "") {
       toast.error("Falta envio");
-    }else if (venta.productos.length === 0) {
+    } else if (venta.productos.length === 0) {
       toast.error("La canasta está vacía");
     } else if (venta.cliente.nombre.trim() === "") {
       toast.error("Falta nombre del cliente");
     } else {
       toast.success("Pedido creado exitosamente...");
-     
+
       dispatch(createSale(venta));
       dispatch(cleanCart());
       setTimeout(() => {
         navigate("/")
-      },3000)
+      }, 3000)
     }
   };
 
@@ -107,8 +112,8 @@ const Cart = ({ product, calcularTotal, usuario }) => {
 
         <div
           className={`border border-gray-500 p-2 mt-4 rounded-md ${product.length > 0
-              ? "overflow-y-scroll"
-              : "h-full flex justify-center items-center"
+            ? "overflow-y-scroll"
+            : "h-full flex justify-center items-center"
             }`}
         >
           {product?.length > 0 ? (
@@ -280,8 +285,8 @@ const Cart = ({ product, calcularTotal, usuario }) => {
             <button
               onClick={() => handleFormaPagoChange("Transferencia")}
               className={`border p-2 text-gray-500 w-32 hover:bg-gray-200 shadow-md rounded-md active:translate-y-[2px] ${formaPago === "Transferencia"
-                  ? "bg-teal-400"
-                  : "border-gray-400"
+                ? "bg-teal-400"
+                : "border-gray-400"
                 }`}
             >
               Transferencia
@@ -301,14 +306,14 @@ const Cart = ({ product, calcularTotal, usuario }) => {
             <button
               onClick={() => handleEnvioChange("Envio")}
               className={`border p-2 text-gray-500 w-24 hover:bg-gray-200 shadow-md rounded-md active:translate-y-[2px] ${envio === "Envio"
-                  ? "bg-teal-400"
-                  : "border-gray-400"
+                ? "bg-teal-400"
+                : "border-gray-400"
                 }`}
             >
               Envio
             </button>
           </div>
-          </div>
+        </div>
         {/*TOTAL*/}
         <div className="p-2 mt-4 lg:mt-12 relative sm:-top-10 -top-4">
           <p>Total: ${calcularTotal()}</p>
