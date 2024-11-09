@@ -8,9 +8,11 @@ export const Nav = ({ user, showNav }) => {
         showNav ? "left-0 " : "-left-full "
       }md:left-0 transition-all duration-300 ease-in-out md:relative fixed top-0 left-0 h-full md:h-auto bg-primary z-30`}
     >
-      <h1 className="font-bold text-4xl text-center md:hidden">
-        N<span className="text-primary">.</span>
+      <Link to="/">
+      <h1 className="font-bold text-2xl text-center md:hidden">
+        Inicio<span className="text-primary">.</span>
       </h1>
+      </Link>
       <Link to="/">
       <h1 className="hidden md:block font-bold text-sm md:text-xl text-center">
         Avio Inicio<span className="text-primary">.</span>
