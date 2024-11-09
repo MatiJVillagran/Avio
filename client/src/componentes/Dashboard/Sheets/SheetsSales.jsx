@@ -80,7 +80,7 @@ const SheetsSales = ({ data, onViewSale, toggleDelete, changeState }) => {
                 </p>
               </div>
               <div className="flex justify-between items-center mt-4 w-full rounded-md p-1">
-                <div className="flex border border-gray-300 p-2 rounded-md bg-gray-200 gap-2 text-xs">
+                <div className="flex border border-gray-300 p-2 rounded-md bg-fourtiary gap-2 text-xs">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"

@@ -166,12 +166,12 @@ const DisplayProductDashboard = ({ products }) => {
                 <span className="font-semibold"></span>
               </div>
               <div>
-                <Link
+                {/* <Link
                   to={"/support"}
                   className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded"
                 >
                   Ayuda
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
