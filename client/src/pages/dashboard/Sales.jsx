@@ -32,6 +32,8 @@ const Sales = () => {
 
   const toggleModalChangeState = (id, state) => {
     dispatch(getSaleChangeState(id, state));
+    console.log("id",id,"state",state);
+    
     setOpenModalChangeState(false);
   };
 
@@ -50,9 +52,11 @@ const Sales = () => {
     dispatch(getSales());
   }, [dispatch]);
 
-  // const filteredSales = sales.filter((sale) => sale.estadoPago !== "Anulado");
+  const filteredSales = sales.filter((sale) => sale.estadoPago !== "Anulado");
+  console.log("filteredSales", filteredSales);
+  
   // Filtrar las ventas
-  const searchedSales  = sales?.filter((sale) => {
+  const searchedSales  = filteredSales?.filter((sale) => {
     const lowercasedFilter = searchTerm ? searchTerm.toLowerCase() : "";
     return (
       sale.id?.toString().toLowerCase().includes(lowercasedFilter) ||

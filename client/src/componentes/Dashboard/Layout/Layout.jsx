@@ -27,7 +27,7 @@ export function Layout({ children, isAuth }) {
   }
 
   return (
-    <div className="h-full w-full flex flex-col md:flex-row bg-gray-200 relative">
+    <div className="h-full w-full flex flex-col md:flex-row bg-gray-200 relative ">
       <div className="md:hidden flex items-center justify-between p-4 bg-gray-200 w-full">
         <button
           onClick={() => setShowNav(!showNav)}

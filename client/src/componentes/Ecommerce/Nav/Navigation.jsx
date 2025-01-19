@@ -70,7 +70,7 @@ const Navigation = () => {
                     Productos
                   </Link>
                   <Link
-                    to="#"
+                    to="/suppliers"
                     className="ml-4 px-3 py-2 rounded-md text-base leading-5 text-gray-800 hover:bg-tertiary hover:text-white transition duration-150 ease-in-out cursor-pointer focus:outline-none focus:text-white focus:bg-gray-700 "
                   >
                     Proveedores amigos
@@ -156,7 +156,7 @@ const Navigation = () => {
               Productos
             </Link>
             <Link
-              to="#"
+              to="/suppliers"
               className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-secondary hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out cursor-pointer"
             >
               Proveedores amigos

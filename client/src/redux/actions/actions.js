@@ -603,16 +603,12 @@ export const publicProductById = (id) => async (dispatch) => {
 
 
 export const deleteSaleRow = (rowIndex) => async (dispatch) => {
-  const token = localStorage.getItem("authToken");
   try {
-    const res = await instance.delete(`/api/sheets/delete/sale/${rowIndex}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // console.log(res);
+    const res = await instance.delete(`/api/sheets/delete/sale/${rowIndex}`);
     if (res.status === 200) {
       toast.success("Eliminado exitosamente");
+      dispatch(getSales());
+
       dispatch({
         type: DELETE_SALE_ROW,
         payload: rowIndex,

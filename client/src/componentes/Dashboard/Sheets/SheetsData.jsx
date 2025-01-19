@@ -10,8 +10,8 @@ const SheetsData = ({
   return (
     <div className="border border-gray-300 p-1/2">
 
-      <div className="overflow-x-auto custom-scroll border border-gray-300 p-2">
-        <table className="basic mt-2">
+      <div className="overflow-x-auto  custom-scroll border border-gray-300 p-2 -mb-1/2">
+        <table className=" basic mt-2">
           <thead>
             <tr className="border border-gray-500">
               <th>ID</th>
@@ -27,7 +27,7 @@ const SheetsData = ({
               <th>Acciones</th>
             </tr>
           </thead>
-          <tbody className="text-center border border-gray-500">
+          <tbody className="text-sm text-center border border-gray-500">
             {data?.length > 0 ? (
               data.map((row, index) => {
                 const imgUrl = row?.url?.split(", ");

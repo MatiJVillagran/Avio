@@ -219,6 +219,8 @@ async function registerSale(auth, data) {
 
     // Verifica si cliente.id existe, de lo contrario, asigna "Panel de control"
     const clientId = cliente.id ? cliente.id : "Panel de control";
+    const statePayment = "Pendiente";
+
 
     const ventaData = productos.map((prod) => [
       newId,
@@ -241,12 +243,13 @@ async function registerSale(auth, data) {
       cliente.provincia,
       cliente.cp,
       cliente.celular,
+      statePayment,
     ]);
 
     // Append the data to the spreadsheet
     const res = await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:T",
+      range: "Ventas!A2:U",
       valueInputOption: "RAW",
       resource: {
         values: ventaData,
@@ -273,7 +276,7 @@ async function getSaleDataUnitiInfo(auth, id) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:T",
+      range: "Ventas!A2:U",
     });
     const rows = res.data.values || [];
 
@@ -301,6 +304,7 @@ async function getSaleDataUnitiInfo(auth, id) {
         provincia: row[17],
         cp: row[18],
         celular: row[19],
+        estadoPago: row[20],
       }));
 
     return sales;
@@ -315,7 +319,7 @@ async function getSaleData(auth) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:T",
+      range: "Ventas!A2:U",
     });
     const rows = res.data.values || [];
     let lastId = 0;
@@ -349,6 +353,7 @@ async function getSaleData(auth) {
           provincia: row[17],
           cp: row[18],
           celular: row[19],
+          estadoPago: row[20],
         };
       } else {
         salesMap[id].cantidad += parseInt(row[6]);
@@ -390,7 +395,7 @@ async function getSaleByUserId(auth, uid) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:T", // Ajusta el rango según tu hoja de ventas
+      range: "Ventas!A2:U", // Ajusta el rango según tu hoja de ventas
     });
 
     const rows = res.data.values || [];
@@ -434,7 +439,7 @@ async function getSaleByUserName(auth, nombreCliente) {
     const sheets = google.sheets({ version: "v4", auth });
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:T", // Ajusta el rango según tu hoja de ventas
+      range: "Ventas!A2:U", // Ajusta el rango según tu hoja de ventas
     });
 
     const rows = res.data.values || [];
@@ -495,18 +500,15 @@ async function getSaleByUserName(auth, nombreCliente) {
 async function putSaleChangeState(auth, id, state) {
   const sheets = google.sheets({ version: "v4", auth });
 
-  // Obtener todos los datos de la hoja
-  const { salesData } = await getSaleData(auth);
-
-  // Filtrar todas las filas que coincidan con el ID proporcionado
-  const rowsToUpdate = salesData.filter((sale) => sale.id === id);
+  // Obtener los datos detallados de las filas que coinciden con el ID
+  const rowsToUpdate = await getSaleDataUnitiInfo(auth, id);
 
   if (rowsToUpdate.length === 0) {
     throw new Error("ID not found");
   }
 
   // Corregir el valor de 'state' si es necesario
-  const correctedState = state === "En preparacion" ? "En preparacion" : state;
+  const correctedState = state === "Enpreparacion" ? "En preparacion" : state;
 
   // Obtener el ID de la hoja de cálculo
   const sheetInfo = await sheets.spreadsheets.get({
@@ -514,7 +516,7 @@ async function putSaleChangeState(auth, id, state) {
   });
 
   const sheet = sheetInfo.data.sheets.find(
-    (s) => s.properties.title === "Ventas" // Asegúrate de que este sea el nombre correcto de tu hoja
+    (s) => s.properties.title === "Ventas"
   );
 
   if (!sheet) {
@@ -523,33 +525,48 @@ async function putSaleChangeState(auth, id, state) {
 
   const sheetId = sheet.properties.sheetId;
 
-  // Crear las solicitudes de actualización para todas las filas coincidentes
-  const requests = rowsToUpdate.map((sale) => {
-    const rowIndex = salesData.indexOf(sale);
-    return {
-      updateCells: {
-        range: {
-          sheetId: sheetId, // Usamos el sheetId obtenido
-          startRowIndex: rowIndex + 1, // +1 porque las filas en Google Sheets empiezan en 1
-          endRowIndex: rowIndex + 2,
-          startColumnIndex: 10, // Columna del estadoPago (columna J)
-          endColumnIndex: 11,
-        },
-        rows: [
-          {
-            values: [
-              {
-                userEnteredValue: {
-                  stringValue: correctedState,
-                },
-              },
-            ],
-          },
-        ],
-        fields: "userEnteredValue",
-      },
-    };
+  // Obtener el rango de datos de la hoja "Ventas"
+  const sheetData = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+    range: "Ventas", // Cambia por el rango real de tu hoja si tiene encabezados
   });
+
+  const allRows = sheetData.data.values || []; // Obtener todas las filas
+
+  // Identificar los índices reales de las filas a actualizar
+  const rowIndices = rowsToUpdate.map((row) => {
+    // Encuentra la fila en la hoja original que coincide con los datos del objeto
+    return allRows.findIndex((sheetRow) => sheetRow[0] === row.id); // Ajusta según el índice de la columna ID
+  });
+
+  if (rowIndices.includes(-1)) {
+    throw new Error("Some rows not found in the sheet");
+  }
+
+  // Crear las solicitudes de actualización
+  const requests = rowIndices.map((rowIndex) => ({
+    updateCells: {
+      range: {
+        sheetId: sheetId,
+        startRowIndex: rowIndex, // Índice real de la fila
+        endRowIndex: rowIndex + 1,
+        startColumnIndex: 20, // Columna U (índice 20)
+        endColumnIndex: 21,
+      },
+      rows: [
+        {
+          values: [
+            {
+              userEnteredValue: {
+                stringValue: correctedState,
+              },
+            },
+          ],
+        },
+      ],
+      fields: "userEnteredValue",
+    },
+  }));
 
   // Ejecutar la actualización
   const res = await sheets.spreadsheets.batchUpdate({
@@ -642,7 +659,7 @@ async function getAllCategories(auth) {
     const normalizedCategories = products
       .filter((product) => product.publicado !== "no") // Filtrar productos no publicados
       .map((product) =>
-        product.categoria.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        product.categoria.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       );
 
     const categories = [...new Set(normalizedCategories)];
@@ -687,7 +704,7 @@ async function getAllMarcas(auth) {
       products
         .filter((product) => product.publicado !== "no") // Filtrar productos no publicados
         .map((product) =>
-          product.marca.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          product.marca.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         )
     )];
 
@@ -726,13 +743,30 @@ async function getProductsBySearch(auth, searchTerm) {
     const { products } = await getSheetData(auth);
 
     // Normaliza y elimina espacios en blanco del término de búsqueda recibido
-    const trimmedSearchTerm = searchTerm.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const trimmedSearchTerm = searchTerm
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
 
-    // Filtra los productos basándose en una coincidencia parcial del término de búsqueda
-    const filteredProducts = products.filter((product) =>
-      product.nombre &&
-      product.nombre.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(trimmedSearchTerm)
-    );
+    // Filtra los productos basándose en coincidencia parcial del término de búsqueda en nombre, marca o categoría
+    const filteredProducts = products.filter((product) => {
+      const normalizedNombre = product.nombre
+        ? product.nombre.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        : "";
+      const normalizedMarca = product.marca
+        ? product.marca.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        : "";
+      const normalizedCategoria = product.categoria
+        ? product.categoria.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        : "";
+
+      return (
+        normalizedNombre.includes(trimmedSearchTerm) ||
+        normalizedMarca.includes(trimmedSearchTerm) ||
+        normalizedCategoria.includes(trimmedSearchTerm)
+      );
+    });
 
     // Si no se encuentran productos, lanzar un error personalizado
     if (filteredProducts.length === 0) {
@@ -797,47 +831,129 @@ async function deleteRowById(auth, id) {
   return res.data;
 }
 
-async function deleteSalesById(auth, id) {
+async function deleteRowById(auth, id) {
   const sheets = google.sheets({ version: "v4", auth });
 
   // Obtener todos los datos de la hoja
   const getRows = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: "Ventas!A:S", // Ajusta el rango según sea necesario
+    range: "Productos!A:I", // Ajusta el rango según sea necesario
   });
 
   const rows = getRows.data.values;
-  let rowsToDelete = [];
+  let rowIndexToDelete = null;
 
-  // Encontrar las filas con el ID proporcionado
+  // Encontrar la fila con el ID proporcionado
   for (let i = 0; i < rows.length; i++) {
     if (rows[i][0] == id) {
       // Asumiendo que la columna ID es la primera (A)
-      rowsToDelete.push(i);
+      rowIndexToDelete = i;
+      break;
     }
   }
 
-  if (rowsToDelete.length === 0) {
+  if (rowIndexToDelete === null) {
     throw new Error("ID not found");
   }
 
-  console.log("rowsToDelete: ", rowsToDelete);
-
-  // Crear solicitudes de eliminación para cada fila encontrada
-  const requests = rowsToDelete.map((rowIndex) => ({
-    deleteDimension: {
-      range: {
-        sheetId: 0, // Asegúrate de que este sea el ID correcto de la hoja
-        dimension: "ROWS",
-        startIndex: rowIndex,
-        endIndex: rowIndex + 1,
+  // Eliminar la fila encontrada
+  const requests = [
+    {
+      deleteDimension: {
+        range: {
+          sheetId: 0, // Asegúrate de que este sea el ID correcto de la hoja
+          dimension: "ROWS",
+          startIndex: rowIndexToDelete,
+          endIndex: rowIndexToDelete + 1,
+        },
       },
+    },
+  ];
+
+  const res = await sheets.spreadsheets.batchUpdate({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+    resource: {
+      requests,
+    },
+  });
+
+  return res.data;
+}
+
+async function deleteSalesById(auth, id) {
+
+
+const sheets = google.sheets({ version: "v4", auth });
+
+  // Obtener los datos detallados de las filas que coinciden con el ID
+  const rowsToUpdate = await getSaleDataUnitiInfo(auth, id);
+
+  if (rowsToUpdate.length === 0) {
+    throw new Error("ID not found");
+  }
+
+  // Estado al que queremos cambiar
+  const canceledState = "Anulado";
+
+  // Obtener el ID de la hoja de cálculo
+  const sheetInfo = await sheets.spreadsheets.get({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+  });
+
+  const sheet = sheetInfo.data.sheets.find(
+    (s) => s.properties.title === "Ventas"
+  );
+
+  if (!sheet) {
+    throw new Error("Sheet not found");
+  }
+
+  const sheetId = sheet.properties.sheetId;
+
+  // Obtener el rango de datos de la hoja "Ventas"
+  const sheetData = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+    range: "Ventas", // Cambia por el rango real de tu hoja si tiene encabezados
+  });
+
+  const allRows = sheetData.data.values || []; // Obtener todas las filas
+
+  // Identificar los índices reales de las filas a actualizar
+  const rowIndices = rowsToUpdate.map((row) => {
+    // Encuentra la fila en la hoja original que coincide con los datos del objeto
+    return allRows.findIndex((sheetRow) => sheetRow[0] === row.id); // Ajusta según el índice de la columna ID
+  });
+
+  if (rowIndices.includes(-1)) {
+    throw new Error("Some rows not found in the sheet");
+  }
+
+  // Crear las solicitudes de actualización
+  const requests = rowIndices.map((rowIndex) => ({
+    updateCells: {
+      range: {
+        sheetId: sheetId,
+        startRowIndex: rowIndex, // Índice real de la fila
+        endRowIndex: rowIndex + 1,
+        startColumnIndex: 20, // Columna U (índice 20)
+        endColumnIndex: 21,
+      },
+      rows: [
+        {
+          values: [
+            {
+              userEnteredValue: {
+                stringValue: canceledState,
+              },
+            },
+          ],
+        },
+      ],
+      fields: "userEnteredValue",
     },
   }));
 
-  // Las solicitudes deben ser enviadas en orden inverso para evitar conflictos de índice
-  requests.reverse();
-
+  // Ejecutar la actualización
   const res = await sheets.spreadsheets.batchUpdate({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
     resource: {

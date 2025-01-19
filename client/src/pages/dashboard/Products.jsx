@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Layout } from "../../componentes/Dashboard/Layout/Layout";
 import SheetsData from "../../componentes/Dashboard/Sheets/SheetsData";
 import TabFormCreateProduct from "../../componentes/Dashboard/Popup/TabFormCreateProduct";
-
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSheets } from "../../redux/actions/actions";
 import TabDeleteRowButton from "../../componentes/Dashboard/Popup/TabDeleteRowButton";
@@ -141,7 +140,7 @@ const Products = () => {
           Crear nuevo producto
         </button>
       </div>
-      <div className="mt-4">
+      <div className="mt-3">
         <input
           type="text"
           placeholder="Buscar por nombre, categoría o SKU"
@@ -150,7 +149,7 @@ const Products = () => {
           className="p-2 border border-gray-400 rounded-md w-full"
         />
       </div>
-      <div className="mt-8 h-screen">
+      <div className="mt-6 h-screen">
         <SheetsData
           data={currentItems}
           toggleModal={toggleModal}
@@ -158,32 +157,56 @@ const Products = () => {
           toggleActiveModal={toggleActiveModal}
           toggleDescriptionModal={toggleDescriptionModal}
         />
-        <div className="flex justify-center mt-4">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 mx-1 bg-pink-400 text-white border border-gray-400 rounded-md disabled:opacity-50"
-          >
-            Anterior
-          </button>
-          {visiblePages.map((number) => (
-            <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={`px-4 py-2 mx-1 border border-gray-400 rounded-md ${currentPage === number ? "bg-primary text-white" : "bg-white"
-                }`}
-            >
-              {number}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 mx-1 bg-pink-400 text-white border border-gray-400 rounded-md disabled:opacity-50"
-          >
-            Siguiente
-          </button>
-        </div>
+        <div className="flex justify-center mt-3 ">
+  {/* Botón para ir a la primera página */}
+  <button
+    onClick={() => handlePageChange(1)}
+    disabled={currentPage === 1}
+    className="px-3 py-2 mx-1 bg-secondary text-white border border-gray-400 rounded-md disabled:opacity-50"
+  >
+    Primera
+  </button>
+
+  {/* Botón para ir a la página anterior */}
+  <button
+    onClick={() => handlePageChange(currentPage - 1)}
+    disabled={currentPage === 1}
+    className="px-3 py-1 mx-1 bg-pink-400 text-white border border-gray-400 rounded-md disabled:opacity-50"
+  >
+    {"<<"}
+  </button>
+
+  {/* Renderiza los números de las páginas visibles */}
+  {visiblePages.map((number) => (
+    <button
+      key={number}
+      onClick={() => handlePageChange(number)}
+      className={`px-3 py-2 mx-1 border border-gray-400 rounded-md ${
+        currentPage === number ? "bg-primary text-white" : "bg-white"
+      }`}
+    >
+      {number}
+    </button>
+  ))}
+
+  {/* Botón para ir a la página siguiente */}
+  <button
+    onClick={() => handlePageChange(currentPage + 1)}
+    disabled={currentPage === totalPages}
+    className="px-3 py-1 mx-1 bg-pink-400 text-white border border-gray-400 rounded-md disabled:opacity-50"
+  >
+    {">>"}
+  </button>
+
+  {/* Botón para ir a la última página */}
+  <button
+    onClick={() => handlePageChange(totalPages)}
+    disabled={currentPage === totalPages}
+    className="px-3 py-2 mx-1 bg-secondary text-white border border-gray-400 rounded-md disabled:opacity-50"
+  >
+    Última
+  </button>
+</div>
       </div>
     </Layout>
   );
