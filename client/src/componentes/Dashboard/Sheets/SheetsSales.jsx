@@ -8,7 +8,7 @@ const SheetsSales = ({ data, onViewSale, toggleDelete, changeState }) => {
 
   // Control de los productos actuales visibles basados en el estado visibleProducts
   const currentProducts = data.slice(0, visibleProducts);
-  console.log("currentProducts", currentProducts);  
+   
   
 
   useEffect(() => {
@@ -52,9 +52,9 @@ const SheetsSales = ({ data, onViewSale, toggleDelete, changeState }) => {
                     </svg>
                     {prod.hora}
                   </span>
-                  {/* <span
+                  <span
                     className={`p-2 border border-gray-300 rounded-md ${
-                      prod.estadoPago === "Confirmada"
+                      prod.estadoPago === "Listo"
                         ? "bg-green-400 text-white"
                         : prod.estadoPago === "Pendiente"
                         ? "bg-orange-500 text-white"
@@ -62,7 +62,7 @@ const SheetsSales = ({ data, onViewSale, toggleDelete, changeState }) => {
                     }`}
                   >
                     {prod.estadoPago}
-                  </span> */}
+                  </span>
                 </div>
               </div>
               <div>

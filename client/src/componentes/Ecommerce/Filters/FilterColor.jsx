@@ -27,7 +27,7 @@ const FilterColor = () => {
             <button
               value={"Todos"}
               onClick={handleMarcaFilter}
-              className="px-4 py-2 bg-primary rounded-md text-white text-xs whitespace-nowrap"
+              className="px-4 py-2 bg-primary rounded-md text-white text-xs whitespace-nowrap  active:bg-secondary"
             >
               Todos
             </button>
@@ -36,7 +36,7 @@ const FilterColor = () => {
                 key={index}
                 value={marca}
                 onClick={handleMarcaFilter}
-                className="px-3 flex justify-center items-center py-3 w-auto bg-primary rounded-md text-white text-xs p-2" // Ajusta padding y font-size
+                className="px-3 flex justify-center items-center py-3 w-auto bg-primary rounded-md text-white text-xs p-2  active:bg-secondary" // Ajusta padding y font-size
               >
                 {marca}
               </button>

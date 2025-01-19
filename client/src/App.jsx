@@ -20,6 +20,7 @@ import Purchase from "./pages/ecommerce/Purchase";
 import { ImageGallery } from "./pages/dashboard/ImageGallery";
 import AboutUs from "./pages/ecommerce/AboutUs";
 import ProtectedRoute from "./firebase/ProtectedRoute";
+import Suppliers from "./pages/ecommerce/Suppliers";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ function App() {
         <Route path="/product" element={<AllProducts />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/suppliers" element={<Suppliers />} />
         {isAuth ? (
           <>
             <Route path="/dashboard/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

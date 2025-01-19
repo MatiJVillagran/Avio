@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-
 import Loader from "../../Ecommerce/Loader/Loader";
 import { deleteSaleRow } from "../../../redux/actions/actions";
 

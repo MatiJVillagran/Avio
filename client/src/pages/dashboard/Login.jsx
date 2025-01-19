@@ -21,7 +21,7 @@ const Login = () => {
         />
       </div>
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full h-full lg:w-1/2 flex justify-center gap-2 items-center flex-col">
-        <h1 className="text-2xl font-semibold mb-4 text-center">Inicar </h1>
+        <h1 className="text-2xl font-semibold mb-4 text-center">Iniciar Sesión</h1>
         <img
                   className="h-12 w-12 object-cover rounded-full"
                   src="https://i.ibb.co/THt2PXT/images-1.jpg"
@@ -38,7 +38,7 @@ const Login = () => {
           >
             <div className="relative flex items-center space-x-4 justify-center">
               <LazyLoadImage
-                src="https://tailus.io/sources/blocks/social/preview/images/google.svg"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png"
                 className="absolute left-0 w-5"
                 alt="google logo"
               />
