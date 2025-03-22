@@ -3,11 +3,14 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { cleanCart, createSale, removeFromCart } from "../../../redux/actions/actions";
 import { useNavigate } from "react-router-dom";
+import BankModal from "./BankModal";
+
 
 const Cart = ({ product, calcularTotal, usuario }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formaPago, setFormaPago] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar el modal
   const [envio, setEnvio] = useState("");
   const [formCliente, setFormCliente] = useState({
     nombre: usuario.name || "",
@@ -25,6 +28,7 @@ const Cart = ({ product, calcularTotal, usuario }) => {
 
   const handleEnvioChange = (envio) => {
     setEnvio(envio);
+    
   };
 
   const handleFormClienteChange = (e) => {
@@ -81,6 +85,16 @@ const Cart = ({ product, calcularTotal, usuario }) => {
 
   const handleRemove = (id) => {
     dispatch(removeFromCart(id));
+  };
+
+  // Función para abrir el modal
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // Función para cerrar el modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -283,7 +297,9 @@ const Cart = ({ product, calcularTotal, usuario }) => {
               Efectivo
             </button>
             <button
-              onClick={() => handleFormaPagoChange("Transferencia")}
+              onClick={() =>{ handleFormaPagoChange("Transferencia");
+                handleOpenModal();
+              }}
               className={`border p-2 text-gray-500 w-32 hover:bg-gray-200 shadow-md rounded-md active:translate-y-[2px] ${formaPago === "Transferencia"
                 ? "bg-teal-400"
                 : "border-gray-400"
@@ -291,6 +307,7 @@ const Cart = ({ product, calcularTotal, usuario }) => {
             >
               Transferencia
             </button>
+            {isModalOpen && <BankModal onClose={handleCloseModal} />}
           </div>
         </div>
         <div className="p-2 lg:mt-0 -mt-14">
