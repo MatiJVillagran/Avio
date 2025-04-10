@@ -17,7 +17,7 @@ export const SendEmailStateChanged = ({ data }) => {
     >
       <div style={{ textAlign: "center", marginBottom: "1rem" }}>
         <img
-          src="https://i.ibb.co/THt2PXT/images-1.jpg" // URL de tu logo
+          src="https://res.cloudinary.com/dfj3xkyd5/image/upload/v1744245677/ljyawpv30nb6qoitxa5m.webp" // URL de tu logo
           alt="Logo de la tienda"
           style={{
             width: "150px",
