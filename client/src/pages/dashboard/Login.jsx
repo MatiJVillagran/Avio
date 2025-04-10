@@ -24,7 +24,7 @@ const Login = () => {
         <h1 className="text-2xl font-semibold mb-4 text-center">Iniciar Sesión</h1>
         <img
                   className="h-12 w-12 object-cover rounded-full"
-                  src="https://i.ibb.co/THt2PXT/images-1.jpg"
+                  src="https://res.cloudinary.com/dfj3xkyd5/image/upload/v1744245677/ljyawpv30nb6qoitxa5m.webp"
                   alt="Logo"
                 />
         <div className="mt-1 ml-10 mr-10 w-full">

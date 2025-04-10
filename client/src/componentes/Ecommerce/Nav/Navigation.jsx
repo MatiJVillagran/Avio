@@ -57,7 +57,7 @@ const Navigation = () => {
               <Link to="/" className="flex-shrink-0">
                 <img
                   className="h-12 w-12 object-cover rounded-full"
-                  src="https://i.ibb.co/THt2PXT/images-1.jpg"
+                  src="https://res.cloudinary.com/dfj3xkyd5/image/upload/v1744245677/ljyawpv30nb6qoitxa5m.webp"
                   alt="Logo"
                 />
               </Link>

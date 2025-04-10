@@ -11,7 +11,7 @@ export default function Register() {
             <div className="mb-2">
               <Link to="/">
                 <img
-                  src="https://i.ibb.co/THt2PXT/images-1.jpg"
+                  src="https://res.cloudinary.com/dfj3xkyd5/image/upload/v1744245677/ljyawpv30nb6qoitxa5m.webp"
                   alt="logoImg"
                   className="w-20 h-20 rounded-full mt-4 border border-gray-400 p-1 hover:animate-pulse"
                 />

@@ -152,7 +152,7 @@ const DisplayProductDashboard = ({ products }) => {
             <div className="text-gray-800">
               <div className="font-bold text-xl flex gap-2 justify-center items-center">
                 <img
-                  src="https://i.ibb.co/THt2PXT/images-1.jpg"
+                  src="https://res.cloudinary.com/dfj3xkyd5/image/upload/v1744245677/ljyawpv30nb6qoitxa5m.webp"
                   className="w-12 h-12 rounded-full"
                   alt=""
                 />
