@@ -76,10 +76,10 @@ const TabViewSale = ({ isOpen, onClose, sale, loading }) => {
         <Loader />
       ) : (
         <div
-          className={`flex flex-col md:flex-row mx-2 md:mx-8 md:h-4/5 h-full w-full overflow-y-scroll md:overflow-hidden bg-gray-200 md:w-4/5 rounded-lg`}
+          className={`flex flex-col md:flex-row mx-2 md:mx-8 md:h-5/6 h-full w-full overflow-y-scroll md:overflow-y-scroll bg-gray-200 md:w-4/5 rounded-lg`}
         >
           <div className="p-8 rounded-3xl w-full md:w-1/2">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 ">
               <button
                 onClick={onClose}
                 className="inline-flex items-center shrink-0 justify-center w-8 h-8 rounded-full bg-gray-900 focus:outline-none"
@@ -121,15 +121,15 @@ const TabViewSale = ({ isOpen, onClose, sale, loading }) => {
                 </p>
               </div>
             </div>
-            <div className="mt-9 relative flex flex-col gap-2.5">
+            <div className="mt-8 relative flex flex-col gap-2.5 scroll-m-0 overflow-y-auto md:pb-10">
               {sale &&
                 sale.map((info, i) => (
                   <div key={i}>
-                    <button onClick={() => toggleExpand(i)} className="w-full">
+                    <button onClick={() => toggleExpand(i)} className="w-full ">
                       <div
-                        className={`flex items-center space-x-4 p-3.5 bg-gray-100`}
+                        className={`flex items-center space-x-4 p-3.5 bg-gray-100 `}
                       >
-                        <span className="flex items-center justify-center w-10 h-10 shrink-0 rounded-full bg-gray-100 text-gray-900">
+                        <span className="flex items-center justify-center w-10 h-10 shrink-0 rounded-full bg-gray-100 text-gray-900 ">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -197,7 +197,7 @@ const TabViewSale = ({ isOpen, onClose, sale, loading }) => {
                       </div>
                     </button>
                     {expandedItems[i] && (
-                      <div className="w-full bg-gray-100 absolute -mt-2 p-2 rounded-md">
+                      <div className="w-full bg-gray-100 absolute -mt-2 p-2 rounded-md ">
                         <div className="flex justify-center items-center flex-col">
                           <p>
                             <span className="text-gray-800 p-2 font-bold">
