@@ -199,7 +199,12 @@ async function registerSale(auth, data) {
     let lastId = 0;
 
     if (rows && rows.length > 1) {
-      lastId = rows.length - 1;
+      const ids = rows
+        .slice(1) // excluir encabezado
+        .map(row => parseInt(row[0])) // fila[0] es la columna A
+        .filter(id => !isNaN(id));
+    
+      lastId = Math.max(...ids, 0); // 0 por defecto si no hay IDs válidos
     }
 
     const newId = lastId + 1;
