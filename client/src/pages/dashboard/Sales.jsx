@@ -52,7 +52,9 @@ const Sales = () => {
     dispatch(getSales());
   }, [dispatch]);
 
-  const filteredSales = sales.filter((sale) => sale.estadoPago !== "Anulado");
+  const filteredSales = sales
+  .filter((sale) => sale.estadoPago !== "Anulado")
+  .sort((a, b) => b.id - a.id);
   console.log("filteredSales", filteredSales);
   
   // Filtrar las ventas
