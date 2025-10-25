@@ -1060,7 +1060,7 @@ async function getCashFlow(auth) {
     // Obtener los datos de la hoja de ventas
     const resVentas = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: "Ventas!A2:M",  // Asumiendo que las columnas de interés están en A2:K
+      range: "Ventas!A2:U",  // Asumiendo que las columnas de interés están en A2:K
     });
 
     const rowsVentas = resVentas.data.values || [];
@@ -1068,10 +1068,11 @@ async function getCashFlow(auth) {
     // Añadir las ventas al flujo de caja como ingresos
     const ventasData = rowsVentas.map((ventaRow, index) => {
       const id = lastId + index + 1;  // Incrementar el ID para las nuevas filas
-      const subtotal = parseFloat(ventaRow[8]);  // Subtotal de la venta
-      const total = parseFloat(ventaRow[10]);  // Total de la venta
-      const descripcion = `Venta Producto: ${ventaRow[4]}, Cliente: ${ventaRow[3]}`;  // SKU y Cliente
-      const fecha = ventaRow[11];  // Fecha de la venta
+      const subtotal = parseFloat(ventaRow[9]);  // Subtotal de la venta
+      const total = parseFloat(ventaRow[11]);  // Total de la venta
+      // const descripcion = `Venta Producto: ${ventaRow[4]}, Cliente: ${ventaRow[3]}`;
+      const descripcion = `Venta N°: ${ventaRow[0]}`;  // SKU y Cliente
+      const fecha = ventaRow[12];  // Fecha de la venta
 
       // Sumar el total de la venta al saldo acumulado
       saldoAcumulado += total;

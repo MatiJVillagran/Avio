@@ -3,8 +3,8 @@ import React from 'react';
 const SheetsCashFlow = ({ data, cashFlow, cajaInicial, cajaFinal }) => {
   
   // Ordenar el cashFlow por fecha (de la más antigua a la más reciente)
-  const sortedCashFlow = [...cashFlow].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-
+  const sortedCashFlow = [...cashFlow].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  
   return (
     <div className="border border-gray-400 p-2">
       <div className="overflow-x-auto custom-scroll">

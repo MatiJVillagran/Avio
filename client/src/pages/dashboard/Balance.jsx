@@ -43,13 +43,18 @@ const Balance = () => {
 
   const cajaFinal = cajaInicial + totalIngresos - totalGastos;
 
+  // 🔹 Primero ordenar el flujo de caja (más reciente → más antigua)
+  const sortedCashFlow = [...cashFlow].sort(
+    (a, b) => new Date(b.fecha.trim()) - new Date(a.fecha.trim())
+  );
+
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Cambiar el número según cuántos elementos mostrar por página
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentCashFlow = cashFlow.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(cashFlow.length / itemsPerPage);
+  const currentCashFlow = sortedCashFlow.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(sortedCashFlow.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -67,7 +72,7 @@ const Balance = () => {
         <h1 className="text-xl text-gray-500">Balance</h1>
       </div>
       <div className="mt-6 h-screen">
-        <SheetsCashFlow 
+        <SheetsCashFlow
           cashFlow={currentCashFlow} // Pasa el flujo de caja paginado al componente
           cajaInicial={cajaInicial}
           cajaFinal={cajaFinal}
@@ -119,32 +124,57 @@ const Balance = () => {
           </div>
         )}
 
-        {/* Paginación */}
-        <div className="flex justify-center mt-1">
+          {/* Botones de paginación */}
+        <div className="flex justify-center mt-1 items-center gap-1">
+
+          {/* Ir a la primera página */}
+          <button
+            onClick={() => handlePageChange(1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-400 text-white rounded-md disabled:opacity-50"
+          >
+            Primera
+          </button>
+
+          {/* Página anterior */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 mx-1 bg-pink-400 text-gray-600 border border-gray-400 rounded-md disabled:opacity-50"
+            className="px-4 py-2 bg-pink-400 text-gray-600 border border-gray-400 rounded-md disabled:opacity-50"
           >
-            Anterior
+            {"<<"}
           </button>
+
+          {/* Números de página */}
           {Array.from({ length: totalPages }, (_, index) => index + 1).map(number => (
             <button
               key={number}
               onClick={() => handlePageChange(number)}
-              className={`px-4 py-2 mx-1 border border-gray-400 rounded-md ${
-                currentPage === number ? "bg-primary text-white" : "bg-white text-gray-600"
-              }`}
+              className={`px-4 py-2 border border-gray-400 rounded-md ${currentPage === number
+                  ? "bg-primary text-white"
+                  : "bg-white text-gray-600"
+                }`}
             >
               {number}
             </button>
           ))}
+
+          {/* Página siguiente */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 mx-1 bg-pink-400 text-gray-600 border border-gray-400 rounded-md disabled:opacity-50"
+            className="px-4 py-2 bg-pink-400 text-gray-600 border border-gray-400 rounded-md disabled:opacity-50"
           >
-            Siguiente
+            {">>"}
+          </button>
+
+          {/* Ir a la última página */}
+          <button
+            onClick={() => handlePageChange(totalPages)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-400 text-white rounded-md disabled:opacity-50"
+          >
+            Última
           </button>
         </div>
       </div>
