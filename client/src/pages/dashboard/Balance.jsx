@@ -125,57 +125,105 @@ const Balance = () => {
         )}
 
           {/* Botones de paginación */}
-        <div className="flex justify-center mt-1 items-center gap-1">
+        <div className="flex justify-center mt-4 items-center gap-1 flex-wrap">
 
-          {/* Ir a la primera página */}
-          <button
-            onClick={() => handlePageChange(1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-400 text-white rounded-md disabled:opacity-50"
-          >
-            Primera
-          </button>
+  {/* Ir a la primera página */}
+  <button
+    onClick={() => handlePageChange(1)}
+    disabled={currentPage === 1}
+    className="px-3 py-2 bg-gray-400 text-white rounded-md disabled:opacity-50"
+  >
+    Primera
+  </button>
 
-          {/* Página anterior */}
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-pink-400 text-gray-600 border border-gray-400 rounded-md disabled:opacity-50"
-          >
-            {"<<"}
-          </button>
+  {/* Página anterior */}
+  <button
+    onClick={() => handlePageChange(currentPage - 1)}
+    disabled={currentPage === 1}
+    className="px-3 py-2 bg-pink-400 text-white rounded-md disabled:opacity-50"
+  >
+    {"<<"}
+  </button>
 
-          {/* Números de página */}
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(number => (
-            <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={`px-4 py-2 border border-gray-400 rounded-md ${currentPage === number
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-600"
-                }`}
-            >
-              {number}
-            </button>
-          ))}
+  {/* Mostrar rango limitado de páginas */}
+  {(() => {
+    const visiblePages = 5; // Cuántas páginas mostrar como máximo
+    const pages = [];
 
-          {/* Página siguiente */}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-pink-400 text-gray-600 border border-gray-400 rounded-md disabled:opacity-50"
-          >
-            {">>"}
-          </button>
+    let startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
+    let endPage = startPage + visiblePages - 1;
 
-          {/* Ir a la última página */}
-          <button
-            onClick={() => handlePageChange(totalPages)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-400 text-white rounded-md disabled:opacity-50"
-          >
-            Última
-          </button>
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - visiblePages + 1);
+    }
+
+    // Si hay páginas ocultas al inicio
+    if (startPage > 1) {
+      pages.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className="px-3 py-2 border border-gray-400 rounded-md bg-white text-gray-600"
+        >
+          1
+        </button>
+      );
+      if (startPage > 2) pages.push(<span key="start-ellipsis">...</span>);
+    }
+
+    // Páginas visibles
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-2 border border-gray-400 rounded-md ${
+            currentPage === i
+              ? "bg-primary text-white"
+              : "bg-white text-gray-600 hover:bg-gray-100"
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // Si hay páginas ocultas al final
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1)
+        pages.push(<span key="end-ellipsis">...</span>);
+      pages.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className="px-3 py-2 border border-gray-400 rounded-md bg-white text-gray-600"
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return pages;
+  })()}
+
+  {/* Página siguiente */}
+  <button
+    onClick={() => handlePageChange(currentPage + 1)}
+    disabled={currentPage === totalPages}
+    className="px-3 py-2 bg-pink-400 text-white rounded-md disabled:opacity-50"
+  >
+    {">>"}
+  </button>
+
+  {/* Ir a la última página */}
+  <button
+    onClick={() => handlePageChange(totalPages)}
+    disabled={currentPage === totalPages}
+    className="px-3 py-2 bg-gray-400 text-white rounded-md disabled:opacity-50"
+  >
+    Última
+  </button>
         </div>
       </div>
     </Layout>
