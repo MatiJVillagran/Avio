@@ -15,6 +15,7 @@ const Balance = () => {
   // Obtener ventas y flujo de caja del estado de Redux
   const sales = useSelector((state) => state.cart.sales);
   const cashFlow = useSelector((state) => state.sheets.cashFlow);
+  
 
   // Efectos para cargar ventas y flujo de caja al montar el componente
   useEffect(() => {
@@ -43,10 +44,41 @@ const Balance = () => {
 
   const cajaFinal = cajaInicial + totalIngresos - totalGastos;
 
-  // 🔹 Primero ordenar el flujo de caja (más reciente → más antigua)
-  const sortedCashFlow = [...cashFlow].sort(
-    (a, b) => new Date(b.fecha.trim()) - new Date(a.fecha.trim())
+   const sortedCashFlow0 = Object.values(
+    cashFlow.reduce((acc, entry) => {
+      const key = entry.descripcion;
+
+      if (!acc[key]) {
+        acc[key] = { ...entry };
+      } else {
+        acc[key].monto += entry.monto;
+      }
+
+      return acc;
+    }, {})
   );
+
+
+ // 🔹 Ordenar por fecha (desc) y, si es la misma, por número de venta (desc)
+const sortedCashFlow = [...sortedCashFlow0].sort((a, b) => {
+  // 1️⃣ Comparar fecha
+  const dateDiff =
+    new Date(b.fecha.trim()) - new Date(a.fecha.trim());
+
+  if (dateDiff !== 0) return dateDiff;
+
+  // 2️⃣ Si la fecha es igual → comparar número de Venta
+  const ventaA = Number(a.descripcion.match(/\d+/)?.[0] || 0);
+  const ventaB = Number(b.descripcion.match(/\d+/)?.[0] || 0);
+
+  return ventaB - ventaA; // mayor a menor
+});
+
+// 1️⃣ Agrupar por descripción y sumar montos
+ 
+  console.log("sortedCashFlow",sortedCashFlow);
+  
+  
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);

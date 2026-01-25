@@ -55,7 +55,7 @@ const Sales = () => {
   const filteredSales = sales
   .filter((sale) => sale.estadoPago !== "Anulado")
   .sort((a, b) => b.id - a.id);
-  console.log("filteredSales", filteredSales);
+  
   
   // Filtrar las ventas
   const searchedSales  = filteredSales?.filter((sale) => {
