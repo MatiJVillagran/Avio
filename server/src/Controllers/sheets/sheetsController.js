@@ -203,7 +203,7 @@ async function registerSale(auth, data) {
         .slice(1) // excluir encabezado
         .map(row => parseInt(row[0])) // fila[0] es la columna A
         .filter(id => !isNaN(id));
-    
+
       lastId = Math.max(...ids, 0); // 0 por defecto si no hay IDs válidos
     }
 
@@ -888,7 +888,7 @@ async function deleteRowById(auth, id) {
 async function deleteSalesById(auth, id) {
 
 
-const sheets = google.sheets({ version: "v4", auth });
+  const sheets = google.sheets({ version: "v4", auth });
 
   // Obtener los datos detallados de las filas que coinciden con el ID
   const rowsToUpdate = await getSaleDataUnitiInfo(auth, id);
@@ -1063,7 +1063,13 @@ async function getCashFlow(auth) {
       range: "Ventas!A2:U",  // Asumiendo que las columnas de interés están en A2:K
     });
 
-    const rowsVentas = resVentas.data.values || [];
+    const rowsVentas0 = resVentas.data.values || [];
+
+     // Filtrar ventas NO anuladas
+    const rowsVentas = rowsVentas0.filter(
+      (ventaRow) => ventaRow[20]?.trim() !== "Anulado"
+    );
+
 
     // Añadir las ventas al flujo de caja como ingresos
     const ventasData = rowsVentas.map((ventaRow, index) => {
